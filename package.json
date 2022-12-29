@@ -1,0 +1,12 @@
+{
+  "name": "7elog",
+  "description": "team7 server repository",
+  "version": "0.0.1",
+  "scripts": {
+    "prepare": "husky install"
+
+  },
+  "dependencies": {
+    "husky": "^8.0.2"
+  }
+}
