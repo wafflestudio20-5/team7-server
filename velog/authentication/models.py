@@ -15,7 +15,7 @@ class User(AbstractUser):
     first_name = None
     last_name = None
     email = models.EmailField(max_length=100, blank=False, null=False, unique=True)
-    birthday = models.DateField()
+    birthday = models.DateField(default="1900-01-01")
     name = models.CharField(max_length=100, blank=True)
     gender = models.CharField(
         choices=Gender.choices, default=Gender.OTHER, max_length=10
@@ -29,9 +29,7 @@ class User(AbstractUser):
     date_joined = models.DateTimeField(auto_now_add=True)
 
     USERNAME_FIELD = "email"
-
     REQUIRED_FIELDS = []
-
     objects = CustomUserManager()
 
     def __str__(self):
