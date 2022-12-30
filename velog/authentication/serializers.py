@@ -39,9 +39,9 @@ class UserLoginSerializer(LoginSerializer):
 class CustomRegisterSerializer(RegisterSerializer):
     username = None
     birthday = serializers.DateField()
-    name = serializers.CharField(max_length=100, required=True)
-    gender = serializers.ChoiceField(choices=User.Gender.choices, required=True)
-    profile_image = serializers.ImageField()
+    name = serializers.CharField(max_length=100)
+    gender = serializers.ChoiceField(choices=User.Gender.choices)
+    profile_image = serializers.ImageField(default="")
     introduction = serializers.CharField(max_length=100)
 
     def update(self, instance, validated_data):
