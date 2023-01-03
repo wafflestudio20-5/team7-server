@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'djoser',
     'rest_framework',
+    'velogapp.apps.VelogappConfig',
 ]
 
 MIDDLEWARE = [
