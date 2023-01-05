@@ -1,8 +1,7 @@
 from rest_framework import generics, status, permissions
 from rest_framework.response import Response
-from velogapp.models import Post
-from velogapp.serializers import *
-from velogapp.permissions import IsCreatorOrReadOnly
+from .serializers import *
+from .permissions import IsCreatorOrReadOnly
 
 class PostCreateView(generics.GenericAPIView):
     permissions_classes = [permissions.IsAuthenticatedOrReadOnly]
@@ -17,11 +16,14 @@ class PostCreateView(generics.GenericAPIView):
         else:
             return Response("data is not valid", status=status.HTTP_400_BAD_REQUEST)
 
-class PostListView(generics.ListAPIView):
+class PostListView(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
     queryset = Post.objects.all()
     serializer_class = PostListSerializer
-    # 특정 user가 쓴 글의 list만 가져오기
+    def get(self, request):
+        queryset = self.get_queryset()
+        serializer = PostListSerializer(queryset, many=True)
+        return Response(serializer.data)
 
 class PostRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsCreatorOrReadOnly]

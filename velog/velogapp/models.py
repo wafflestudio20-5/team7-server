@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from authentication.models import User
 
 class Series(models.Model):
     series_name = models.CharField(max_length=100)
@@ -22,8 +22,8 @@ class Tag(models.Model):
     tag_name = models.CharField(max_length=200)
 
 class ReadingList(models.Model):
-    posts_liked = models.ManyToManyField(Post, related_name='posts_liked', null=True)
-    posts_viewed = models.ManyToManyField(Post, related_name='posts_viewed', null=True)
+    posts_liked = models.ManyToManyField(Post, related_name='posts_liked')
+    posts_viewed = models.ManyToManyField(Post, related_name='posts_viewed')
 
 
 # Create your models here.
