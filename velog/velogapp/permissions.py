@@ -7,3 +7,7 @@ class IsCreatorOrReadOnly(permissions.BasePermission):
             return True
         else:
             return obj.created_by == request.user
+
+class IsCreator(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj: Post):
+        return obj.created_by ==request.user
