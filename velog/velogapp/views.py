@@ -1,7 +1,8 @@
 from rest_framework import generics, status, permissions
 from rest_framework.response import Response
 from .serializers import *
-from .permissions import IsCreatorOrReadOnly
+from .permissions import IsCreatorOrReadOnly, IsCreator
+from django.db.models import Q
 
 class PostCreateView(generics.GenericAPIView):
     permissions_classes = [permissions.IsAuthenticatedOrReadOnly]
@@ -18,19 +19,33 @@ class PostCreateView(generics.GenericAPIView):
 
 class PostListView(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
-    queryset = Post.objects.all()
     serializer_class = PostListSerializer
+    def get_queryset(self):
+        if self.request.user.is_authenticated:
+            return Post.objects.filter(Q(created_by=self.request.user) |
+                                       Q(is_private=False)
+                                       )
+        else:
+            return Post.objects.filter(is_private=False)
     def get(self, request):
         queryset = self.get_queryset()
         serializer = PostListSerializer(queryset, many=True)
         return Response(serializer.data)
 
-class PostRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+class PostRetrieveDestroyView(generics.RetrieveDestroyAPIView):
     permission_classes = [IsCreatorOrReadOnly]
+    serializer_class = PostDetailSerializer
+    def get_queryset(self):
+        if self.request.user.is_authenticated:
+            return Post.objects.filter(Q(created_by=self.request.user) |
+                                       Q(is_private=False)
+                                       )
+        else:
+            return Post.objects.filter(is_private=False)
+
+class PostRetrieveUpdateView(generics.RetrieveUpdateAPIView):
+    permission_classes = [IsCreator]
     queryset = Post.objects.all()
-    def get_serializer_class(self):
-        if self.request.method == 'GET':
-            return PostDetailSerializer
-        return PostSerializer
+    serializer_class = PostSerializer
 
 # Create your views here.

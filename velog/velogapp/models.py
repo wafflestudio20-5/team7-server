@@ -1,5 +1,6 @@
 from django.db import models
 from authentication.models import User
+from django.utils.translation import gettext_lazy as _
 
 class Series(models.Model):
     series_name = models.CharField(max_length=100)
@@ -10,6 +11,7 @@ class Post(models.Model):
     title = models.TextField()
     preview = models.CharField(max_length=150, null=True)
     description = models.TextField()
+    is_private = models.BooleanField(default=False)
     created_by = models.ForeignKey(User, on_delete=models.PROTECT)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

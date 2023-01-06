@@ -23,6 +23,7 @@ class PostSerializer(serializers.ModelSerializer):
             'thumbnail',
             'preview',
             'description',
+            'is_private',
             'tags',
         ]
 
