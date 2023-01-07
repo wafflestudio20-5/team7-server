@@ -20,6 +20,7 @@ class PostCreateView(generics.GenericAPIView):
 class PostListView(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = PostListSerializer
+    #lookup_field = 'created_by'
     def get_queryset(self):
         if self.request.user.is_authenticated:
             return Post.objects.filter(Q(created_by=self.request.user) |
@@ -28,13 +29,17 @@ class PostListView(generics.GenericAPIView):
         else:
             return Post.objects.filter(is_private=False)
     def get(self, request):
-        queryset = self.get_queryset()
+        if request.path == '/':
+            queryset = self.get_queryset().order_by('-like_count')
+        else:
+            queryset = self.get_queryset().order_by('created_at')
         serializer = PostListSerializer(queryset, many=True)
         return Response(serializer.data)
 
 class PostRetrieveDestroyView(generics.RetrieveDestroyAPIView):
     permission_classes = [IsCreatorOrReadOnly]
     serializer_class = PostDetailSerializer
+    lookup_field = 'title'
     def get_queryset(self):
         if self.request.user.is_authenticated:
             return Post.objects.filter(Q(created_by=self.request.user) |
@@ -47,5 +52,6 @@ class PostRetrieveUpdateView(generics.RetrieveUpdateAPIView):
     permission_classes = [IsCreator]
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+    lookup_field = 'id'
 
 # Create your views here.
