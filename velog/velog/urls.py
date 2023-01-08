@@ -13,11 +13,13 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from allauth.account.views import ConfirmEmailView, EmailVerificationSentView
 from dj_rest_auth.views import UserDetailsView
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import include, path, re_path
+from django.views.generic import TemplateView
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
@@ -35,9 +37,6 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
-    path("auth/", include("authentication.urls")),
-    path("accounts/", include("allauth.urls")),
     path(
         "swagger<format>.json|.yaml)",
         schema_view.without_ui(cache_timeout=0),
@@ -49,4 +48,20 @@ urlpatterns = [
         name="schema-swagger-ui",
     ),
     path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
+    path("admin/", admin.site.urls),
+    path("auth/", include("authentication.urls")),
+    path("accounts/", include("allauth.urls")),
+    path("", TemplateView.as_view(template_name="home.html"), name="home"),
+    # 유효한 이메일이 유저에게 전달
+    re_path(
+        r"^account-confirm-email/$",
+        EmailVerificationSentView.as_view(),
+        name="account_email_verification_sent",
+    ),
+    # 유저가 클릭한 이메일(=링크) 확인
+    re_path(
+        r"^account-confirm-email/(?P<key>[-:\w]+)/$",
+        ConfirmEmailView.as_view(),
+        name="account_confirm_email",
+    ),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
