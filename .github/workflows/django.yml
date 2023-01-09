@@ -64,7 +64,7 @@ jobs:
       run: aws s3 cp --region ap-northeast-2 ./team7elogdjango.zip s3://$S3_BUCKET_NAME/team7elogdjango.zip
     
     - name: Sync to S3
-      run: aws s3 sync . s3://team7elogbucket
+      run: aws s3 sync . s3://team7elogbucket/team7-server
     
     - name: Make migrations
       run: |
@@ -72,7 +72,9 @@ jobs:
         python manage.py makemigrations
     
     - name: Migrate
-      run: python manage.py migrate
+      run: |
+        cd velog
+        python manage.py migrate
 
     - name: Code Deploy
       run: | 
