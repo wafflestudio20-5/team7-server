@@ -2,9 +2,9 @@ name: 7elog CI
 
 on:
   push:
-    branches: [ "Config/ConnectToAWS" ]
+    branches: [ "Config/ConnectToAWS-1" ]
   pull_request:
-    branches: [ "Config/ConnectToAWS" ]
+    branches: [ "Config/ConnectToAWS-1" ]
 
 jobs:
   build:
@@ -28,6 +28,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    
+    - name: Activate Venv
+      run: source team7elog/bin/activate
     
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v3
@@ -63,7 +66,11 @@ jobs:
     - name: Sync to S3
       run: aws s3 sync . s3://team7elogbucket
     
-    - name: Make migrations and migrate
+    - name: Make migrations
+      run: python manage.py makemigrations
+    
+    - name: Migrate
+      run: python manage.py migrate
 
     - name: Code Deploy
       run: | 
