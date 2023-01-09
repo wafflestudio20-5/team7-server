@@ -174,10 +174,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'team7elogdb'
-        'USER': 'admin', # 데이터베이스 계정
-        'PASSWORD': os.environ['DB_PASSWORD'], # 계정 비밀번호
-        'HOST': os.environ['DB_HOST'], # 데이테베이스 주소(IP)
-        'PORT': '3306', # 데이터베이스 포트(보통은 3306)
+        'USER': 'admin',
+        'PASSWORD': os.environ['DB_PASSWORD'],
+        'HOST': os.environ['DB_HOST'],
+        'PORT': '3306',
     }
 }
 
