@@ -65,13 +65,7 @@ jobs:
     
     - name: Sync to S3
       run: aws s3 sync . s3://team7elogbucket/team7-server
-  
-  deploy:
-    needs: build
-    name: Deploy
-    runs-on: ubuntu
-    
-    steps:
+      
     - name: Code Deploy
       run: | 
         aws deploy create-deployment \
@@ -79,3 +73,4 @@ jobs:
         --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
         --deployment-group-name ${{ env.CODE_DEPLOY_DEPLOYMENT_GROUP_NAME }} \
         --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=team7elogdjango.zip
+    
