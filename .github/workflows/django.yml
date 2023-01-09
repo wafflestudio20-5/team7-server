@@ -17,8 +17,8 @@ jobs:
         STATE: ${{ secrets.STATE }}
         SOCIAL_AUTH_GOOGLE_CLIENT_ID: ${{secrets.SOCIAL_AUTH_GOOGLE_CLIENT_ID}}
         SOCIAL_AUTH_GOOGLE_SECRET: ${{ secrets.SOCIAL_AUTH_GOOGLE_SECRET}}
-        CODE_DEPLOY_APPLICATION_NAME: 7elog-app
-        CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: 7elog-deploy-group
+        CODE_DEPLOY_APPLICATION_NAME: 7elog
+        CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: dev
         DATABASES: ${{ secrets.DATABASES }}
         DB_HOST: ${{ secrets.DB_HOST }}
         DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
@@ -78,4 +78,4 @@ jobs:
         --deployment-config-name CodeDeployDefault.AllAtOnce \
         --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
         --deployment-group-name ${{ env.CODE_DEPLOY_DEPLOYMENT_GROUP_NAME }} \
-        --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=testprojectdjango.zip
+        --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=team7elogdjango.zip
