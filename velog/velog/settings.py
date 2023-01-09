@@ -19,6 +19,10 @@ from django.core.exceptions import ImproperlyConfigured
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+STATE =os.environ["STATE"]
+SECRET_KEY = os.environ["SECRET_KEY"]
+SOCIAL_AUTH_GOOGLE_SECRET = os.environ["SOCIAL_AUTH_GOOGLE_SECRET"]
+SOCIAL_AUTH_GOOGLE_CLIENT_ID = os.environ["SOCIAL_AUTH_GOOGLE_CLIENT_ID"]
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -165,6 +169,8 @@ WSGI_APPLICATION = "velog.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
+
+DATABASES = os.environ("DATABASES")
 
 # DATABASES = {
 #     "default": {
