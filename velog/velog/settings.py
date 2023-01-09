@@ -14,6 +14,9 @@ import os
 from datetime import timedelta
 from pathlib import Path
 
+import pymysql  
+pymysql.install_as_MySQLdb()
+
 from django.core.exceptions import ImproperlyConfigured
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
