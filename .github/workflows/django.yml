@@ -41,6 +41,7 @@ jobs:
         
     - name: Run Tests
       run: |
+        cd velog
         python manage.py test
         
     - name: archive drcloud 
