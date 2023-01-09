@@ -75,7 +75,13 @@ jobs:
       run: |
         cd velog
         python manage.py migrate
-
+  
+  deploy:
+    needs: build
+    name: Deploy
+    runs-on: ubuntu
+    
+    steps:
     - name: Code Deploy
       run: | 
         aws deploy create-deployment \
