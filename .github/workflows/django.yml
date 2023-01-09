@@ -29,12 +29,6 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     
-    - name: Print Working Directory
-      run: pwd
-    
-    - name: Activate Venv
-      run: source ~/team7elog/bin/activate
-    
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v3
       with:
