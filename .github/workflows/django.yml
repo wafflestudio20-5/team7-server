@@ -65,16 +65,6 @@ jobs:
     
     - name: Sync to S3
       run: aws s3 sync . s3://team7elogbucket/team7-server
-    
-    - name: Make migrations
-      run: |
-        cd velog
-        python manage.py makemigrations
-    
-    - name: Migrate
-      run: |
-        cd velog
-        python manage.py migrate
   
   deploy:
     needs: build
