@@ -20,6 +20,8 @@ jobs:
         CODE_DEPLOY_APPLICATION_NAME: 7elog-app
         CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: 7elog-deploy-group
         DATABASES: ${{ secrets.DATABASES }}
+        DB_HOST: ${{ secrets.DB_HOST }}
+        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         
     strategy:
       max-parallel: 4
