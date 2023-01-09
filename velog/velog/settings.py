@@ -170,7 +170,16 @@ WSGI_APPLICATION = "velog.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DATABASES = os.environ["DATABASES"]
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'team7elogdb'
+        'USER': admin, # 데이터베이스 계정
+        'PASSWORD': os.environ['DB_PASSWORD'], # 계정 비밀번호
+        'HOST': os.environ['DB_HOST'], # 데이테베이스 주소(IP)
+        'PORT': '3306', # 데이터베이스 포트(보통은 3306)
+    }
+}
 
 # DATABASES = {
 #     "default": {
