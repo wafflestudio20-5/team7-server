@@ -173,7 +173,7 @@ WSGI_APPLICATION = "velog.wsgi.application"
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'team7elogdb'
+        'NAME': 'team7elogdb',
         'USER': 'admin',
         'PASSWORD': os.environ['DB_PASSWORD'],
         'HOST': os.environ['DB_HOST'],
