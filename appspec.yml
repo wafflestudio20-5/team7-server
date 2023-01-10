@@ -3,11 +3,12 @@ os: linux
 
 files:
   - source: /
-    destination: /home/ubuntu
+    destination: /
     
 permissions:
-  - object: /home/ubuntu
+  - object: /
     owner: ubuntu
+    pattern: "**"
     group: ubuntu
     mode: 755
 hooks:
