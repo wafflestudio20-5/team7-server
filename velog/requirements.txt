@@ -27,6 +27,7 @@ drf-yasg==1.21.4
 exceptiongroup==1.0.4
 filelock==3.8.2
 gitmoji==0.1.0
+gunicorn==20.0.4
 identify==2.5.11
 idna==3.4
 inflection==0.5.1
