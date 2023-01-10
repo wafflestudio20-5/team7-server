@@ -28,10 +28,10 @@ echo "activate venv..."
 source team7elog/bin/activate
 
 echo "install package..."
-python3 -m pip install -r "requirements.txt"
+sudo python3 -m pip install -r "requirements.txt"
 
-echo "install django..."
-python3 -m pip install django==4.1
+# echo "install django..."
+# python3 -m pip install django==4.1
 
 echo "collect static..."
 python3 manage.py collectstatic
