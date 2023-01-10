@@ -7,6 +7,8 @@ echo "hello!"
 cd $(dirname "$0")
 echo "현재경로"
 pwd //현재경로
+
+echo "chmod deploy.sh"
 chmod +x ./deploy.sh
 
 ls -a
