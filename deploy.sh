@@ -16,7 +16,7 @@ sudo apt update
 sudo apt python3.8
 
 echo "installing pip..."
-sudo apt install python3-pip
+sudo apt-get install python3-pip
 
 echo "installing virtualenv"
 python3 -m pip install --user virtualenv
