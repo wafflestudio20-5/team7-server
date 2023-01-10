@@ -49,8 +49,8 @@ python3 manage.py makemigrations
 echo "apply migration..."
 python3 manage.py migrate
 
-echo "move location to project..."
-cd velog
+#echo "move location to project..."
+#cd velog
 
 echo "gunicorn..."
 nohup gunicorn velog.wsgi:application -b 0.0.0.0:8080
