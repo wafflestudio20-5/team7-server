@@ -23,9 +23,9 @@ from django.core.exceptions import ImproperlyConfigured
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 STATE =os.environ.get("STATE")
-SECRET_KEY = os.environ["SECRET_KEY"]
-SOCIAL_AUTH_GOOGLE_SECRET = os.environ["SOCIAL_AUTH_GOOGLE_SECRET"]
-SOCIAL_AUTH_GOOGLE_CLIENT_ID = os.environ["SOCIAL_AUTH_GOOGLE_CLIENT_ID"]
+SECRET_KEY = os.environ.get("SECRET_KEY")
+SOCIAL_AUTH_GOOGLE_SECRET = os.environ.get("SOCIAL_AUTH_GOOGLE_SECRET")
+SOCIAL_AUTH_GOOGLE_CLIENT_ID = os.environ.get("SOCIAL_AUTH_GOOGLE_CLIENT_ID")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
