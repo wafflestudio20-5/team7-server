@@ -33,11 +33,11 @@ jobs:
     
     - name: Generate Environment Variables Files for Production
       run: |
-        echo "SECRET_KEY=$SECRET_KEY" >> .env.production
-        echo "DB_HOST=$DB_HOST" >> .env.production
-        echo "DB_PASSWORD=$DB_PASSWORD" >> .env.production
-        echo "SOCIAL_AUTH_GOOGLE_CLIENT_ID=$SOCIAL_AUTH_GOOGLE_CLIENT_ID" >> .env.production
-        echo "SOCIAL_AUTH_GOOGLE_SECRET=$SOCIAL_AUTH_GOOGLE_SECRET" >> .env.production
+        echo "SECRET_KEY=$SECRET_KEY" >> .env
+        echo "DB_HOST=$DB_HOST" >> .env
+        echo "DB_PASSWORD=$DB_PASSWORD" >> .env
+        echo "SOCIAL_AUTH_GOOGLE_CLIENT_ID=$SOCIAL_AUTH_GOOGLE_CLIENT_ID" >> .env
+        echo "SOCIAL_AUTH_GOOGLE_SECRET=$SOCIAL_AUTH_GOOGLE_SECRET" >> .env
         echo "STATE=$STATE" >> .env.production
     
     - name: Set up Python ${{ matrix.python-version }}
