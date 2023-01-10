@@ -45,9 +45,6 @@ jobs:
       run: |
         cd velog
         python manage.py test
-        
-    - name: archive drcloud 
-      run: tar cvfz ./drcloud.tar.gz *
        
     - name: Make zip file
       run: zip -r ./team7elogdjango.zip .
