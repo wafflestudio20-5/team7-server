@@ -33,6 +33,9 @@ sudo python3 -m pip install -r "requirements.txt"
 # echo "install django..."
 # python3 -m pip install django==4.1
 
+echo "install pymysql..."
+python3 -m pip install pymysql
+
 echo "collect static..."
 python3 manage.py collectstatic
 
