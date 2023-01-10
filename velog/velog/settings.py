@@ -68,7 +68,7 @@ INSTALLED_APPS = [
     "authentication.apps.AuthenticationConfig",
     "velogapp.apps.VelogappConfig",
     # drf
-    # "drf_yasg",
+    "drf_yasg",
     # 'djoser',
     "rest_framework",
     "rest_framework.authtoken",
