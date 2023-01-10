@@ -13,7 +13,7 @@ from django.core.wsgi import get_wsgi_application
 
 sys.path.append('/velog')
 
-sys.path.append('/team7elog/Lib/site-packages')
+sys.path.append('/team7elog/lib')
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'velog.settings')
 
