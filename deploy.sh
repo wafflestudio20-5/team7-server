@@ -19,16 +19,16 @@ echo "installing pip..."
 sudo apt install python3-pip
 
 echo "installing virtualenv"
-python -m pip install --user virtualenv
+python3 -m pip install --user virtualenv
 
 echo "activate venv..."
 source team7elog/bin/activate
 
 echo "install package..."
-pip install -r "requirements.txt"
+python3 -m pip install -r "requirements.txt"
 
 echo "collect static..."
-python manage.py collectstatic
+python3 manage.py collectstatic
 
 echo "make migrations..."
 python3 manage.py makemigrations
