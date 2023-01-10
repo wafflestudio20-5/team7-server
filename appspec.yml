@@ -3,9 +3,10 @@ os: linux
 
 files:
   - source: /
-    destination: /opt/codedeploy-agent/deployment-root/bb6044f6-4965-4a28-b31d-fd0bef23b03f/d-RHKVVFI7L/deployment-archive
+    destination: /home/ubuntu
+    
 permissions:
-  - object: /opt/codedeploy-agent/deployment-root/bb6044f6-4965-4a28-b31d-fd0bef23b03f/d-RHKVVFI7L/deployment-archive/velog/
+  - object: /home/ubuntu
     owner: ubuntu
     group: ubuntu
     mode: 755
