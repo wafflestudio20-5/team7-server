@@ -3,10 +3,10 @@ os: linux
 
 files:
   - source: /
-    destination: /
+    destination: /home/ubuntu
     
 permissions:
-  - object: /
+  - object: /home/ubuntu
     owner: ubuntu
     pattern: "**"
     group: ubuntu
