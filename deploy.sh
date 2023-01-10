@@ -28,7 +28,7 @@ echo "move location to project..."
 cd test/team7-server/velog
 
 echo "gunicorn..."
-nohup gunicorn velog.wsgi:application -b 0.0.0.0:8080
+gunicorn velog.wsgi:application -b 0.0.0.0:8080
 
 # sudo systemctl restart nginx
 # sudo systemctl restart gunicorn
