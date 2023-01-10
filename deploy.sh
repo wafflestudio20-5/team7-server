@@ -38,7 +38,7 @@ sudo python3 -m pip -y install -r "requirements.txt"
 #python3 -m pip install pymysql
 
 echo "installing drf_yasg..."
-python3 -m pip install drf_yasg
+sudo python3 -m pip install drf_yasg
 
 echo "collect static..."
 python3 manage.py collectstatic
