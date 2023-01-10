@@ -20,6 +20,7 @@ sudo apt-get install python3-pip
 
 echo "installing virtualenv"
 python3 -m pip install --user virtualenv
+Y
 
 echo "installing gunicorn"
 python3 -m pip install gunicorn
