@@ -21,6 +21,9 @@ sudo apt install python3-pip
 echo "installing virtualenv"
 python3 -m pip install --user virtualenv
 
+echo "installing gunicorn"
+python3 -m pip install gunicorn
+
 echo "activate venv..."
 source team7elog/bin/activate
 
