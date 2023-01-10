@@ -178,8 +178,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'team7elogdb',
         'USER': 'admin',
-        'PASSWORD': os.environ['DB_PASSWORD'],
-        'HOST': os.environ['DB_HOST'],
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
+        'HOST': os.environ.get('DB_HOST'),
         'PORT': '3306',
     }
 }
