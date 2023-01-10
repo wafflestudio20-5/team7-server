@@ -11,6 +11,15 @@ pwd //현재경로
 echo "chmod deploy.sh"
 chmod +x ./deploy.sh
 
+echo "installing python..."
+sudo apt update
+sudo apt python3.8
+
+echo "installing pip..."
+sudo apt install python3-pip
+
+echo "installing virtualenv"
+python -m pip install --user virtualenv
 
 echo "activate venv..."
 source team7elog/bin/activate
