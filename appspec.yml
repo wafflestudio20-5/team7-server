@@ -3,7 +3,7 @@ os: linux
 
 files:
   - source: /
-    destination: /opt/velog
+    destination: /opt/codedeploy-agent/deployment-root/bb6044f6-4965-4a28-b31d-fd0bef23b03f/d-RHKVVFI7L/deployment-archive
 permissions:
   - object: /opt/codedeploy-agent/deployment-root/bb6044f6-4965-4a28-b31d-fd0bef23b03f/d-RHKVVFI7L/deployment-archive/velog/
     owner: ubuntu
