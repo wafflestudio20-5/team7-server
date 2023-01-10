@@ -11,8 +11,6 @@ pwd //현재경로
 echo "chmod deploy.sh"
 chmod +x ./deploy.sh
 
-ls -a
-// sh파일이 다른 폴더에 있다면 cd 명령어를 통해 root로 와야한다.
 
 echo "activate venv..."
 source team7elog/bin/activate
