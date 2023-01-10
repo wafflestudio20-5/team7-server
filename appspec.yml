@@ -10,7 +10,7 @@ permissions:
     owner: ubuntu
     pattern: "**"
     group: ubuntu
-    mode: 755
+    mode: 644
 hooks:
   AfterInstall:
     # location은 프로젝트의 root경로를 기준
