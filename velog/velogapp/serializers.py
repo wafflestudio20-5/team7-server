@@ -1,6 +1,5 @@
 from rest_framework import serializers
-
-from velogapp.models import *
+from .models import *
 
 
 class PostSerializer(serializers.ModelSerializer):
@@ -23,12 +22,15 @@ class PostSerializer(serializers.ModelSerializer):
             'thumbnail',
             'preview',
             'description',
+            'is_private',
             'tags',
         ]
 
 class PostListSerializer(serializers.ModelSerializer):
     id = serializers.PrimaryKeyRelatedField(read_only=True)
     created_by = serializers.PrimaryKeyRelatedField(read_only=True)
+    like_count = serializers.PrimaryKeyRelatedField(read_only=True)
+    
     # comment_count 기능
 
     class Meta:
