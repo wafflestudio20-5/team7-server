@@ -68,9 +68,6 @@ jobs:
       
     - name: Upload to S3
       run: aws s3 cp --region ap-northeast-2 ./team7elogdjango.zip s3://$S3_BUCKET_NAME/team7elogdjango.zip
-    
-    - name: Sync to S3
-      run: aws s3 sync . s3://team7elogbucket/team7-server
       
     - name: Code Deploy
       run: | 
