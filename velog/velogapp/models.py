@@ -2,6 +2,7 @@ from django.db import models
 from authentication.models import User
 from django.utils.translation import gettext_lazy as _
 
+
 class Series(models.Model):
     series_name = models.CharField(max_length=100)
 
@@ -26,6 +27,7 @@ class Tag(models.Model):
 class ReadingList(models.Model):
     posts_liked = models.ManyToManyField(Post, related_name='posts_liked')
     posts_viewed = models.ManyToManyField(Post, related_name='posts_viewed')
+
 
 
 # Create your models here.

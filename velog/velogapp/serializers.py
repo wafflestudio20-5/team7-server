@@ -1,5 +1,4 @@
 from rest_framework import serializers
-
 from .models import *
 
 
@@ -31,6 +30,7 @@ class PostListSerializer(serializers.ModelSerializer):
     id = serializers.PrimaryKeyRelatedField(read_only=True)
     created_by = serializers.PrimaryKeyRelatedField(read_only=True)
     like_count = serializers.PrimaryKeyRelatedField(read_only=True)
+    
     # comment_count 기능
 
     class Meta:

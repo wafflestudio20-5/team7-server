@@ -54,4 +54,5 @@ class PostRetrieveUpdateView(generics.RetrieveUpdateAPIView):
     serializer_class = PostSerializer
     lookup_field = 'id'
 
+
 # Create your views here.
