@@ -15,7 +15,7 @@ sys.path.append('/')
 
 # sys.path.append('/velog')
 
-# sys.path.append('/home/ubuntu/team7elog/lib/python3.8/site-packages')
+sys.path.append('/home/ubuntu/team7elog/lib/python3.8/site-packages')
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'velog.settings')
 
