@@ -192,7 +192,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'team7elogdb',
-        'USER': 'root',
+        'USER': 'admin',
         'PASSWORD': env('DB_PASSWORD'),
         'HOST': env('DB_HOST'),
         'PORT': '3306',
