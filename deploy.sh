@@ -53,7 +53,6 @@ python3 manage.py migrate
 #cd velog
 
 echo "gunicorn..."
-cd velog
 nohup gunicorn --bind 0.0.0.0:8080 velog.wsgi:application 
 
 # sudo systemctl restart nginx
