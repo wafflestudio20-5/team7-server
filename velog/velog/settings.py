@@ -30,7 +30,7 @@ if env_path.exists():
         env.read_env(f, overwrite=True)
 
 # STATE =os.environ.get("STATE")
-STATE =env("STATE")
+# STATE =env("STATE")
 # SECRET_KEY = os.environ.get("SECRET_KEY")
 SECRET_KEY = env("SECRET_KEY")
 # SOCIAL_AUTH_GOOGLE_SECRET = os.environ.get("SOCIAL_AUTH_GOOGLE_SECRET")
