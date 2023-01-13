@@ -68,6 +68,9 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
+    # cors
+    "corsheaders",
+    # django
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -94,8 +97,6 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.facebook",
     "allauth.socialaccount.providers.github",
     "allauth.socialaccount.providers.kakao",
-    # cors
-    "corsheaders",
 ]
 
 REST_USE_JWT = True
@@ -299,5 +300,6 @@ LOGIN_REDIRECT_URL = "/auth/social/logout"
 LOGOUT_REDIRECT_URL = "/auth/social/login"
 
 # CORS
+CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW_ALL = True
 SECURE_CROSS_ORIGIN_OPENER_POLICY = None
