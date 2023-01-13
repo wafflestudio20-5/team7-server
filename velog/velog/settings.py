@@ -297,3 +297,6 @@ SOCIALACCOUNT_PROVIDERS = {
 
 LOGIN_REDIRECT_URL = "/auth/social/logout"
 LOGOUT_REDIRECT_URL = "/auth/social/login"
+
+# CORS
+CORS_ORIGIN_ALLOW_ALL = True
