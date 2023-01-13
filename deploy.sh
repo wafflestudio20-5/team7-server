@@ -8,6 +8,9 @@ cd $(dirname "$0")
 echo "현재경로"
 pwd //현재경로
 
+echo "change user to root"
+sudo su
+
 echo "chmod deploy.sh"
 chmod +x ./deploy.sh
 
