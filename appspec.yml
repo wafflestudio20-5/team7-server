@@ -15,5 +15,5 @@ hooks:
   AfterInstall:
     # location은 프로젝트의 root경로를 기준
     - location: deploy.sh
-      timeout: 300
+      timeout: 100
       runas: root
