@@ -18,16 +18,16 @@ from pathlib import Path
 import pymysql  
 pymysql.install_as_MySQLdb()
 
+from django.core.exceptions import ImproperlyConfigured
+
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent
+
 env = Env()
 env_path = BASE_DIR / ".env"
 if env_path.exists():
     with env_path.open("rt", encoding="utf8") as f:
         env.read_env(f, overwrite=True)
-
-from django.core.exceptions import ImproperlyConfigured
-
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
 
 # STATE =os.environ.get("STATE")
 STATE =env("STATE")
