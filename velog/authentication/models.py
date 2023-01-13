@@ -11,7 +11,11 @@ class User(AbstractUser):
         MALE = "M", _("Male")
         OTHER = "O", _("Other")
 
-    username = None
+    username = models.CharField(
+        _("username"),
+        max_length=100,
+        unique=True,
+    )
     first_name = None
     last_name = None
     email = models.EmailField(max_length=100, blank=False, null=False, unique=True)

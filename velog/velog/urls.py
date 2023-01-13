@@ -14,6 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from allauth.account.views import ConfirmEmailView, EmailVerificationSentView
+from allauth.socialaccount.views import connections
 from dj_rest_auth.views import UserDetailsView
 from django.conf import settings
 from django.conf.urls.static import static
@@ -64,4 +65,5 @@ urlpatterns = [
         ConfirmEmailView.as_view(),
         name="account_confirm_email",
     ),
+    path("velog/", include("velogapp.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

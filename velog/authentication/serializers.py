@@ -13,6 +13,7 @@ class UserSerializer(UserDetailsSerializer):
         model = User
         fields = [
             "id",
+            "username",
             "email",
             "name",
             "gender",
@@ -33,11 +34,12 @@ class UserLoginSerializer(LoginSerializer):
     def create(self, validated_data):
         pass
 
-    username = None
+    # username = None
 
 
 class CustomRegisterSerializer(RegisterSerializer):
-    username = None
+    # username = None
+    username = serializers.CharField(max_length=100)
     birthday = serializers.DateField()
     name = serializers.CharField(max_length=100)
     gender = serializers.ChoiceField(choices=User.Gender.choices)
