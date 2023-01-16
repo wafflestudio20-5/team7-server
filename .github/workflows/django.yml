@@ -22,6 +22,12 @@ jobs:
         DATABASES: ${{ secrets.DATABASES }}
         DB_HOST: ${{ secrets.DB_HOST }}
         DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        GH_CLIENT_ID: ${{ secrets.GH_CLIENT_ID}}
+        GH_SECRET_KEY: ${{ secrets.GH_SECRET_KEY }}
+        KAKAO_CLIENT: ${{ secrets.KAKAO_CLIENT_ID}}
+        KAKAO_SECRET_KEY: ${{ secrets.KAKAO_SECRET_KEY }}
+        FACEBOOK_CLIENT_ID: ${{ secrets.FACEBOOK_CLIENT_ID }}
+        FACEBOOK_SECRET_KEY: ${{ secrets.FACEBOOK_SECRET_KEY }}
         
     strategy:
       max-parallel: 4
@@ -39,6 +45,12 @@ jobs:
         echo "SOCIAL_AUTH_GOOGLE_CLIENT_ID=$SOCIAL_AUTH_GOOGLE_CLIENT_ID" >> ./velog/.env
         echo "SOCIAL_AUTH_GOOGLE_SECRET=$SOCIAL_AUTH_GOOGLE_SECRET" >> ./velog/.env
         echo "STATE=$STATE" >> ./velog/.env
+        echo "FACEBOOK_CLIENT_ID=$FACEBOOK_CLIENT_ID" >> ./velog/.env
+        echo "FACEBOOK_SECRET_KEY=$FACEBOOK_SECRET_KEY" >> ./velog/.env
+        echo "GH_CLIENT_ID=$GH_CLIENT_ID" >> ./velog/.env
+        echo "GH_SECRET_KEY=$GH_SECRET_KEY" >> ./velog/.env
+        echo "KAKAO_CLIENT_ID=$KAKAO_CLIENT_ID" >> ./velog/.env
+        echo "KAKAO_SECRET_KEY=$KAKAO_SECRET_KEY" >> ./velog/.env
     
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v3
