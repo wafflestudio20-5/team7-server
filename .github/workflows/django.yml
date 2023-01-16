@@ -2,9 +2,9 @@ name: 7elog CI
 
 on:
   push:
-    branches: [ "Config/ConnectToAWS-1" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "Config/ConnectToAWS-1" ]
+    branches: [ "main" ]
 
 jobs:
   build:
