@@ -64,11 +64,11 @@ jobs:
     
     - name: Collect Static
       run: |
+        cd velog
         python manage.py collect static
         
     - name: Run Tests
       run: |
-        cd velog
         python manage.py test
        
     - name: Make zip file
