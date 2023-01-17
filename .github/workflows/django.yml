@@ -65,7 +65,7 @@ jobs:
     - name: Collect Static
       run: |
         cd velog
-        python manage.py collect static
+        python manage.py collectstatic
         
     - name: Run Tests
       run: |
