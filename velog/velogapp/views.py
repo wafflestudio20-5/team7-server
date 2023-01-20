@@ -31,7 +31,7 @@ class PostListView(generics.GenericAPIView):
     def get(self, request):
         if request.path == '/':
             queryset = self.get_queryset().order_by('-like_count')
-        elif request.path == '/recent':
+        else:
             queryset = self.get_queryset().order_by('created_at')
         serializer = PostListSerializer(queryset, many=True)
         return Response(serializer.data)
