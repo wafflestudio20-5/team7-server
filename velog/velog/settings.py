@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import json
 import os
+import sys
 from datetime import timedelta
 from pathlib import Path
 
@@ -29,6 +30,9 @@ secret_file = os.path.join(BASE_DIR, "secrets.json")
 with open(secret_file) as f:
     secrets = json.loads(f.read())
 
+for key, value in secrets.items():
+    setattr(sys.modules[__name__], key, value)
+
 
 def get_secret(setting):
     try:
@@ -38,7 +42,7 @@ def get_secret(setting):
         raise ImproperlyConfigured(error_msg)
 
 
-SECRET_KEY = get_secret("SECRET_KEY")
+# SECRET_KEY = get_secret("SECRET_KEY")
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -116,8 +120,8 @@ REST_FRAMEWORK = {
 
 SIMPLE_JWT = {
     "AUTH_HEADER_TYPES": ("Bearer",),
-    "ACCESS_TOKEN_LIFETIME": timedelta(hours=2),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+    "ACCESS_TOKEN_LIFETIME": timedelta(hours=1),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     "ROTATE_REFRESH_TOKENS": False,
     "BLACKLIST_AFTER_ROTATION": True,
 }
@@ -259,9 +263,8 @@ SOCIALACCOUNT_PROVIDERS = {
     },
 }
 
-LOGIN_REDIRECT_URL = "/"
-LOGOUT_REDIRECT_URL = "/accounts/login"
-
+LOGIN_REDIRECT_URL = "/api/v1/"
+LOGOUT_REDIRECT_URL = "/api/v1/accounts/login/"
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
@@ -274,4 +277,5 @@ ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS: 1
 ACCOUNT_EMAIL_SUBJECT_PREFIX = "[이메일 인증] "
-EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = "/"
+EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = "/api/v1/"
+EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = "/api/v1/accounts/login/"
