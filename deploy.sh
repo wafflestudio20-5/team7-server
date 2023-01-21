@@ -46,6 +46,9 @@ python3 -m pip install pymysql
 echo "installing drf_yasg..."
 sudo python3 -m pip install drf_yasg
 
+echo "installing coresheaders..."
+sudo python3 -m pip install django-cors-headers
+
 echo "collect static..."
 python3 manage.py collectstatic
 
