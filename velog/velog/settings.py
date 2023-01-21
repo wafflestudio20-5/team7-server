@@ -62,7 +62,7 @@ def get_secret(setting):
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["*", "7elog.store"]
 
 
 # Application definition
@@ -302,6 +302,9 @@ LOGOUT_REDIRECT_URL = "/auth/social/login"
 # CORS
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_WHITELIST = [
+    'https://7elog.store',
+]
 SECURE_CROSS_ORIGIN_OPENER_POLICY = None
 
 # CSRF
