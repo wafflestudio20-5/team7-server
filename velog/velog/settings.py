@@ -352,7 +352,6 @@ CSRF_TRUSTED_ORIGINS = [
     'http://7elog.store',
     'https://7elog.store',
     'https://*.7elog.store',
-    'https://' + os.environ['WEBSITE_HOSTNAME'],
 ]
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 CSRF_COOKIE_SECURE = True
