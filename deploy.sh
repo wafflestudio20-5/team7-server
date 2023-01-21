@@ -11,6 +11,12 @@ pwd //현재경로
 echo "change user to root"
 sudo su
 
+echo "chmod velogapp"
+chmod +x ./velog/velogapp
+
+echo "chmod authentication"
+chmod +x ./velog/authentication
+
 echo "chmod deploy.sh"
 chmod +x ./deploy.sh
 
