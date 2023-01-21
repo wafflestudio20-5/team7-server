@@ -14,15 +14,15 @@ sudo su
 echo "chmod deploy.sh"
 chmod +x ./deploy.sh
 
-# echo "installing python..."
-# sudo apt update
-# sudo apt python3.8
+echo "installing python..."
+sudo apt update
+sudo apt python3.8
 
 echo "installing pip..."
 sudo apt-get install python3-pip
 
-# echo "installing virtualenv"
-# sudo pip3 install virtualenv 
+echo "installing virtualenv"
+sudo pip3 install virtualenv 
 
 echo "installing gunicorn"
 sudo python3 -m pip install gunicorn
@@ -30,15 +30,15 @@ sudo python3 -m pip install gunicorn
 echo "installing environ"
 sudo python3 -m pip install django-environ
 
-# echo "activate venv..."
-# source team7elog/bin/activate
+echo "activate venv..."
+source team7elog/bin/activate
 
 echo "install package..."
 cd velog
 sudo python3 -m pip install -r "requirements.txt"
 
-# echo "install django..."
-# python3 -m pip install django==4.1
+echo "install django..."
+python3 -m pip install django==4.1
 
 echo "install pymysql..."
 python3 -m pip install pymysql
