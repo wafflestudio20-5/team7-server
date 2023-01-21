@@ -301,7 +301,14 @@ LOGOUT_REDIRECT_URL = "/auth/social/login"
 
 # CORS
 CORS_ALLOW_CREDENTIALS = True
-CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOWED_ORIGINS = [
+    "https://7elog.store",
+    "http://localhost:80",
+    "http://127.0.0.1:9000
+]
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"^https://\w+\.7elog\.store$",
+]
 CORS_ORIGIN_WHITELIST = [
     'https://*.7elog.store',
 ]
