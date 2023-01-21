@@ -317,6 +317,15 @@ CORS_ORIGIN_WHITELIST = [
 ]
 # SECURE_CROSS_ORIGIN_OPENER_POLICY = None
 
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+
 CORS_ALLOW_HEADERS = (
     'access-control-allow-credentials',
     'access-control-allow-origin',
