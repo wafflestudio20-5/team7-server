@@ -27,12 +27,12 @@ sudo pip3 install virtualenv
 echo "installing gunicorn"
 sudo python3 -m pip install gunicorn
 
-echo "activate venv..."
-source team7elog/bin/activate
+# echo "activate venv..."
+# source team7elog/bin/activate
 
 echo "install package..."
 cd velog
-sudo python3 -m pip -y install -r "requirements.txt"
+sudo python3 -m pip install -r "requirements.txt"
 
 # echo "install django..."
 # python3 -m pip install django==4.1
