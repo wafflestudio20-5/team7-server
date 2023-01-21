@@ -49,8 +49,8 @@ sudo python3 -m pip install drf_yasg
 echo "installing coresheaders..."
 sudo python3 -m pip install django-cors-headers
 
-echo "collect static..."
-python3 manage.py collectstatic
+# echo "collect static..."
+# python3 manage.py collectstatic
 
 echo "make migrations..."
 python3 manage.py makemigrations
