@@ -31,7 +31,7 @@ echo "installing environ"
 sudo python3 -m pip install django-environ
 
 echo "activate venv..."
-#! /home/ubuntu/team7elog/bin/activate
+sudo source /home/ubuntu/team7elog/bin/activate
 
 echo "install package..."
 cd velog
