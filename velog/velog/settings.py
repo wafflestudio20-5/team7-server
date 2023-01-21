@@ -304,7 +304,7 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     "https://7elog.store",
     "http://localhost:80",
-    "http://127.0.0.1:9000
+    "http://127.0.0.1:9000"
 ]
 CORS_ALLOWED_ORIGIN_REGEXES = [
     r"^https://\w+\.7elog\.store$",
