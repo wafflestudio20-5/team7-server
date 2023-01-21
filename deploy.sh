@@ -53,10 +53,10 @@ sudo python3 -m pip install django-cors-headers
 # python3 manage.py collectstatic
 
 echo "make migrations..."
-python3 manage.py makemigrations
+y | python3 manage.py makemigrations
 
 echo "apply migration..."
-python3 manage.py migrate
+y | python3 manage.py migrate
 
 #echo "move location to project..."
 #cd velog
