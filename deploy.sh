@@ -64,8 +64,10 @@ python3 manage.py migrate
 echo "gunicorn..."
 sudo systemctl start gunicorn
 sudo systemctl enable gunicorn
+sudo systemctl status gunicorn
 
 echo "nginx..."
 sudo systemctl restart nginx
+sudo systemctl status nginx
 # sudo systemctl restart gunicorn
 
