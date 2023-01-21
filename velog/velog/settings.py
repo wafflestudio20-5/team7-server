@@ -232,7 +232,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "Adia/Seoul"
+TIME_ZONE = "Asia/Seoul"
 
 USE_I18N = True
 
