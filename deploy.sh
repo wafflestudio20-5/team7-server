@@ -16,7 +16,7 @@ chmod +x ./deploy.sh
 
 echo "installing python..."
 sudo apt update
-sudo apt python3.8
+sudo apt install python3.8
 
 echo "installing pip..."
 sudo apt-get install python3-pip
