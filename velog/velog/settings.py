@@ -300,6 +300,7 @@ LOGIN_REDIRECT_URL = "/auth/social/logout"
 LOGOUT_REDIRECT_URL = "/auth/social/login"
 
 # CORS
+CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     "https://7elog.store",
@@ -311,8 +312,31 @@ CORS_ALLOWED_ORIGIN_REGEXES = [
 ]
 CORS_ORIGIN_WHITELIST = [
     'https://*.7elog.store',
+    'localhost:8000',
+    '127.0.0.1:8000',
 ]
-SECURE_CROSS_ORIGIN_OPENER_POLICY = None
+# SECURE_CROSS_ORIGIN_OPENER_POLICY = None
+
+CORS_ALLOW_HEADERS = (
+    'access-control-allow-credentials',
+    'access-control-allow-origin',
+    'access-control-request-method',
+    'access-control-request-headers',
+    'accept',
+    'accept-encoding',
+    'accept-language',
+    'authorization',
+    'connection',
+    'content-type',
+    'dnt',
+    'credentials',
+    'host',
+    'origin',
+    'user-agent',
+    'X-CSRFToken',
+    'csrftoken',
+    'x-requested-with',
+)
 
 # CSRF
 CSRF_TRUSTED_ORIGINS = ['https://*.7elog.store']
