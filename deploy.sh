@@ -65,6 +65,7 @@ echo "gunicorn..."
 sudo systemctl start gunicorn
 sudo systemctl enable gunicorn
 
-# sudo systemctl restart nginx
+echo "nginx..."
+sudo systemctl restart nginx
 # sudo systemctl restart gunicorn
 
