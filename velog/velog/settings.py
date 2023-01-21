@@ -62,7 +62,7 @@ def get_secret(setting):
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["*", "https://*.7elog.store"]
+ALLOWED_HOSTS = ["*", "https://7elog.store"]
 
 
 # Application definition
