@@ -348,5 +348,11 @@ CORS_ALLOW_HEADERS = (
 )
 
 # CSRF
-CSRF_TRUSTED_ORIGINS = ['https://*.7elog.store']
+CSRF_TRUSTED_ORIGINS = [ 
+    'https://*.7elog.store',
+    'https://7elog.store',
+    '7elog.store',
+    'localhost:8000',
+    
+]
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
