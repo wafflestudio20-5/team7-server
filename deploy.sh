@@ -27,6 +27,9 @@ sudo pip3 install virtualenv
 echo "installing gunicorn"
 sudo python3 -m pip install gunicorn
 
+echo "installing environ"
+sudo python3 -m pip install django-environ
+
 # echo "activate venv..."
 # source team7elog/bin/activate
 
