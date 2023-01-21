@@ -20,10 +20,10 @@ class PostCreateView(generics.GenericAPIView):
 class PostListView(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = PostListSerializer
-    #lookup_field = 'created_by'
+    #lookup_field = 'author'
     def get_queryset(self):
         if self.request.user.is_authenticated:
-            return Post.objects.filter(Q(created_by=self.request.user) |
+            return Post.objects.filter(Q(author=self.request.user) |
                                        Q(is_private=False)
                                        )
         else:
@@ -42,7 +42,7 @@ class PostRetrieveDestroyView(generics.RetrieveDestroyAPIView):
     lookup_field = 'title'
     def get_queryset(self):
         if self.request.user.is_authenticated:
-            return Post.objects.filter(Q(created_by=self.request.user) |
+            return Post.objects.filter(Q(author=self.request.user) |
                                        Q(is_private=False)
                                        )
         else:
@@ -52,7 +52,48 @@ class PostRetrieveUpdateView(generics.RetrieveUpdateAPIView):
     permission_classes = [IsCreator]
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    lookup_field = 'id'
+    lookup_field = 'pid'
 
+class CommentListCreateView(generics.ListCreateAPIView):
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+
+    def create(self, request, pid, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data)
+        post = Post.objects.get(pid=pid)
+        #get pid for post in comment
+
+        if serializer.is_valid():
+            author = request.user
+            parent_comment = request.data.get("parent_comment", None)
+            serializer.save(author=author, post=post)
+            return Response(data=serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.get_queryset().filter(post=self.kwargs['pid'])
+        serializer = CommentSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+class CommentUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsCreatorOrReadOnly]
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    lookup_field = 'cid'
+
+    def update(self, request, *args, **kwargs):
+        comment = Comment.objects.get(pk=self.kwargs['cid'])
+        is_updated = True
+        serializer = CommentSerializer(comment, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save(is_updated=is_updated)
+            return Response(data=serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
 
 # Create your views here.
