@@ -27,8 +27,8 @@ sudo pip3 install virtualenv
 echo "installing gunicorn"
 sudo python3 -m pip install gunicorn
 
-# echo "activate venv..."
-# source team7elog/bin/activate
+echo "activate venv..."
+source team7elog/bin/activate
 
 echo "install package..."
 cd velog
