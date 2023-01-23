@@ -304,7 +304,7 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 LOGIN_REDIRECT_URL = "/api/v1/"
-LOGOUT_REDIRECT_URL = "/api/v1/accounts/login/"
+LOGOUT_REDIRECT_URL = "/api/v1/accounts/logout/"
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
@@ -319,8 +319,8 @@ ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS: 1
 ACCOUNT_EMAIL_SUBJECT_PREFIX = "[이메일 인증] "
 EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = "/api/v1/"
 
-LOGIN_REDIRECT_URL = "/auth/social/logout"
-LOGOUT_REDIRECT_URL = "/auth/social/login"
+LOGIN_REDIRECT_URL = "/auth/social/login"
+LOGOUT_REDIRECT_URL = "/auth/social/logout"
 
 # CORS
 CORS_ORIGIN_ALLOW_ALL = True
