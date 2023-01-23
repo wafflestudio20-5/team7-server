@@ -28,6 +28,8 @@ jobs:
         KAKAO_SECRET_KEY: ${{ secrets.KAKAO_SECRET_KEY }}
         FACEBOOK_CLIENT_ID: ${{ secrets.FACEBOOK_CLIENT_ID }}
         FACEBOOK_SECRET_KEY: ${{ secrets.FACEBOOK_SECRET_KEY }}
+        EMAIL_HOST_USER: ${{ secrets.EMAIL_HOST_USER }}
+        EMAIL_HOST_PASSWORD: ${{ secrets.EMAIL_HOST_PASSWORD }}
         
     strategy:
       max-parallel: 4
@@ -51,6 +53,9 @@ jobs:
         echo "GH_SECRET_KEY=$GH_SECRET_KEY" >> ./velog/.env
         echo "KAKAO_CLIENT_ID=$KAKAO_CLIENT_ID" >> ./velog/.env
         echo "KAKAO_SECRET_KEY=$KAKAO_SECRET_KEY" >> ./velog/.env
+        echo "EMAIL_HOST_USER=$EMAIL_HOST_USER" >> ./velog/.env
+        echo "EMAIL_HOST_PASSWORD=$EMAIL_HOST_PASSWORD" >> ./velog/.env
+        
     
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v3
