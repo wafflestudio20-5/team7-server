@@ -8,6 +8,8 @@ from dj_rest_auth.views import (PasswordResetConfirmView, PasswordResetView,
 from django.urls import path, re_path, include
 
 urlpatterns = [
+    path("login/", LoginView.as_view(), name='rest_login'),
+    path("logout/", LogoutView.as_view(), name='rest_logout'),
     path("user/", UserDetailsView.as_view(), name="user_detail"),
     path("signup/", RegisterView.as_view(), name="basic_signup"),
     path(
