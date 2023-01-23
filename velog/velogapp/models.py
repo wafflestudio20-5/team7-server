@@ -17,7 +17,7 @@ class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.PROTECT)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    like_count = models.PositiveIntegerField(default=0)
+    likes = models.PositiveIntegerField(default=0)
     like_user = models.ManyToManyField(User, related_name='user_who_liked', blank=True)
     tags = models.ManyToManyField('Tag', blank=True)
     hits = models.PositiveIntegerField(default=0)

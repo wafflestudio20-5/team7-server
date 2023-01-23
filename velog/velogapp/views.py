@@ -9,10 +9,11 @@ class PostCreateView(generics.GenericAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     def post(self, request, *args, **kwargs):
+        author = request.user
         data = request.data
         serializer = self.get_serializer(data=data)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(author=author)
             return Response(data=serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response("data is not valid", status=status.HTTP_400_BAD_REQUEST)
@@ -29,8 +30,8 @@ class PostListView(generics.GenericAPIView):
         else:
             return Post.objects.filter(is_private=False)
     def get(self, request):
-        if request.path == '/':
-            queryset = self.get_queryset().order_by('-like_count')
+        if request.path == '/': # 여기 re_path로 지정해주는 것도 좋아보임
+            queryset = self.get_queryset().order_by('-likes')
         else:
             queryset = self.get_queryset().order_by('created_at')
         serializer = PostListSerializer(queryset, many=True)
@@ -53,6 +54,7 @@ class PostRetrieveUpdateView(generics.RetrieveUpdateAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     lookup_field = 'pid'
+    #해당 post의 comment도 불러오도록 해야 함
 
 class CommentListCreateView(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]

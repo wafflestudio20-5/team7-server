@@ -1,13 +1,16 @@
 from rest_framework import serializers
 from .models import *
 
+class TagSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Tag
+        field = ['id', 'tag_name']
+
 
 class PostSerializer(serializers.ModelSerializer):
     author = serializers.PrimaryKeyRelatedField(read_only=True)
-
-    def to_internal_value(self, data):
-        internal_value = super().to_internal_value(data)
-        return {**internal_value, 'author': self.context['request'].user}
+    tags = TagSerializer(many=True, required=False)
 
     class Meta:
         model = Post
@@ -27,7 +30,7 @@ class PostSerializer(serializers.ModelSerializer):
 
 class PostListSerializer(serializers.ModelSerializer):
     author = serializers.PrimaryKeyRelatedField(read_only=True)
-    like_count = serializers.PrimaryKeyRelatedField(read_only=True)
+    likes = serializers.PrimaryKeyRelatedField(read_only=True)
     
     # comment_count 기능
 
@@ -41,32 +44,9 @@ class PostListSerializer(serializers.ModelSerializer):
             'author',
             'created_at',
             'updated_at',
-            'like_count',
+            'likes',
 
         ]
-
-class PostDetailSerializer(serializers.ModelSerializer):
-    author = serializers.PrimaryKeyRelatedField(read_only=True)
-    like_count = serializers.PrimaryKeyRelatedField(read_only=True)
-
-    class Meta:
-        model = Post
-        fields = [
-            'pid',
-            'title',
-            'tags',
-            'author',
-            'created_at',
-            'updated_at',
-            'content',
-            'like_count',
-        ]
-
-class TagSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Tag
-        field = ['tag_name']
 
 class CommentSerializer(serializers.ModelSerializer):
 
@@ -81,4 +61,21 @@ class CommentSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ['post', 'author']
         model = Comment
+
+class PostDetailSerializer(serializers.ModelSerializer):
+    author = serializers.PrimaryKeyRelatedField(read_only=True)
+    likes = serializers.PrimaryKeyRelatedField(read_only=True)
+
+    class Meta:
+        model = Post
+        fields = [
+            'pid',
+            'title',
+            'tags',
+            'author',
+            'created_at',
+            'updated_at',
+            'content',
+            'likes',
+        ]
 
