@@ -17,7 +17,15 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name="Post",
             fields=[
-                ("pid", models.AutoField(primary_key=True, serialize=False)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
                 ("thumbnail", models.ImageField(null=True, upload_to="")),
                 ("title", models.TextField()),
                 ("preview", models.CharField(max_length=150, null=True)),

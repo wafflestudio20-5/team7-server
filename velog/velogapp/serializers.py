@@ -24,10 +24,12 @@ class PostSerializer(serializers.ModelSerializer):
             'is_private',
             'tags',
         ]
+        
 
 class PostListSerializer(serializers.ModelSerializer):
     author = serializers.PrimaryKeyRelatedField(read_only=True)
     like_count = serializers.PrimaryKeyRelatedField(read_only=True)
+    
     
     # comment_count 기능
 
@@ -44,6 +46,7 @@ class PostListSerializer(serializers.ModelSerializer):
             'like_count',
 
         ]
+
 
 class PostDetailSerializer(serializers.ModelSerializer):
     author = serializers.PrimaryKeyRelatedField(read_only=True)
@@ -62,11 +65,13 @@ class PostDetailSerializer(serializers.ModelSerializer):
             'like_count',
         ]
 
+
 class TagSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Tag
         field = ['tag_name']
+        
 
 class CommentSerializer(serializers.ModelSerializer):
 

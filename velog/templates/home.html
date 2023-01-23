@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% load account socialaccount %}
+
+{% block content %}
+
+    {% if request.user.is_authenticated %}
+
+        <h1>Hi {{ request.user.email }}!</h1>
+        <h3>이름: {{ request.user.name }}</h3>
+        <h3>생일: {{ request.user.birthday }}</h3>
+        <h3>자기소개: {{ request.user.introduction }}</h3>
+        <h3>성: {{ request.user.gender }}</h3>
+        <h3>가입날짜: {{ request.user.date_joined }}</h3>
+
+        {% if request.user == user %}
+        <a href="{% url 'user_detail' %}">Edit Profile</a>
+        {% endif %}
+        <div>
+            <a href="{% url 'account_logout' %}">Logout</a>
+        </div>
+    {% else %}
+
+        <h1>Not logged in</h1>
+
+        <a href="{% url 'account_signup' %}">Signup</a>
+
+        <a class="btn" href="{% url 'account_login' %}">Login</a>
+    {% endif %}
+
+{% endblock content %}

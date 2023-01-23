@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import json
 import os
+import sys
+
 from environ import Env
 from datetime import timedelta
 from pathlib import Path
@@ -46,6 +48,9 @@ SOCIAL_AUTH_GOOGLE_CLIENT_ID = env("SOCIAL_AUTH_GOOGLE_CLIENT_ID")
 
 # with open(secret_file) as f:
 #     secrets = json.loads(f.read())
+
+# for key, value in secrets.items():
+#    setattr(sys.modules[__name__], key, value)
 
 
 def get_secret(setting):
@@ -90,6 +95,7 @@ INSTALLED_APPS = [
     "dj_rest_auth",
     "dj_rest_auth.registration",
     # allauth
+    "allauth_ui",
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
@@ -97,6 +103,7 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.facebook",
     "allauth.socialaccount.providers.github",
     "allauth.socialaccount.providers.kakao",
+    "widget_tweaks",
 ]
 
 REST_USE_JWT = True
@@ -105,11 +112,11 @@ JWT_AUTH_REFRESH_COOKIE = "my-refresh-token"
 
 SITE_ID = 1
 ACCOUNT_UNIQUE_EMAIL = True
-ACCOUNT_USER_MODEL_USERNAME_FIELD = None
-ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_USER_MODEL_USERNAME_FIELD = "username"
+ACCOUNT_USERNAME_REQUIRED = True
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_AUTHENTICATION_METHOD = "email"
-ACCOUNT_EMAIL_VERIFICATION = "none"
+# ACCOUNT_EMAIL_VERIFICATION = "none"
 
 AUTH_USER_MODEL = "authentication.User"
 
@@ -135,8 +142,8 @@ REST_FRAMEWORK = {
 
 SIMPLE_JWT = {
     "AUTH_HEADER_TYPES": ("Bearer",),
-    "ACCESS_TOKEN_LIFETIME": timedelta(hours=2),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+    "ACCESS_TOKEN_LIFETIME": timedelta(hours=1),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     "ROTATE_REFRESH_TOKENS": False,
     "BLACKLIST_AFTER_ROTATION": True,
 }
@@ -147,10 +154,10 @@ SWAGGER_SETTINGS = {
     }
 }
 
-AUTHENTICATION_BACKENDS = [
+AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
     "allauth.account.auth_backends.AuthenticationBackend",
-]
+)
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -295,6 +302,22 @@ SOCIALACCOUNT_PROVIDERS = {
         "GRAPH_API_URL": "https://graph.facebook.com/v13.0",
     },
 }
+
+LOGIN_REDIRECT_URL = "/api/v1/"
+LOGOUT_REDIRECT_URL = "/api/v1/accounts/login/"
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = "587"
+EMAIL_HOST_USER = secrets["EMAIL_HOST_USER"]
+EMAIL_HOST_PASSWORD = secrets["EMAIL_HOST_PASSWORD"]
+EMAIL_USE_TLS = True  # TLS 보안 방법
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS: 1
+ACCOUNT_EMAIL_SUBJECT_PREFIX = "[이메일 인증] "
+EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = "/api/v1/"
 
 LOGIN_REDIRECT_URL = "/auth/social/logout"
 LOGOUT_REDIRECT_URL = "/auth/social/login"

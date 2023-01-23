@@ -1,5 +1,7 @@
 from rest_framework import permissions
+
 from .models import Post
+
 
 class IsCreatorOrReadOnly(permissions.BasePermission):
     def has_object_permission(self, request, view, obj: Post):
@@ -11,3 +13,4 @@ class IsCreatorOrReadOnly(permissions.BasePermission):
 class IsCreator(permissions.BasePermission):
     def has_object_permission(self, request, view, obj: Post):
         return obj.author ==request.user
+
