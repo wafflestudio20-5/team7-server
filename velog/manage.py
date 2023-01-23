@@ -3,10 +3,10 @@
 import os
 import sys
 
-
 def main():
     """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'velog.settings')
+    sys.path.append('/home/ubuntu/team7elog/lib/python3.8/site-packages')
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
