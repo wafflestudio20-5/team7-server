@@ -9,14 +9,14 @@ class PostCreateView(generics.GenericAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     def post(self, request, *args, **kwargs):
-        author = request.user
         data = request.data
-        serializer = self.get_serializer(data=data)
+        serializer = self.serializer_class(data=data)
         if serializer.is_valid():
+            author = request.user
             serializer.save(author=author)
             return Response(data=serializer.data, status=status.HTTP_201_CREATED)
         else:
-            return Response("data is not valid", status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class PostListView(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
@@ -38,7 +38,7 @@ class PostListView(generics.GenericAPIView):
         return Response(serializer.data)
 
 class PostRetrieveDestroyView(generics.RetrieveDestroyAPIView):
-    permission_classes = [IsCreatorOrReadOnly]
+    permission_classes = [IsCreatorOrReadOnly] # retrieve 누구나/ likes patch 누구나 / destroy creator만
     serializer_class = PostDetailSerializer
     lookup_field = 'title'
     def get_queryset(self):
@@ -48,6 +48,20 @@ class PostRetrieveDestroyView(generics.RetrieveDestroyAPIView):
                                        )
         else:
             return Post.objects.filter(is_private=False)
+    # post 요청 시 좋아요 추가/제거
+    def post(self, request, *args, **kwargs):
+        post = self.get_object()
+        user = request.user
+        if post.like_user.filter(pk=request.user.pk).exists():
+            post.like_user.remove(user)
+            post.likes -= 1
+            post.save()
+        else:
+            post.like_user.add(user)
+            post.likes += 1
+            post.save()
+        return self.retrieve(request, *args, **kwargs)
+
 
 class PostRetrieveUpdateView(generics.RetrieveUpdateAPIView):
     permission_classes = [IsCreator]
