@@ -49,8 +49,8 @@ SOCIAL_AUTH_GOOGLE_CLIENT_ID = env("SOCIAL_AUTH_GOOGLE_CLIENT_ID")
 # with open(secret_file) as f:
 #     secrets = json.loads(f.read())
 
-for key, value in secrets.items():
-    setattr(sys.modules[__name__], key, value)
+# for key, value in secrets.items():
+#    setattr(sys.modules[__name__], key, value)
 
 
 def get_secret(setting):
