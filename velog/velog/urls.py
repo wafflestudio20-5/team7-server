@@ -54,23 +54,9 @@ urlpatterns = [
         name="schema-redoc",
     ),
     path("api/v1/admin/", admin.site.urls),
-    path("api/v1/accounts/", include("dj_rest_auth.urls")),
+    # path("api/v1/accounts/", include("dj_rest_auth.urls")),
     path("api/v1/accounts/", include("authentication.urls")),
-    # path("api/v1/accounts/", include("allauth.urls")),
-    # path("api/v1/accounts/", include("allauth.urls")),
-    # path("accounts/", include("authentication.urls")),
+    path("api/v1/accounts/", include("allauth.urls"), name="socialaccount_signup"),
     path("api/v1/", TemplateView.as_view(template_name="home.html"), name="home"),
-    # 유효한 이메일이 유저에게 전달
-    # re_path(
-    #     r"^account-confirm-email/$",
-    #     EmailVerificationSentView.as_view(),
-    #     name="account_email_verification_sent",
-    # ),
-    # # 유저가 클릭한 이메일(=링크) 확인
-    # re_path(
-    #     r"^account-confirm-email/(?P<key>[-:\w]+)/$",
-    #     ConfirmEmailView.as_view(),
-    #     name="account_confirm_email",
-    # ),
     path("api/v1/velog/", include("velogapp.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

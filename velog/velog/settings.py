@@ -94,7 +94,6 @@ ACCOUNT_USER_MODEL_USERNAME_FIELD = "username"
 ACCOUNT_USERNAME_REQUIRED = True
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_AUTHENTICATION_METHOD = "email"
-# ACCOUNT_EMAIL_VERIFICATION = "none"
 
 AUTH_USER_MODEL = "authentication.User"
 
@@ -228,43 +227,40 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # Social Login
 
-SOCIALACCOUNT_PROVIDERS = {
-    "google": {
-        "SCOPE": [
-            "profile",
-            "email",
-        ],
-        "AUTH_PARAMS": {
-            "access_type": "online",
-        },
-        "OAUTH_PKCE_ENABLED": True,
-    },
-    "facebook": {
-        "METHOD": "oauth2",
-        # 'SDK_URL': '//connect.facebook.net/{locale}/sdk.js',
-        "SCOPE": ["email", "public_profile"],
-        "AUTH_PARAMS": {"auth_type": "reauthenticate"},
-        "INIT_PARAMS": {"cookie": True},
-        "FIELDS": [
-            "id",
-            "first_name",
-            "last_name",
-            "middle_name",
-            "name",
-            "name_format",
-            "picture",
-            "short_name",
-        ],
-        "EXCHANGE_TOKEN": True,
-        # 'LOCALE_FUNC': 'path.to.callable',
-        "VERIFIED_EMAIL": False,
-        "VERSION": "v13.0",
-        "GRAPH_API_URL": "https://graph.facebook.com/v13.0",
-    },
-}
+# SOCIALACCOUNT_PROVIDERS = {
+#     "google": {
+#         "SCOPE": [
+#             "profile",
+#             "email",
+#         ],
+#         "AUTH_PARAMS": {
+#             "access_type": "online",
+#         },
+#         "OAUTH_PKCE_ENABLED": True,
+#     },
+#     "facebook": {
+#         "METHOD": "oauth2",
+#         "AUTH_PARAMS": {"auth_type": "reauthenticate"},
+#         "INIT_PARAMS": {"cookie": True},
+#         "FIELDS": [
+#             "id",
+#             "email",
+#             "name",
+#             "name_format",
+#             "picture",
+#             "short_name",
+#         ],
+#         "EXCHANGE_TOKEN": True,
+#         # 'LOCALE_FUNC': 'path.to.callable',
+#         "VERIFIED_EMAIL": False,
+#         "VERSION": "v13.0",
+#         "GRAPH_API_URL": "https://graph.facebook.com/v13.0",
+#     },
+# }
 
 LOGIN_REDIRECT_URL = "/api/v1/"
 LOGOUT_REDIRECT_URL = "/api/v1/accounts/login/"
+ACCOUNT_LOGOUT_REDIRECT_URL = "/api/v1/accounts/login/"
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
@@ -277,5 +273,5 @@ ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS: 1
 ACCOUNT_EMAIL_SUBJECT_PREFIX = "[이메일 인증] "
-EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = "/api/v1/"
-EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = "/api/v1/accounts/login/"
+ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = "/api/v1/"
+ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = "/api/v1/accounts/login/"
