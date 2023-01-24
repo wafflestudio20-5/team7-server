@@ -23,6 +23,7 @@ from rest_framework.views import APIView
 from .models import User
 
 import logging
+logger = logging.getLogger(__name__)
 
 # from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
 # from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
@@ -401,7 +402,7 @@ class ConfirmEmailView(APIView):
         key = self.kwargs['key']
         email_confirmation = EmailConfirmationHMAC.from_key(key)
         # 왜 email_confirmation에서 None이 나오지?
-        logger = logging.getLogger("django.server")
+
         logger.info(email_confirmation)
         print(email_confirmation)
         if not email_confirmation:
