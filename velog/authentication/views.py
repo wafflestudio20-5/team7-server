@@ -29,7 +29,7 @@ import logging
 # from allauth.socialaccount.providers.github.views import GitHubOAuth2Adapter
 # from allauth.socialaccount.providers.kakao.views import KakaoOAuth2Adapter
 
-BASE_URL = "https://api.7elog.store/api/v1/"
+BASE_URL = "https://api.7elog.store"
 GOOGLE_CALLBACK_URI = BASE_URL + "accounts/google/login/callback/"
 KAKAO_CALLBACK_URI = BASE_URL + "accounts/kakao/login/callback/"
 GITHUB_CALLBACK_URI = BASE_URL + "accounts/github/login/callback/"
