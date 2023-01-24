@@ -20,6 +20,9 @@ chmod +x ./velog/authentication
 echo "chmod deploy.sh"
 chmod +x ./deploy.sh
 
+echo "chmod templates"
+chmod +x ./velog/templates/
+
 echo "installing python..."
 sudo apt update
 sudo apt-get install python3.8
