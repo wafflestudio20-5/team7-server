@@ -45,15 +45,15 @@ def google_login(request):
     Code Request
     """
     scope = "https://www.googleapis.com/auth/userinfo.email"
-    client_id = getattr(settings, "GOOGLE_CLIENT_ID")
+    client_id = getattr(settings, "SOCIAL_AUTH_GOOGLE_CLIENT_ID")
     return redirect(
         f"https://accounts.google.com/o/oauth2/v2/auth?client_id={client_id}&response_type=code&redirect_uri={GOOGLE_CALLBACK_URI}&scope={scope}"
     )
 
 
 def google_callback(request):
-    client_id = getattr(settings, "GOOGLE_CLIENT_ID")
-    client_secret = getattr(settings, "GOOGLE_SECRET")
+    client_id = getattr(settings, "SOCIAL_AUTH_GOOGLE_CLIENT_ID")
+    client_secret = getattr(settings, "SOCIAL_AUTH_GOOGLE_SECRET")
     code = request.GET.get("code")
     """
     Access Token Request
@@ -219,8 +219,8 @@ def github_login(request):
 
 
 def github_callback(request):
-    client_id = getattr(settings, "GITHUB_CLIENT_ID")
-    client_secret = getattr(settings, "GITHUB_SECRET")
+    client_id = getattr(settings, "GH_CLIENT_ID")
+    client_secret = getattr(settings, "GH_SECRET_KEY")
     code = request.GET.get("code")
     """
     Access Token Request
@@ -312,7 +312,7 @@ def facebook_login(request):
 
 def facebook_callback(request):
     client_id = getattr(settings, "FACEBOOK_CLIENT_ID")
-    client_secret = getattr(settings, "FACEBOOK_SECRET")
+    client_secret = getattr(settings, "FACEBOOK_SECRET_KEY")
     code = request.GET.get("code")
     """
     Access Token Request
