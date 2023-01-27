@@ -22,7 +22,10 @@ chmod +x ./deploy.sh
 
 echo "chmod templates"
 chmod +x ./velog/templates/
+chmod +x ./velog/templates/account/
 chmod +x ./velog/templates/account
+chmod +x ./velog/templates/socialaccount/
+chmod +x ./velog/templates/socialaccount
 
 echo "installing python..."
 sudo apt update
