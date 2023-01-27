@@ -16,6 +16,7 @@ from django.http import JsonResponse
 from django.shortcuts import redirect
 from rest_framework import status
 from rest_framework.views import APIView 
+from rest_framework.permission import AllowAny
 
 from .models import User
 
@@ -390,7 +391,7 @@ class ConfirmEmailView(APIView):
     def get_object(self, queryset=None):
         key = self.kwargs['key']
         email_confirmation = EmailConfirmationHMAC.from_key(key)
-        # 왜 email_confirmation에서 None이 나오지?
+        
 
         logger.info(email_confirmation)
         print(email_confirmation)
