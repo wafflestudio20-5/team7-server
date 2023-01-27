@@ -15,6 +15,7 @@ from django.conf import settings
 from django.http import JsonResponse
 from django.shortcuts import redirect
 from rest_framework import status
+from rest_framework.views import APIView 
 
 from .models import User
 
