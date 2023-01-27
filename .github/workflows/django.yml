@@ -2,9 +2,9 @@ name: 7elog CI
 
 on:
   push:
-    branches: [ "feat-email-login" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "feat-email-login" ]
+    branches: [ "main" ]
 
 jobs:
   build:
