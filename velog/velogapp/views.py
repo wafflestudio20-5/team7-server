@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from .serializers import *
 from .permissions import IsCreatorOrReadOnly, IsCreator
 from django.db.models import Q
+import re
 
 class PostCreateView(generics.GenericAPIView):
     permissions_classes = [permissions.IsAuthenticatedOrReadOnly]
@@ -13,7 +14,19 @@ class PostCreateView(generics.GenericAPIView):
         serializer = self.serializer_class(data=data)
         if serializer.is_valid():
             author = request.user
-            serializer.save(author=author)
+            post = serializer.save(author=author)
+            create_tag = request.data.get("create_tag")
+            create_tag.replace("\n", ",")
+            tag_regex = re.findall('([0-9a-zA-Z가-힣]*),', create_tag) # 쉼표 또는 엔터로 split 되도록 수정 필요
+            tags_list = [Tag.objects.get_or_create(
+                tag_name=t) for t in tag_regex]
+            for tag, bool in tags_list:
+                post.tags.add(tag.pk)
+            post.save()
+            serializer = PostSerializer(
+                post,
+                context={"request": request},
+            )
             return Response(data=serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -33,7 +46,7 @@ class PostListView(generics.GenericAPIView):
         if request.path == '/': # 여기 re_path로 지정해주는 것도 좋아보임
             queryset = self.get_queryset().order_by('-likes')
         else:
-            queryset = self.get_queryset().order_by('created_at')
+            queryset = self.get_queryset().order_by('-created_at')
         serializer = PostListSerializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -61,14 +74,13 @@ class PostRetrieveDestroyView(generics.RetrieveDestroyAPIView):
             post.likes += 1
             post.save()
         return self.retrieve(request, *args, **kwargs)
-
+    # 해당 post의 comment도 불러오도록 해야 함
 
 class PostRetrieveUpdateView(generics.RetrieveUpdateAPIView):
     permission_classes = [IsCreator]
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     lookup_field = 'pid'
-    #해당 post의 comment도 불러오도록 해야 함
 
 class CommentListCreateView(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]

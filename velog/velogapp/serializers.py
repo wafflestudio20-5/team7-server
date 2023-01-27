@@ -2,15 +2,19 @@ from rest_framework import serializers
 from .models import *
 
 class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = ['id', 'tag_name']
+
+class TagPostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Tag
-        field = ['id', 'tag_name']
-
+        fields = ['tag_name', 'tag']
 
 class PostSerializer(serializers.ModelSerializer):
     author = serializers.PrimaryKeyRelatedField(read_only=True)
-    tags = TagSerializer(many=True, required=False)
+    tags = TagSerializer(many=True, required=False, read_only=True)
 
     class Meta:
         model = Post
@@ -25,8 +29,10 @@ class PostSerializer(serializers.ModelSerializer):
             'preview',
             'content',
             'is_private',
+            'create_tag',
             'tags',
         ]
+        write_only_field = ['create_tag']
 
 class PostListSerializer(serializers.ModelSerializer):
     author = serializers.PrimaryKeyRelatedField(read_only=True)
@@ -65,6 +71,7 @@ class CommentSerializer(serializers.ModelSerializer):
 class PostDetailSerializer(serializers.ModelSerializer):
     author = serializers.PrimaryKeyRelatedField(read_only=True)
     likes = serializers.PrimaryKeyRelatedField(read_only=True)
+    tags = TagSerializer(many=True, required=False, read_only=True)
 
     class Meta:
         model = Post

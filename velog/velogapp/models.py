@@ -21,6 +21,7 @@ class Post(models.Model):
     like_user = models.ManyToManyField(User, related_name='user_who_liked', blank=True)
     tags = models.ManyToManyField('Tag', blank=True)
     hits = models.PositiveIntegerField(default=0)
+    create_tag = models.CharField(max_length=200, null=True)
 
 class Tag(models.Model):
     tag_name = models.CharField(max_length=200)
