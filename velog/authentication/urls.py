@@ -13,10 +13,13 @@ from dj_rest_auth.views import (
     PasswordResetView,
     UserDetailsView,
 )
-from django.urls import path, re_path
+from django.urls import path, re_path, include
 from rest_framework_simplejwt.views import TokenRefreshView, TokenVerifyView
 
+
 urlpatterns = [
+    path("login/", LoginView.as_view(), name='rest_login'),
+    path("logout/", LogoutView.as_view(), name='rest_logout'),
     path("user/", UserDetailsView.as_view(), name="user_detail"),
     path("signup/", RegisterView.as_view(), name="account_signup"),
     path("login/", LoginView.as_view(), name="account_login"),
@@ -69,7 +72,7 @@ urlpatterns = [
     ),
     re_path(
         r"^account-confirm-email/(?P<key>[-:\w]+)/$",
-        ConfirmEmailView.as_view(),
+        views.ConfirmEmailView.as_view(),
         name="account_confirm_email",
     ),
 ]
