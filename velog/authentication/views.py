@@ -1,6 +1,7 @@
 from json.decoder import JSONDecodeError
 
 import requests
+
 from allauth.account.views import ConfirmEmailView
 from allauth.account.models import EmailConfirmation, EmailConfirmationHMAC
 from allauth.socialaccount.models import SocialAccount
@@ -10,17 +11,14 @@ from allauth.socialaccount.providers.google import views as google_view
 from allauth.socialaccount.providers.kakao import views as kakao_view
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from dj_rest_auth.registration.views import SocialConnectView, SocialLoginView
-from dj_rest_auth.views import LoginView
 from django.conf import settings
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import JsonResponse
 from django.shortcuts import redirect
-from django.utils.translation import gettext_lazy as _
 from rest_framework import status
-from rest_framework.permissions import AllowAny
-from rest_framework.response import Response
-from rest_framework.views import APIView
 
 from .models import User
+
+BASE_URL = "https://api.7elog.store/api/v1/"
 
 import logging
 logger = logging.getLogger(__name__)
@@ -30,7 +28,8 @@ logger = logging.getLogger(__name__)
 # from allauth.socialaccount.providers.github.views import GitHubOAuth2Adapter
 # from allauth.socialaccount.providers.kakao.views import KakaoOAuth2Adapter
 
-BASE_URL = "https://api.7elog.store"
+# BASE_URL = "https://api.7elog.store"
+
 GOOGLE_CALLBACK_URI = BASE_URL + "accounts/google/login/callback/"
 KAKAO_CALLBACK_URI = BASE_URL + "accounts/kakao/login/callback/"
 GITHUB_CALLBACK_URI = BASE_URL + "accounts/github/login/callback/"
@@ -93,7 +92,7 @@ def google_callback(request):
             )
         if social_user.provider != "google":
             return JsonResponse(
-                {"err_msg": "no matching social type"},
+                {"err_msg": f"user is already signed up with {social_user.provider}"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
         # 기존에 Google로 가입된 유저
@@ -144,7 +143,6 @@ def kakao_callback(request):
     error = token_req_json.get("error")
     if error is not None:
         raise JSONDecodeError(error)
-    print(token_req_json)
     access_token = token_req_json.get("access_token")
     """
     Email Request
@@ -165,7 +163,6 @@ def kakao_callback(request):
     """
     email = kakao_account.get("email")
     kakao_account["username"] = kakao_account.get("profile", {}).get("nickname")
-    print(kakao_account)
     """
     Signup or Signin Request
     """
@@ -181,7 +178,7 @@ def kakao_callback(request):
             )
         if social_user.provider != "kakao":
             return JsonResponse(
-                {"err_msg": "no matching social type"},
+                {"err_msg": f"user is already signed up with {social_user.provider}"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
         # 기존에 Google로 가입된 유저
@@ -246,7 +243,6 @@ def github_callback(request):
     error = user_json.get("error")
     if error is not None:
         raise JSONDecodeError(error)
-    print(user_json)
     email = user_json.get("email")
     """
     Signup or Signin Request
@@ -263,18 +259,16 @@ def github_callback(request):
             )
         if social_user.provider != "github":
             return JsonResponse(
-                {"err_msg": "no matching social type"},
+                {"err_msg": f"user is already signed up with {social_user.provider}"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
         # 기존에 github로 가입된 유저
         data = {"access_token": access_token, "code": code}
-        return JsonResponse(data)
         accept = requests.post(f"{BASE_URL}accounts/github/login/finish/", data=data)
         accept_status = accept.status_code
         if accept_status != 200:
             return JsonResponse({"err_msg": "failed to signin"}, status=accept_status)
         accept_json = accept.json()
-        # accept_json.pop('user', None)
         return JsonResponse(accept_json)
     except User.DoesNotExist:
         # 기존에 가입된 유저가 없으면 새로 가입
@@ -285,7 +279,6 @@ def github_callback(request):
             return JsonResponse({"err_msg": "failed to signup"}, status=accept_status)
         # user의 pk, email, first name, last name과 Access Token, Refresh token 가져옴
         accept_json = accept.json()
-        # accept_json.pop('user', None)
         return JsonResponse(accept_json)
 
 
@@ -311,7 +304,7 @@ class GithubLogin(SocialLoginView):
 def facebook_login(request):
     client_id = getattr(settings, "FACEBOOK_CLIENT_ID")
     return redirect(
-        f"https://facebook.com/v13.0/dialog/oauth?client_id={client_id}&redirect_uri={FACEBOOK_CALLBACK_URI}&state={state}&scope=public_profile,email"
+        f"https://facebook.com/v13.0/dialog/oauth?client_id={client_id}&grant_type=authorization_code&redirect_uri={FACEBOOK_CALLBACK_URI}&state={state}"
     )
 
 
@@ -323,10 +316,9 @@ def facebook_callback(request):
     Access Token Request
     """
     token_req = requests.get(
-        f"https://graph.facebook.com/v13.0/dialog/access_token?client_id={client_id}&redirect_uri={FACEBOOK_CALLBACK_URI}&client_secret={client_secret}&code={code}"
+        f"https://graph.facebook.com/v13.0/oauth/access_token?client_id={client_id}&redirect_uri={FACEBOOK_CALLBACK_URI}&client_secret={client_secret}&code={code}"
     )
     token_req_json = token_req.json()
-    print(token_req_json)
     error = token_req_json.get("error")
     if error is not None:
         raise JSONDecodeError(error)
@@ -342,15 +334,12 @@ def facebook_callback(request):
     error = user_json.get("error")
     if error is not None:
         raise JSONDecodeError(error)
-    print(user_json)
     email = user_json.get("email")
     """
     Signup or Signin Request
     """
     try:
         user = User.objects.get(email=email)
-        # 기존에 가입된 유저의 Provider가 github가 아니면 에러 발생, 맞으면 로그인
-        # 다른 SNS로 가입된 유저
         social_user = SocialAccount.objects.get(user=user)
         if social_user is None:
             return JsonResponse(
@@ -359,10 +348,9 @@ def facebook_callback(request):
             )
         if social_user.provider != "facebook":
             return JsonResponse(
-                {"err_msg": "no matching social type"},
+                {"err_msg": f"user is already signed up with {social_user.provider}"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        # 기존에 github로 가입된 유저
         data = {"access_token": access_token, "code": code}
         accept = requests.post(f"{BASE_URL}accounts/facebook/login/finish/", data=data)
         accept_status = accept.status_code
