@@ -132,4 +132,13 @@ class TagListView(generics.GenericAPIView):
         queryset = self.get_queryset()
         serializer = TagSerializer(queryset, many=True)
         return Response(serializer.data)
+
+class TagPostListView(generics.GenericAPIView):
+    permission_classes = [permissions.AllowAny]
+    queryset = Post.objects.all()
+    serializer_class = PostListSerializer
+    def get(self, request, tag_name):
+        post = Post.objects.filter(tags__tag_name=tag_name)
+        serializer = PostListSerializer(post, many=True, context={'request': request})
+        return Response(serializer.data)
 # Create your views here.

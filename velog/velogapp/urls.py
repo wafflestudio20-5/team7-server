@@ -11,4 +11,5 @@ urlpatterns = [
     path('<int:pid>/comment/', CommentListCreateView.as_view()),
     path('<int:pid>/comment/<int:cid>', CommentUpdateDeleteView.as_view()),
     path('tags/', TagListView.as_view()),
+    path('tags/<str:tag_name>', TagPostListView.as_view()),
 ]
