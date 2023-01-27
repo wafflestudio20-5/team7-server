@@ -10,4 +10,5 @@ urlpatterns = [
     path('write/id=<int:pid>/', PostRetrieveUpdateView.as_view()),#특정 포스트 업데이트
     path('<int:pid>/comment/', CommentListCreateView.as_view()),
     path('<int:pid>/comment/<int:cid>', CommentUpdateDeleteView.as_view()),
+    path('tags/', TagListView.as_view()),
 ]

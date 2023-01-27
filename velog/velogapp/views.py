@@ -124,4 +124,12 @@ class CommentUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
 
+class TagListView(generics.GenericAPIView):
+    permission_classes = [permissions.AllowAny]
+    queryset = Tag.objects.all()
+    serializer_class = TagSerializer
+    def get(self, request):
+        queryset = self.get_queryset()
+        serializer = TagSerializer(queryset, many=True)
+        return Response(serializer.data)
 # Create your views here.

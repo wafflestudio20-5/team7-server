@@ -2,15 +2,16 @@ from rest_framework import serializers
 from .models import *
 
 class TagSerializer(serializers.ModelSerializer):
+    postCount = serializers.SerializerMethodField()
+    def get_postCount(self, obj):
+        return Post.objects.filter(tags=obj.id).count()
     class Meta:
         model = Tag
-        fields = ['id', 'tag_name']
+        fields = ['id',
+                  'tag_name',
+                  'postCount',
+                  ]
 
-class TagPostSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Tag
-        fields = ['tag_name', 'tag']
 
 class PostSerializer(serializers.ModelSerializer):
     author = serializers.PrimaryKeyRelatedField(read_only=True)
