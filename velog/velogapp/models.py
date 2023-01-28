@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 class Series(models.Model):
     series_name = models.CharField(max_length=100)
-    author = models.ForeignKey(User, on_delete=models.PROTECT, null=True) #null=True 지우기
+    author = models.ForeignKey(User, on_delete=models.PROTECT)
 
 class Post(models.Model):
     pid = models.AutoField(primary_key=True)
