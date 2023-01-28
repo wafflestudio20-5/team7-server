@@ -154,10 +154,11 @@ class SeriesListView(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
     queryset = Series.objects.all()
     serializer_class = SeriesSerializer
-    def get(self, request):
-        queryset = self.get_queryset()
-        #series = Series.objects.filter(author__name=name)
-        serializer = SeriesSerializer(queryset, many=True)
+    def get(self, request, name):
+        series = Series.objects.filter(author__name=name)
+        serializer = SeriesSerializer(series, many=True, context={'request': request})
         return Response(serializer.data)
+
+
 
 # Create your views here.

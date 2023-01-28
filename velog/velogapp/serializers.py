@@ -23,8 +23,10 @@ class SeriesSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'series_name',
+            'author',
             'postCount',
         ]
+
 
 class PostSerializer(serializers.ModelSerializer):
     author = serializers.SerializerMethodField()
