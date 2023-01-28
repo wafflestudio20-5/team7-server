@@ -5,6 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 class Series(models.Model):
     series_name = models.CharField(max_length=100)
+    author = models.ForeignKey(User, on_delete=models.PROTECT, null=True) #null=True 지우기
 
 class Post(models.Model):
     pid = models.AutoField(primary_key=True)
@@ -22,6 +23,7 @@ class Post(models.Model):
     tags = models.ManyToManyField('Tag', blank=True)
     hits = models.PositiveIntegerField(default=0)
     create_tag = models.CharField(max_length=200, null=True)
+    get_or_create_series = models.CharField(max_length=100, null=True)
 
 class Tag(models.Model):
     tag_name = models.CharField(max_length=200)

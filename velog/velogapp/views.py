@@ -15,6 +15,7 @@ class PostCreateView(generics.GenericAPIView):
         if serializer.is_valid():
             author = request.user
             post = serializer.save(author=author)
+            # create or get tag
             create_tag = request.data.get("create_tag")
             create_tag.replace("\n", ",")
             tag_regex = re.findall('([0-9a-zA-Z가-힣]*),', create_tag) # 쉼표 또는 엔터로 split 되도록 수정 필요
@@ -23,6 +24,13 @@ class PostCreateView(generics.GenericAPIView):
             for tag, bool in tags_list:
                 post.tags.add(tag.pk)
             post.save()
+            # create or get series
+            series = request.data.get("get_or_create_series") # post 작성 시 series 설정은  create_series로만 저장 가능
+            if series != "":
+                post.series = Series.objects.get_or_create(series_name=series, author=author)[0]
+                post.save()
+            else:
+                pass
             serializer = PostSerializer(
                 post,
                 context={"request": request},
@@ -51,7 +59,7 @@ class PostListView(generics.GenericAPIView):
         return Response(serializer.data)
 
 class PostRetrieveDestroyView(generics.RetrieveDestroyAPIView):
-    permission_classes = [IsCreatorOrReadOnly] # retrieve 누구나/ likes patch 누구나 / destroy creator만
+    permission_classes = [IsCreatorOrReadOnly]
     serializer_class = PostDetailSerializer
     lookup_field = 'title'
     def get_queryset(self):
@@ -141,4 +149,15 @@ class TagPostListView(generics.GenericAPIView):
         post = Post.objects.filter(tags__tag_name=tag_name)
         serializer = PostListSerializer(post, many=True, context={'request': request})
         return Response(serializer.data)
+
+class SeriesListView(generics.GenericAPIView):
+    permission_classes = [permissions.AllowAny]
+    queryset = Series.objects.all()
+    serializer_class = SeriesSerializer
+    def get(self, request):
+        queryset = self.get_queryset()
+        #series = Series.objects.filter(author__name=name)
+        serializer = SeriesSerializer(queryset, many=True)
+        return Response(serializer.data)
+
 # Create your views here.
