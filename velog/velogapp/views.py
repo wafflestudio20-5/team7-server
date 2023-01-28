@@ -42,7 +42,6 @@ class PostCreateView(generics.GenericAPIView):
 class PostListView(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = PostListSerializer
-    #lookup_field = 'author'
     def get_queryset(self):
         if self.request.user.is_authenticated:
             return Post.objects.filter(Q(author=self.request.user) |
@@ -51,11 +50,26 @@ class PostListView(generics.GenericAPIView):
         else:
             return Post.objects.filter(is_private=False)
     def get(self, request):
-        if request.path == '/': # 여기 re_path로 지정해주는 것도 좋아보임
+        if request.path == '/':
             queryset = self.get_queryset().order_by('-likes')
-        else:
+        elif request.path == '/recent/':
             queryset = self.get_queryset().order_by('-created_at')
         serializer = PostListSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+class UserPostListView(generics.GenericAPIView):
+    permission_classes = [permissions.AllowAny]
+    serializer_class = PostListSerializer
+    def get_queryset(self):
+        if self.request.user.is_authenticated:
+            return Post.objects.filter(Q(author=self.request.user) |
+                                       Q(is_private=False)
+                                       )
+        else:
+            return Post.objects.filter(is_private=False)
+    def get(self, request, name):
+        post = Post.objects.filter(author__name=name)
+        serializer = PostListSerializer(post, many=True, context={'request': request})
         return Response(serializer.data)
 
 class PostRetrieveDestroyView(generics.RetrieveDestroyAPIView):
@@ -143,8 +157,14 @@ class TagListView(generics.GenericAPIView):
 
 class TagPostListView(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
-    queryset = Post.objects.all()
     serializer_class = PostListSerializer
+    def get_queryset(self):
+        if self.request.user.is_authenticated:
+            return Post.objects.filter(Q(author=self.request.user) |
+                                       Q(is_private=False)
+                                       )
+        else:
+            return Post.objects.filter(is_private=False)
     def get(self, request, tag_name):
         post = Post.objects.filter(tags__tag_name=tag_name)
         serializer = PostListSerializer(post, many=True, context={'request': request})
