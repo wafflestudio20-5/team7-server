@@ -26,6 +26,9 @@ chmod +x ./velog/templates/account/
 chmod +x ./velog/templates/account
 chmod +x ./velog/templates/socialaccount/
 chmod +x ./velog/templates/socialaccount
+chmod +x ./velog/templates/loaders/
+chmod +x ./velog/templates/loaders
+
 
 echo "installing python..."
 sudo apt update
