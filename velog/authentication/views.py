@@ -212,7 +212,7 @@ class KakaoLogin(SocialLoginView):
 
 
 def github_login(request):
-    client_id = getattr(settings, "GITHUB_CLIENT_ID")
+    client_id = getattr(settings, "GH_CLIENT_ID")
     return redirect(
         f"https://github.com/login/oauth/authorize?client_id={client_id}&redirect_uri={GITHUB_CALLBACK_URI}"
     )
