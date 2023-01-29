@@ -11,7 +11,7 @@ urlpatterns = [
     path('write/', PostCreateView.as_view()), #새 글 작성
     path('@<str:name>/series/', SeriesListView.as_view()), # 특정 user가 작성한 시리즈 목록 // name->userid(username) 수정필요
     path('@<str:name>/series/<str:series_name>', SeriesPostListView.as_view()), # 특정 user가 작성한 시리즈에 속해있는 포스트 // name->userid(username) 수정필요
-    path('@<str:name>/<str:title>/', PostRetrieveDestroyView.as_view()), #특정 포스트 get,delete// name->userid(username) 수정필요, 중복 게시물 해결 필요
+    path('@<str:name>/<str:url>/', PostRetrieveDestroyView.as_view()), #특정 포스트 get,delete// name->userid(username) 수정필요
     path('write/id=<int:pid>/', PostRetrieveUpdateView.as_view()),#특정 포스트 update
     path('<int:pid>/comment/', CommentListCreateView.as_view()),
     path('<int:pid>/comment/<int:cid>', CommentUpdateDeleteView.as_view()),

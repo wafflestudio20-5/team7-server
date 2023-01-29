@@ -24,6 +24,7 @@ class Post(models.Model):
     view_user = models.ManyToManyField(User, related_name='user_who_viewed', blank=True)
     create_tag = models.CharField(max_length=200, null=True)
     get_or_create_series = models.CharField(max_length=100, null=True)
+    url = models.CharField(max_length=100, null=True)
 
 class Tag(models.Model):
     tag_name = models.CharField(max_length=200)

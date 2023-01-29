@@ -49,6 +49,7 @@ class PostSerializer(serializers.ModelSerializer):
             'is_private',
             'create_tag',
             'tags',
+            'url',
         ]
         write_only_field = ['create_tag',
                             'get_or_create_series'
@@ -94,8 +95,6 @@ class PostDetailSerializer(serializers.ModelSerializer):
     likes = serializers.PrimaryKeyRelatedField(read_only=True)
     tags = TagSerializer(many=True, required=False, read_only=True)
 
-    def get_author(self, obj):
-        return obj.author.name
 
     class Meta:
         model = Post
