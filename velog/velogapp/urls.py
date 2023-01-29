@@ -9,7 +9,7 @@ urlpatterns = [
     path('write/', PostCreateView.as_view()), #새 글 작성
     path('@<str:name>/series/', SeriesListView.as_view()),
     path('@<str:name>/series/<str:series_name>', SeriesPostListView.as_view()),
-    path('@<str:name>/<title>/', PostRetrieveDestroyView.as_view()), #특정 포스트 get,delete// userid(username) field도 사용하도록 만들어야함, 중복 게시물 해결 필요
+    path('@<str:name>/<str:title>/', PostRetrieveDestroyView.as_view()), #특정 포스트 get,delete// userid(username) field도 사용하도록 만들어야함, 중복 게시물 해결 필요
     path('write/id=<int:pid>/', PostRetrieveUpdateView.as_view()),#특정 포스트 업데이트
     path('<int:pid>/comment/', CommentListCreateView.as_view()),
     path('<int:pid>/comment/<int:cid>', CommentUpdateDeleteView.as_view()),

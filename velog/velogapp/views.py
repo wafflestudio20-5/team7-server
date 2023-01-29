@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from .serializers import *
 from .permissions import IsCreatorOrReadOnly, IsCreator
 from django.db.models import Q
+from django.shortcuts import get_object_or_404
 import re
 
 class PostCreateView(generics.GenericAPIView):
@@ -75,7 +76,9 @@ class UserPostListView(generics.GenericAPIView):
 class PostRetrieveDestroyView(generics.RetrieveDestroyAPIView):
     permission_classes = [IsCreatorOrReadOnly]
     serializer_class = PostDetailSerializer
-    lookup_field = 'title'
+    lookup_field1, lookup_field2 = 'name', 'title'
+
+
     def get_queryset(self):
         if self.request.user.is_authenticated:
             return Post.objects.filter(Q(author=self.request.user) |
@@ -83,9 +86,15 @@ class PostRetrieveDestroyView(generics.RetrieveDestroyAPIView):
                                        )
         else:
             return Post.objects.filter(is_private=False)
+
+
+    def get(self, request, name, title):
+        post = self.get_queryset().get(author__name=name, title=title)
+        serializer = PostDetailSerializer(post)
+        return Response(serializer.data)
     # post 요청 시 좋아요 추가/제거
-    def post(self, request, *args, **kwargs):
-        post = self.get_object()
+    def post(self, request, name, title):
+        post = self.get_queryset().get(author__name=name, title=title)
         user = request.user
         if post.like_user.filter(pk=request.user.pk).exists():
             post.like_user.remove(user)
@@ -95,7 +104,7 @@ class PostRetrieveDestroyView(generics.RetrieveDestroyAPIView):
             post.like_user.add(user)
             post.likes += 1
             post.save()
-        return self.retrieve(request, *args, **kwargs)
+        return self.get(request, name, title)
     # 해당 post의 comment도 불러오도록 해야 함
 
 class PostRetrieveUpdateView(generics.RetrieveUpdateAPIView):
