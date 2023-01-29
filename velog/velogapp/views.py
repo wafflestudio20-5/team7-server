@@ -2,6 +2,7 @@ from rest_framework import generics, status, permissions
 from rest_framework.response import Response
 from .serializers import *
 from .permissions import IsCreatorOrReadOnly, IsCreator
+from .paginations import PostListPagination
 from django.db.models import Q
 import re
 
@@ -49,9 +50,10 @@ class PostCreateView(generics.GenericAPIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class PostListView(generics.GenericAPIView):
+class PostListView(generics.ListAPIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = PostListSerializer
+    pagination_class = PostListPagination
     def get_queryset(self):
         if self.request.user.is_authenticated:
             return Post.objects.filter(Q(author=self.request.user) |
@@ -72,7 +74,7 @@ class PostListView(generics.GenericAPIView):
                 if request.user.is_authenticated:
                     queryset = self.get_queryset().filter(view_user=request.user)[::-1]
             serializer = PostListSerializer(queryset, many=True)
-            return Response(serializer.data)
+            return self.get_paginated_response(self.paginate_queryset(serializer.data))
         except:
             return Response({"detail": "Authentication credentials were not provided."}, status=status.HTTP_403_FORBIDDEN)
 
@@ -235,6 +237,7 @@ class SeriesPostListView(generics.GenericAPIView): # PUT, DELETE 추가 필요(p
 class SearchListView(generics.GenericAPIView): # ajax
     permission_classes = [permissions.AllowAny]
     serializer_class = PostListSerializer
+    pagination_class = PostListPagination
     def get_queryset(self):
         if self.request.user.is_authenticated:
             return Post.objects.filter(Q(author=self.request.user) |
@@ -249,7 +252,7 @@ class SearchListView(generics.GenericAPIView): # ajax
                                     Q(title__icontains=word)
                                    ).order_by('-likes')
             serializer = PostListSerializer(post, many=True, context={'request': request})
-            return Response(serializer.data)
+            return self.get_paginated_response(self.paginate_queryset(serializer.data))
         else:
             return Response()
 
