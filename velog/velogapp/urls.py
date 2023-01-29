@@ -4,6 +4,7 @@ from .views import *
 urlpatterns = [
     path('', PostListView.as_view()), #메인페이지
     path('recent/', PostListView.as_view()), #최신순으로 정렬
+    path('search/', SearchListView.as_view()), # 'search/'에서 POST 요청 날렸을 때 redirect 해야 할 수도
     path('@<str:name>/', UserPostListView.as_view()), # 특정 user가 작성한 글 보기
     path('write/', PostCreateView.as_view()), #새 글 작성
     path('@<str:name>/series/', SeriesListView.as_view()),

@@ -14,9 +14,9 @@ class TagSerializer(serializers.ModelSerializer):
 
 
 class SeriesSerializer(serializers.ModelSerializer):
-    postCount = serializers.SerializerMethodField()
-
-    def get_postCount(self, obj):
+    postNum = serializers.SerializerMethodField()
+    #update_at, thumbnail
+    def get_postNum(self, obj):
         return Post.objects.filter(series=obj.id).count()
     class Meta:
         model = Series
@@ -24,16 +24,14 @@ class SeriesSerializer(serializers.ModelSerializer):
             'id',
             'series_name',
             'author',
-            'postCount',
+            'postNum',
         ]
 
 
 class PostSerializer(serializers.ModelSerializer):
-    author = serializers.SerializerMethodField()
+    author = serializers.PrimaryKeyRelatedField(read_only=True)
     tags = TagSerializer(many=True, required=False, read_only=True)
     series = serializers.PrimaryKeyRelatedField(read_only=True)
-    def get_author(self, obj):
-        return obj.author.name
 
     class Meta:
         model = Post
@@ -57,11 +55,9 @@ class PostSerializer(serializers.ModelSerializer):
                             ]
 
 class PostListSerializer(serializers.ModelSerializer):
-    author = serializers.SerializerMethodField()
+    author = serializers.PrimaryKeyRelatedField(read_only=True)
     likes = serializers.PrimaryKeyRelatedField(read_only=True)
 
-    def get_author(self, obj):
-        return obj.author.name
     # comment_count 기능
 
     class Meta:
@@ -79,9 +75,7 @@ class PostListSerializer(serializers.ModelSerializer):
         ]
 
 class CommentSerializer(serializers.ModelSerializer):
-    author = serializers.SerializerMethodField()
-    def get_author(self, obj):
-        return obj.author.name
+    author = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
         fields = [
