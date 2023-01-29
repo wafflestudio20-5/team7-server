@@ -3,11 +3,10 @@ from rest_framework.response import Response
 from .serializers import *
 from .permissions import IsCreatorOrReadOnly, IsCreator
 from django.db.models import Q
-from django.shortcuts import get_object_or_404
 import re
 
 class PostCreateView(generics.GenericAPIView):
-    permissions_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permissions_classes = [permissions.IsAuthenticated]
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     def post(self, request, *args, **kwargs):
@@ -55,6 +54,12 @@ class PostListView(generics.GenericAPIView):
             queryset = self.get_queryset().order_by('-likes')
         elif request.path == '/recent/':
             queryset = self.get_queryset().order_by('-created_at')
+        elif request.path == '/lists/liked/':
+            if request.user.is_authenticated:
+                queryset = self.get_queryset().filter(like_user=request.user)[::-1]
+        elif request.path == '/lists/read/':
+            if request.user.is_authenticated:
+                queryset = self.get_queryset().filter(view_user=request.user)[::-1]
         serializer = PostListSerializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -90,6 +95,11 @@ class PostRetrieveDestroyView(generics.RetrieveDestroyAPIView):
 
     def get(self, request, name, title):
         post = self.get_queryset().get(author__name=name, title=title)
+        if post.view_user.filter(pk=request.user.pk).exists():
+            post.view_user.remove(request.user)
+            post.view_user.add(request.user)
+        else:
+            post.view_user.add(request.user)
         serializer = PostDetailSerializer(post)
         return Response(serializer.data)
     # post 요청 시 좋아요 추가/제거
@@ -188,7 +198,7 @@ class SeriesListView(generics.GenericAPIView):
         serializer = SeriesSerializer(series, many=True, context={'request': request})
         return Response(serializer.data)
 
-class SeriesPostListView(generics.GenericAPIView):
+class SeriesPostListView(generics.GenericAPIView): # PUT, DELETE 추가 필요(permission classes = [IsCreatorOrReadOnly]
     permission_classes = [permissions.AllowAny]
     serializer_class = SeriesSerializer
     def get_queryset(self):
