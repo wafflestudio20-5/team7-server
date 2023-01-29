@@ -68,7 +68,7 @@ class UserPostListView(generics.GenericAPIView):
         else:
             return Post.objects.filter(is_private=False)
     def get(self, request, name):
-        post = Post.objects.filter(author__name=name)
+        post = Post.objects.filter(author__name=name).order_by('-created_at')
         serializer = PostListSerializer(post, many=True, context={'request': request})
         return Response(serializer.data)
 
@@ -178,6 +178,22 @@ class SeriesListView(generics.GenericAPIView):
         series = Series.objects.filter(author__name=name)
         serializer = SeriesSerializer(series, many=True, context={'request': request})
         return Response(serializer.data)
+
+class SeriesPostListView(generics.GenericAPIView):
+    permission_classes = [permissions.AllowAny]
+    serializer_class = SeriesSerializer
+    def get_queryset(self):
+        if self.request.user.is_authenticated:
+            return Post.objects.filter(Q(author=self.request.user) |
+                                       Q(is_private=False)
+                                       )
+        else:
+            return Post.objects.filter(is_private=False)
+    def get(self, request, name, series_name):
+        post = Post.objects.filter(author__name=name, series__series_name=series_name).order_by('-created_at')
+        serializer = PostSerializer(post, many=True, context={'request': request})
+        return Response(serializer.data)
+
 
 class SearchListView(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
