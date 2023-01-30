@@ -38,6 +38,9 @@ class Comment(models.Model):
     content = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    #like-comment
+    comment_like_user = models.ManyToManyField(User, related_name='user_who_liked', blank=True)
+    comment_like_count = models.PositiveIntegerField(default=0)
     #Re-comment
     parent_comment = models.ForeignKey('self', on_delete=models.CASCADE, null=True)
 

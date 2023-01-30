@@ -82,7 +82,8 @@ class CommentSerializer(serializers.ModelSerializer):
             'author',
             'created_at',
             'content',
-            'parent_comment'
+            'parent_comment',
+            'comment_like_count'
         ]
         read_only_fields = ['post', 'author']
         model = Comment
