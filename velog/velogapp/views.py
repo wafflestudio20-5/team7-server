@@ -87,6 +87,7 @@ class CommentUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
         comment = Comment.objects.get(pk=self.kwargs['cid'])
         is_updated = True
         serializer = CommentSerializer(comment, data=request.data, partial=True)
+        
         if serializer.is_valid():
             serializer.save(is_updated=is_updated)
             return Response(data=serializer.data, status=status.HTTP_200_OK)
@@ -95,4 +96,19 @@ class CommentUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
 
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
+
+class CommentLikeView(generics.GenericAPIView):
+    def create(self, request, *args, **kwargs):
+        comment = Comment.objects.get(pk=self.kwargs['cid'])
+        user = request.user
+        request.POST._mutable = True
+        
+        if comment.comment_like_user.filter(pk=request.user.pk).exists():
+            comment.comment_like_user.remove(user)
+            request.POST[comment.comment_like_count] -= 1
+        else:
+            comment.comment_like_user.add(user)
+            request.POST[comment.comment_like_count] += 1
+        
+        return super().create(request, *args, **kwargs)
 

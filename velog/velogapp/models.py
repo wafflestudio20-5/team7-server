@@ -39,8 +39,8 @@ class Comment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     #like-comment
-    comment_like_user = models.ManyToManyField(User, related_name='user_who_liked', blank=True)
     comment_like_count = models.PositiveIntegerField(default=0)
+    comment_like_user = models.ManyToManyField(User, related_name='comment_likes', blank=True)
     #Re-comment
     parent_comment = models.ForeignKey('self', on_delete=models.CASCADE, null=True)
 
