@@ -343,6 +343,7 @@ CORS_ALLOWED_ORIGIN_REGEXES = [
 ]
 CORS_ORIGIN_WHITELIST = [
     'https://*.7elog.store',
+    'localhost:3000',
     'localhost:8000',
     '127.0.0.1:8000',
 ]
