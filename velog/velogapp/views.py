@@ -62,21 +62,18 @@ class PostListView(generics.ListAPIView):
         else:
             return Post.objects.filter(is_private=False)
     def get(self, request):
-        try:
-            if request.path == '/':
-                queryset = self.get_queryset().order_by('-likes')
-            elif request.path == '/recent/':
-                queryset = self.get_queryset().order_by('-created_at')
-            elif request.path == '/lists/liked/':
-                if request.user.is_authenticated:
-                    queryset = self.get_queryset().filter(like_user=request.user)[::-1]
-            elif request.path == '/lists/read/':
-                if request.user.is_authenticated:
-                    queryset = self.get_queryset().filter(view_user=request.user)[::-1]
-            serializer = PostListSerializer(queryset, many=True)
-            return self.get_paginated_response(self.paginate_queryset(serializer.data))
-        except:
-            return Response({"detail": "Authentication credentials were not provided."}, status=status.HTTP_403_FORBIDDEN)
+        if request.path == '/api/v1/velog/':
+             queryset = self.get_queryset().order_by('-likes')
+        elif request.path == '/api/v1/velog/recent/':
+            queryset = self.get_queryset().order_by('-created_at')
+        elif request.path == '/api/v1/velog/lists/liked/':
+            if request.user.is_authenticated:
+                queryset = self.get_queryset().filter(like_user=request.user)[::-1]
+        elif request.path == '/api/v1/velog/lists/read/':
+            if request.user.is_authenticated:
+                queryset = self.get_queryset().filter(view_user=request.user)[::-1]
+        serializer = PostListSerializer(queryset, many=True)
+        return self.get_paginated_response(self.paginate_queryset(serializer.data))
 
 class UserPostListView(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
