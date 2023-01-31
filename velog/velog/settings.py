@@ -334,6 +334,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     "https://api.7elog.store",
+    "https://7elog.store",
     "http://localhost:80",
     "http://127.0.0.1:9000"
 ]
