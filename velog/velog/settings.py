@@ -73,7 +73,7 @@ def get_secret(setting):
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["*", "https://api.7elog.store", "43.201.111.105"]
+ALLOWED_HOSTS = ["*", "https://api.7elog.store", "43.201.111.105", "https://7elog.store"]
 
 
 # Application definition
@@ -165,6 +165,7 @@ AUTHENTICATION_BACKENDS = (
 )
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -172,7 +173,6 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
 ]
 
@@ -333,17 +333,21 @@ LOGOUT_REDIRECT_URL = "/auth/social/logout"
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
+    "https://d822df5kj1qhh.cloudfront.net",
     "https://api.7elog.store",
     "https://7elog.store",
     "http://localhost:3000",
     "http://localhost:80",
     "http://127.0.0.1:9000",
     'https://*.7elog.store',
+    'http://7elog.store',
 ]
 CORS_ALLOWED_ORIGIN_REGEXES = [
     r"^https://\w+\.7elog\.store$",
 ]
 CORS_ORIGIN_WHITELIST = [
+    'https://d822df5kj1qhh.cloudfront.net',
+    'http://7elog.store',
     'https://*.7elog.store',
     'localhost:3000',
     'localhost:8000',
@@ -388,6 +392,9 @@ CSRF_TRUSTED_ORIGINS = [
     'http://api.7elog.store',
     'https://api.7elog.store',
     'https://*.7elog.store',
+    'https://7elog.store',
+    'http://7elog.store',
+    'https://d822df5kj1qhh.cloudfront.net',
 ]
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 CSRF_COOKIE_SECURE = True
