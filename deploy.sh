@@ -77,7 +77,7 @@ echo "installing coresheaders..."
 sudo python3 -m pip install django-cors-headers
 
 echo "collect static..."
-python3 manage.py collectstatic
+yes | python3 manage.py collectstatic
 
 echo "make migrations..."
 yes | python3 manage.py makemigrations
