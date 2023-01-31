@@ -12,13 +12,20 @@ from .models import User
 class UserSerializer(UserDetailsSerializer):
     class Meta:
         model = User
+        model = User
         fields = [
-            "id",
             "username",
             "email",
             "name",
             "profile_image",
             "introduction",
+            "mail",
+            "github",
+            "twitter",
+            "facebook",
+            "homepage",
+            "velog_name",
+            "about",
         ]
         read_only_fields = [
             "email",
@@ -52,11 +59,18 @@ class CustomRegisterSerializer(RegisterSerializer):
     def get_cleaned_data(self):
         return {
             "username": self.validated_data.get("username", ""),
+            "velog_name": self.validated_data.get("username", "") + ".log",
             "password1": self.validated_data.get("password1", ""),
             "email": self.validated_data.get("email", ""),
             "name": self.validated_data.get("name", ""),
             "profile_image": self.validated_data.get("profile_image", ""),
             "introduction": self.validated_data.get("introduction", ""),
+            "mail": self.validated_data.get("mail", ""),
+            "github": self.validated_data.get("github", ""),
+            "twitter": self.validated_data.get("twitter", ""),
+            "facebook": self.validated_data.get("facebook", ""),
+            "homepage": self.validated_data.get("homepage", ""),
+            "about": self.validated_data.get("about", ""),
         }
 
     def save(self, request):
@@ -72,9 +86,16 @@ class CustomRegisterSerializer(RegisterSerializer):
                 raise serializers.ValidationError(
                     detail=serializers.as_serializer_error(exc)
                 )
+        user.velog_name = self.validated_data.get("username", "") + ".log"
         user.name = self.validated_data.get("name", "")
         user.profile_image = self.validated_data.get("profile_image", "")
         user.introduction = self.validated_data.get("introduction", "")
+        user.mail = self.validated_data.get("mail", "")
+        user.github = self.validated_data.get("github", "")
+        user.twitter = self.validated_data.get("twitter", "")
+        user.facebook = self.validated_data.get("facebook", "")
+        user.homepage = self.validated_data.get("homepage", "")
+        user.about = self.validated_data.get("about", "")
         user.save()
         self.custom_signup(request, user)
         setup_user_email(request, user, [])
