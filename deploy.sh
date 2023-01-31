@@ -26,20 +26,20 @@ chmod +x ./velog/templates/account/
 chmod +x ./velog/templates/account
 chmod +x ./velog/templates/socialaccount/
 chmod +x ./velog/templates/socialaccount
-chmod +x ./velog/templates/loaders/
-chmod +x ./velog/templates/loaders
-chmod +x ./velog/templates/account/messages/
-chmod +x ./velog/templates/account/messages/logged_in.txt
+# chmod +x ./velog/templates/loaders/
+# chmod +x ./velog/templates/loaders
+# chmod +x ./velog/templates/account/messages/
+# chmod +x ./velog/templates/account/messages/logged_in.txt
 
 chmod 777 ./velog/templates/
 chmod 777 ./velog/templates/account/
 chmod 777 ./velog/templates/account
 chmod 777 ./velog/templates/socialaccount/
 chmod 777 ./velog/templates/socialaccount
-chmod 777 ./velog/templates/loaders/
-chmod 777 ./velog/templates/loaders
-chmod 777 ./velog/templates/account/messages/
-chmod 777 ./velog/templates/account/messages/logged_in.txt
+# chmod 777 ./velog/templates/loaders/
+# chmod 777 ./velog/templates/loaders
+# chmod 777 ./velog/templates/account/messages/
+# chmod 777 ./velog/templates/account/messages/logged_in.txt
 
 echo "installing python..."
 sudo apt update
