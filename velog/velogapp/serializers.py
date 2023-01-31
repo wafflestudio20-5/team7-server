@@ -102,6 +102,16 @@ class PostDetailSerializer(serializers.ModelSerializer):
     likes = serializers.PrimaryKeyRelatedField(read_only=True)
     tags = TagSerializer(many=True, required=False, read_only=True)
     comments = CommentSerializer(many=True, read_only=True, source='comment_set')
+    is_active = serializers.SerializerMethodField(default=False)
+
+    def get_is_active(self, obj):
+        try:
+            if self.context['request'].user in obj.like_user.all():
+                return True
+            else:
+                return False
+        except:
+            return False
 
     class Meta:
         model = Post
@@ -116,6 +126,7 @@ class PostDetailSerializer(serializers.ModelSerializer):
             'updated_at',
             'content',
             'likes',
+            'is_active',
             'comments',
         ]
 
