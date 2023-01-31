@@ -58,8 +58,10 @@ class PostSerializer(serializers.ModelSerializer):
 class PostListSerializer(serializers.ModelSerializer):
     author = serializers.PrimaryKeyRelatedField(read_only=True)
     likes = serializers.PrimaryKeyRelatedField(read_only=True)
+    comments = serializers.SerializerMethodField()
 
-    # comment_count 기능
+    def get_comments(self, obj):
+        return Comment.objects.filter(post__pid=obj.pid).count()
 
     class Meta:
         model = Post
@@ -69,10 +71,11 @@ class PostListSerializer(serializers.ModelSerializer):
             'thumbnail',
             'preview',
             'author',
+            'url',
             'created_at',
             'updated_at',
             'likes',
-
+            'comments',
         ]
 
 class CommentSerializer(serializers.ModelSerializer):
@@ -98,7 +101,7 @@ class PostDetailSerializer(serializers.ModelSerializer):
     author = serializers.PrimaryKeyRelatedField(read_only=True)
     likes = serializers.PrimaryKeyRelatedField(read_only=True)
     tags = TagSerializer(many=True, required=False, read_only=True)
-
+    comments = CommentSerializer(many=True, read_only=True, source='comment_set')
 
     class Meta:
         model = Post
@@ -108,9 +111,11 @@ class PostDetailSerializer(serializers.ModelSerializer):
             'title',
             'tags',
             'author',
+            'url',
             'created_at',
             'updated_at',
             'content',
             'likes',
+            'comments',
         ]
 
