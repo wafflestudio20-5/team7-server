@@ -1,19 +1,44 @@
 from rest_framework import serializers
 from .models import *
 
+class TagSerializer(serializers.ModelSerializer):
+    postCount = serializers.SerializerMethodField()
+    def get_postCount(self, obj):
+        return Post.objects.filter(tags=obj.id).count()
+    class Meta:
+        model = Tag
+        fields = ['id',
+                  'tag_name',
+                  'postCount',
+                  ]
+
+
+class SeriesSerializer(serializers.ModelSerializer):
+    postNum = serializers.SerializerMethodField()
+    #update_at, thumbnail
+    def get_postNum(self, obj):
+        return Post.objects.filter(series=obj.id).count()
+    class Meta:
+        model = Series
+        fields = [
+            'id',
+            'series_name',
+            'author',
+            'postNum',
+        ]
+
 
 class PostSerializer(serializers.ModelSerializer):
     author = serializers.PrimaryKeyRelatedField(read_only=True)
-
-    def to_internal_value(self, data):
-        internal_value = super().to_internal_value(data)
-        return {**internal_value, 'author': self.context['request'].user}
+    tags = TagSerializer(many=True, required=False, read_only=True)
+    series = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
         model = Post
         fields = [
             'pid',
             'series',
+            'get_or_create_series',
             'title',
             'author',
             'created_at',
@@ -22,15 +47,18 @@ class PostSerializer(serializers.ModelSerializer):
             'preview',
             'content',
             'is_private',
+            'create_tag',
             'tags',
+            'url',
         ]
-        
+        write_only_field = ['create_tag',
+                            'get_or_create_series'
+                            ]
 
 class PostListSerializer(serializers.ModelSerializer):
     author = serializers.PrimaryKeyRelatedField(read_only=True)
-    like_count = serializers.PrimaryKeyRelatedField(read_only=True)
-    
-    
+    likes = serializers.PrimaryKeyRelatedField(read_only=True)
+
     # comment_count 기능
 
     class Meta:
@@ -43,37 +71,12 @@ class PostListSerializer(serializers.ModelSerializer):
             'author',
             'created_at',
             'updated_at',
-            'like_count',
+            'likes',
 
         ]
-
-
-class PostDetailSerializer(serializers.ModelSerializer):
-    author = serializers.PrimaryKeyRelatedField(read_only=True)
-    like_count = serializers.PrimaryKeyRelatedField(read_only=True)
-
-    class Meta:
-        model = Post
-        fields = [
-            'pid',
-            'title',
-            'tags',
-            'author',
-            'created_at',
-            'updated_at',
-            'content',
-            'like_count',
-        ]
-
-
-class TagSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Tag
-        field = ['tag_name']
-        
 
 class CommentSerializer(serializers.ModelSerializer):
+    author = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
         fields = [
@@ -82,8 +85,32 @@ class CommentSerializer(serializers.ModelSerializer):
             'author',
             'created_at',
             'content',
-            'parent_comment'
+            'parent_comment',
+            'comment_like_count',
         ]
-        read_only_fields = ['post', 'author']
+        read_only_fields = ['post',
+                            'author',
+                            'comment_like_count',
+                            ]
         model = Comment
+
+class PostDetailSerializer(serializers.ModelSerializer):
+    author = serializers.PrimaryKeyRelatedField(read_only=True)
+    likes = serializers.PrimaryKeyRelatedField(read_only=True)
+    tags = TagSerializer(many=True, required=False, read_only=True)
+
+
+    class Meta:
+        model = Post
+        fields = [
+            'pid',
+            'series',
+            'title',
+            'tags',
+            'author',
+            'created_at',
+            'updated_at',
+            'content',
+            'likes',
+        ]
 
