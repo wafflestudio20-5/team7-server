@@ -62,21 +62,18 @@ class PostListView(generics.ListAPIView):
         else:
             return Post.objects.filter(is_private=False)
     def get(self, request):
-        try:
-            if request.path == '/':
-                queryset = self.get_queryset().order_by('-likes')
-            elif request.path == '/recent/':
-                queryset = self.get_queryset().order_by('-created_at')
-            elif request.path == '/lists/liked/':
-                if request.user.is_authenticated:
-                    queryset = self.get_queryset().filter(like_user=request.user)[::-1]
-            elif request.path == '/lists/read/':
-                if request.user.is_authenticated:
-                    queryset = self.get_queryset().filter(view_user=request.user)[::-1]
-            serializer = PostListSerializer(queryset, many=True)
-            return self.get_paginated_response(self.paginate_queryset(serializer.data))
-        except:
-            return Response({"detail": "Authentication credentials were not provided."}, status=status.HTTP_403_FORBIDDEN)
+        if request.path == '/api/v1/velog/':
+             queryset = self.get_queryset().order_by('-likes')
+        elif request.path == '/api/v1/velog/recent/':
+            queryset = self.get_queryset().order_by('-created_at')
+        elif request.path == '/api/v1/velog/lists/liked/':
+            if request.user.is_authenticated:
+                queryset = self.get_queryset().filter(like_user=request.user)[::-1]
+        elif request.path == '/api/v1/velog/lists/read/':
+            if request.user.is_authenticated:
+                queryset = self.get_queryset().filter(view_user=request.user)[::-1]
+        serializer = PostListSerializer(queryset, many=True)
+        return self.get_paginated_response(self.paginate_queryset(serializer.data))
 
 class UserPostListView(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
@@ -88,8 +85,8 @@ class UserPostListView(generics.GenericAPIView):
                                        )
         else:
             return Post.objects.filter(is_private=False)
-    def get(self, request, name):
-        post = Post.objects.filter(author__name=name).order_by('-created_at')
+    def get(self, request, username):
+        post = Post.objects.filter(author__username=username).order_by('-created_at')
         serializer = PostListSerializer(post, many=True, context={'request': request})
         return Response(serializer.data)
 
@@ -103,8 +100,8 @@ class PostRetrieveDestroyView(generics.RetrieveDestroyAPIView):
                                        )
         else:
             return Post.objects.filter(is_private=False)
-    def get(self, request, name, url):
-        post = self.get_queryset().get(author__name=name, url=url)
+    def get(self, request, username, url):
+        post = self.get_queryset().get(author__username=username, url=url)
         # 조회한(GET 요청한) user 기록
         if request.user.is_authenticated:
             if post.view_user.filter(pk=request.user.pk).exists():
@@ -115,8 +112,8 @@ class PostRetrieveDestroyView(generics.RetrieveDestroyAPIView):
         serializer = PostDetailSerializer(post)
         return Response(serializer.data)
     # post 요청 시 좋아요 추가/제거
-    def post(self, request, name, url):
-        post = self.get_queryset().get(author__name=name, url=url)
+    def post(self, request, username, url):
+        post = self.get_queryset().get(author__username=username, url=url)
         if request.user.is_authenticated:
             user = request.user
             if post.like_user.filter(pk=request.user.pk).exists():
@@ -127,12 +124,12 @@ class PostRetrieveDestroyView(generics.RetrieveDestroyAPIView):
                 post.like_user.add(user)
                 post.likes += 1
                 post.save()
-            return self.get(request, name, url)
+            return self.get(request, username, url)
         else:
             return Response({"detail": "Authentication credentials were not provided."}, status=status.HTTP_403_FORBIDDEN)
 
-    def delete(self, request, name, url):
-        post = self.get_queryset().get(author__name=name, url=url)
+    def delete(self, request, username, url):
+        post = self.get_queryset().get(author__username=username, url=url)
         self.perform_destroy(post)
         return Response(status=status.HTTP_204_NO_CONTENT)
     # 해당 post의 comment도 불러오도록 해야 함
@@ -213,8 +210,8 @@ class SeriesListView(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
     queryset = Series.objects.all()
     serializer_class = SeriesSerializer
-    def get(self, request, name):
-        series = Series.objects.filter(author__name=name)
+    def get(self, request, username):
+        series = Series.objects.filter(author__username=username)
         serializer = SeriesSerializer(series, many=True, context={'request': request})
         return Response(serializer.data)
 
@@ -228,8 +225,8 @@ class SeriesPostListView(generics.GenericAPIView): # PUT, DELETE 추가 필요(p
                                        )
         else:
             return Post.objects.filter(is_private=False)
-    def get(self, request, name, series_name):
-        post = Post.objects.filter(author__name=name, series__series_name=series_name).order_by('-created_at')
+    def get(self, request, username, series_name):
+        post = Post.objects.filter(author__username=username, series__series_name=series_name).order_by('-created_at')
         serializer = PostListSerializer(post, many=True, context={'request': request})
         return Response(serializer.data)
 
