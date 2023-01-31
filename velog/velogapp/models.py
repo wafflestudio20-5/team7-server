@@ -1,3 +1,4 @@
+from authentication.models import User
 from django.db import models
 from authentication.models import User
 
@@ -43,4 +44,3 @@ class Comment(models.Model):
     #Re-comment
     parent_comment = models.ForeignKey('self', on_delete=models.CASCADE, null=True)
 
-# Create your models here.

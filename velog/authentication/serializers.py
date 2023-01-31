@@ -4,6 +4,7 @@ from dj_rest_auth.registration.serializers import RegisterSerializer
 from dj_rest_auth.serializers import LoginSerializer, UserDetailsSerializer
 from django.core.exceptions import ValidationError
 from rest_framework import serializers
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from .models import User
 
@@ -13,10 +14,9 @@ class UserSerializer(UserDetailsSerializer):
         model = User
         fields = [
             "id",
+            "username",
             "email",
             "name",
-            "gender",
-            "birthday",
             "profile_image",
             "introduction",
         ]
@@ -37,10 +37,9 @@ class UserLoginSerializer(LoginSerializer):
 
 
 class CustomRegisterSerializer(RegisterSerializer):
-    username = None
-    birthday = serializers.DateField()
+    # username = None
+    username = serializers.CharField(max_length=100)
     name = serializers.CharField(max_length=100)
-    gender = serializers.ChoiceField(choices=User.Gender.choices)
     profile_image = serializers.ImageField(default="")
     introduction = serializers.CharField(max_length=100)
 
@@ -55,9 +54,7 @@ class CustomRegisterSerializer(RegisterSerializer):
             "username": self.validated_data.get("username", ""),
             "password1": self.validated_data.get("password1", ""),
             "email": self.validated_data.get("email", ""),
-            "birthday": self.validated_data.get("birthday", ""),
             "name": self.validated_data.get("name", ""),
-            "gender": self.validated_data.get("gender", ""),
             "profile_image": self.validated_data.get("profile_image", ""),
             "introduction": self.validated_data.get("introduction", ""),
         }
@@ -75,12 +72,20 @@ class CustomRegisterSerializer(RegisterSerializer):
                 raise serializers.ValidationError(
                     detail=serializers.as_serializer_error(exc)
                 )
-        user.birthday = self.validated_data.get("birthday", "")
         user.name = self.validated_data.get("name", "")
-        user.gender = self.validated_data.get("gender", "")
         user.profile_image = self.validated_data.get("profile_image", "")
         user.introduction = self.validated_data.get("introduction", "")
         user.save()
         self.custom_signup(request, user)
         setup_user_email(request, user, [])
         return user
+
+
+class CustomTokenRefreshSerializer(serializers.Serializer):
+    refresh_token = serializers.CharField()
+
+    def validate(self, attrs):
+        refresh = RefreshToken(attrs["refresh_token"])
+        data = {"access_token": str(refresh.access_token)}
+
+        return data

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="4fb66123-f961-43bd-ab99-d8581bd95145" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/velog/authentication/migrations/0001_initial.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/velog/templates/account/_button.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/velog/templates/account/_links.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/velog/templates/account/_non_field_errors.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/velog/templates/account/_render_form.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/velog/templates/account/base.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/velog/templates/account/email_confirm.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/velog/templates/account/login.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/velog/templates/account/logout.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/velog/templates/account/password_reset.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/velog/templates/account/password_reset_done.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/velog/templates/account/password_reset_from_key.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/velog/templates/account/password_reset_from_key_done.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/velog/templates/account/signup.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/velog/templates/account/verification_sent.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/velog/templates/base.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/velog/templates/home.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/velog/templates/socialaccount/authentication_error.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/velog/templates/socialaccount/connections.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/velog/templates/socialaccount/login.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/velog/templates/socialaccount/signup.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/velog/templates/socialaccount/snippets/provider_list.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/velog/velog/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/velog/velog/urls.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2KAeKqbnguWb8sbGd6dVtG64oe3" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "C:/Users/Jungi/Downloads/team7-server/velog"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="4fb66123-f961-43bd-ab99-d8581bd95145" name="Changes" comment="" />
+      <created>1673421753513</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1673421753513</updated>
+      <workItem from="1673421754754" duration="13000" />
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
