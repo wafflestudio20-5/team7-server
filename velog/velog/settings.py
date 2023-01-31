@@ -335,8 +335,10 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     "https://api.7elog.store",
     "https://7elog.store",
+    "http://localhost:3000",
     "http://localhost:80",
-    "http://127.0.0.1:9000"
+    "http://127.0.0.1:9000",
+    'https://*.7elog.store',
 ]
 CORS_ALLOWED_ORIGIN_REGEXES = [
     r"^https://\w+\.7elog\.store$",
@@ -346,6 +348,8 @@ CORS_ORIGIN_WHITELIST = [
     'localhost:3000',
     'localhost:8000',
     '127.0.0.1:8000',
+    'https://7elog.store',
+    'https://api.7elog.store',
 ]
 # SECURE_CROSS_ORIGIN_OPENER_POLICY = None
 
