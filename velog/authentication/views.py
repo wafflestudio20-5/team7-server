@@ -14,11 +14,12 @@ from dj_rest_auth.registration.views import SocialConnectView, SocialLoginView
 from django.conf import settings
 from django.http import JsonResponse
 from django.shortcuts import redirect
-from rest_framework import status
+from rest_framework import status, generics, permissions
+from rest_framework.response import Response
 from rest_framework.views import APIView 
 from rest_framework.permissions import AllowAny
-
 from .models import User
+from .serializers import UserSerializer
 
 BASE_URL = "https://api.7elog.store/api/v1/"
 
@@ -38,6 +39,17 @@ GITHUB_CALLBACK_URI = BASE_URL + "accounts/github/login/callback/"
 FACEBOOK_CALLBACK_URI = BASE_URL + "accounts/facebook/login/callback/"
 
 state = getattr(settings, "STATE")
+
+
+class UsernameView(generics.ListAPIView):
+    permission_classes = [permissions.AllowAny]
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.get_queryset().get(username=kwargs['username'])
+        serializer = self.serializer_class(queryset)
+        return Response(serializer.data)
 
 
 def google_login(request):
