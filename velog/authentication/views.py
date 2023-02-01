@@ -44,11 +44,17 @@ state = getattr(settings, "STATE")
 
 class UserListUpdateView(UserDetailsView):
     serializer_class = UserSerializer
+
     def update(self, request, *args, **kwargs):
-        if request.data['username'] == request.user.username:
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        new_username = request.data.get("username", None)
+        if new_username == request.user.username:
             request.data._mutable = True
             request.data.pop('username')
-        kwargs['partial'] = True
+            kwargs['partial'] = True
         return super().update(request, *args, **kwargs)
 
 

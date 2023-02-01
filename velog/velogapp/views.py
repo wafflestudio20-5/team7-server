@@ -140,6 +140,42 @@ class PostRetrieveUpdateView(generics.RetrieveUpdateAPIView):
     serializer_class = PostSerializer
     lookup_field = 'pid'
 
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        pid = kwargs['pid']
+        try:
+            post = Post.objects.get(pid=pid)
+        except:
+            return Response(data={f"message": f"There is no post id {pid}"}, status=status.HTTP_404_NOT_FOUND)
+        posturl = request.data.get("url", None)
+        if posturl is not None and posturl != post.url:
+            while Post.objects.filter(url=posturl).exists():
+                postid = Post.objects.filter(url=posturl).count()
+                posturl += "-" + str(postid)
+            post.url = posturl
+        create_tag = request.data.get("create_tag", None)
+        if create_tag is not None:
+            ptags = post.tags.all()
+            author = request.user
+            for ptag in ptags:
+                post.tags.remove(ptag)
+            create_tag.replace("\n", ",")
+            tag_regex = re.findall('([0-9a-zA-Z가-힣]*),', create_tag)
+            tags_list = [Tag.objects.get_or_create(
+                tag_name=t, author=author)
+                for t in tag_regex]
+            for tag, bool in tags_list:
+                post.tags.add(tag.pk)
+        series = request.data.get("get_or_create_series", None)
+        if series is not None and series != "" and post.series.series_name != series:
+            post.series = Series.objects.get_or_create(series_name=series, author=author)[0]
+            post.save()
+        post.save()
+        return super().update(request, *args, **kwargs)
+
 class CommentListCreateView(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     queryset = Comment.objects.all()
