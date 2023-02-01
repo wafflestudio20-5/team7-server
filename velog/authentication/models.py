@@ -15,7 +15,13 @@ class User(AbstractUser):
     last_name = None
     email = models.EmailField(max_length=100, blank=False, null=False, unique=True)
     name = models.CharField(max_length=100, blank=True)
-
+    velog_name = models.CharField(max_length=100, blank=True)
+    mail = models.CharField(max_length=100, blank=True)
+    github = models.CharField(max_length=100, blank=True)
+    twitter = models.CharField(max_length=100, blank=True)
+    facebook = models.CharField(max_length=100, blank=True)
+    homepage = models.CharField(max_length=100, blank=True)
+    about = models.TextField(blank=True)
     profile_image = models.ImageField(upload_to="authentication/pictures", blank=True)
     introduction = models.CharField(max_length=100, blank=True)
     is_staff = models.BooleanField(default=False)
