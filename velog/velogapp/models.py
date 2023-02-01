@@ -29,6 +29,7 @@ class Post(models.Model):
 
 class Tag(models.Model):
     tag_name = models.CharField(max_length=200)
+    author = models.ForeignKey(User, on_delete=models.PROTECT)
 
 class Comment(models.Model):
     #Post class
