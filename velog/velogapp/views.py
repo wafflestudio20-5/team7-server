@@ -20,7 +20,7 @@ class PostCreateView(generics.GenericAPIView):
                 pass
             else:
                 posturl = request.data.get("title")
-            if Post.objects.filter(url=posturl).exists():
+            while Post.objects.filter(url=posturl).exists():
                 postid = Post.objects.filter(url=posturl).count()
                 posturl += "-"+str(postid)
             author = request.user
@@ -30,7 +30,7 @@ class PostCreateView(generics.GenericAPIView):
             create_tag.replace("\n", ",")
             tag_regex = re.findall('([0-9a-zA-Z가-힣]*),', create_tag)
             tags_list = [Tag.objects.get_or_create(
-                            tag_name=t)
+                            tag_name=t, author=author)
                          for t in tag_regex]
             for tag, bool in tags_list:
                 post.tags.add(tag.pk)
@@ -86,7 +86,7 @@ class UserPostListView(generics.GenericAPIView):
         else:
             return Post.objects.filter(is_private=False)
     def get(self, request, username):
-        post = Post.objects.filter(author__name=username).order_by('-created_at')
+        post = Post.objects.filter(author__username=username).order_by('-created_at')
         serializer = PostListSerializer(post, many=True, context={'request': request})
         return Response(serializer.data)
 
@@ -101,7 +101,7 @@ class PostRetrieveDestroyView(generics.RetrieveDestroyAPIView):
         else:
             return Post.objects.filter(is_private=False)
     def get(self, request, username, url):
-        post = self.get_queryset().get(author__name=username, url=url)
+        post = self.get_queryset().get(author__username=username, url=url)
         # 조회한(GET 요청한) user 기록
         if request.user.is_authenticated:
             if post.view_user.filter(pk=request.user.pk).exists():
@@ -113,7 +113,7 @@ class PostRetrieveDestroyView(generics.RetrieveDestroyAPIView):
         return Response(serializer.data)
     # post 요청 시 좋아요 추가/제거
     def post(self, request, username, url):
-        post = self.get_queryset().get(author__name=username, url=url)
+        post = self.get_queryset().get(author__username=username, url=url)
         if request.user.is_authenticated:
             user = request.user
             if post.like_user.filter(pk=request.user.pk).exists():
@@ -129,7 +129,7 @@ class PostRetrieveDestroyView(generics.RetrieveDestroyAPIView):
             return Response({"detail": "Authentication credentials were not provided."}, status=status.HTTP_403_FORBIDDEN)
 
     def delete(self, request, username, url):
-        post = self.get_queryset().get(author__name=username, url=url)
+        post = self.get_queryset().get(author__username=username, url=url)
         self.perform_destroy(post)
         return Response(status=status.HTTP_204_NO_CONTENT)
     # 해당 post의 comment도 불러오도록 해야 함
@@ -185,10 +185,11 @@ class CommentUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
 class TagListView(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
     queryset = Tag.objects.all()
-    serializer_class = TagSerializer
+    serializer_class = TagCountSerializer
+
     def get(self, request):
-        queryset = self.get_queryset()
-        serializer = TagSerializer(queryset, many=True)
+        queryset = Tag.objects.values('tag_name').distinct() # 현재에는 tag_name이 같으나 author가 달라질 수 있기에 중복제거
+        serializer = TagCountSerializer(queryset, many=True) # TagCountSerializer로 적용
         return Response(serializer.data)
 
 class TagPostListView(generics.GenericAPIView):
@@ -206,12 +207,36 @@ class TagPostListView(generics.GenericAPIView):
         serializer = PostListSerializer(post, many=True, context={'request': request})
         return Response(serializer.data)
 
+class UserTagListView(generics.GenericAPIView):
+    permission_classes = [permissions.AllowAny]
+    queryset = Tag.objects.all()
+    serializer_class = TagSerializer
+    def get(self, request, username):
+        tags = Tag.objects.filter(author__username=username)
+        serializer = TagSerializer(tags, many=True, context={'request': request})
+        return Response(serializer.data)
+
+class UserTagPostListView(generics.GenericAPIView): # PUT, DELETE 추가 필요(permission classes = [IsCreatorOrReadOnly]
+    permission_classes = [permissions.AllowAny]
+    serializer_class = PostListSerializer
+    def get_queryset(self):
+        if self.request.user.is_authenticated:
+            return Post.objects.filter(Q(author=self.request.user) |
+                                       Q(is_private=False)
+                                       )
+        else:
+            return Post.objects.filter(is_private=False)
+    def get(self, request, username, tag_name):
+        post = Post.objects.filter(author__username=username, tags__tag_name=tag_name)
+        serializer = PostListSerializer(post, many=True, context={'request': request})
+        return Response(serializer.data)
+
 class SeriesListView(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
     queryset = Series.objects.all()
     serializer_class = SeriesSerializer
     def get(self, request, username):
-        series = Series.objects.filter(author__name=username)
+        series = Series.objects.filter(author__username=username)
         serializer = SeriesSerializer(series, many=True, context={'request': request})
         return Response(serializer.data)
 
@@ -226,7 +251,7 @@ class SeriesPostListView(generics.GenericAPIView): # PUT, DELETE 추가 필요(p
         else:
             return Post.objects.filter(is_private=False)
     def get(self, request, username, series_name):
-        post = Post.objects.filter(author__name=username, series__series_name=series_name).order_by('-created_at')
+        post = Post.objects.filter(author__username=username, series__series_name=series_name).order_by('-created_at')
         serializer = PostListSerializer(post, many=True, context={'request': request})
         return Response(serializer.data)
 

@@ -3,11 +3,24 @@ from .models import *
 
 class TagSerializer(serializers.ModelSerializer):
     postCount = serializers.SerializerMethodField()
+    author = serializers.StringRelatedField(read_only=True)
     def get_postCount(self, obj):
         return Post.objects.filter(tags=obj.id).count()
     class Meta:
         model = Tag
         fields = ['id',
+                  'tag_name',
+                  'author',
+                  'postCount',
+                  ]
+
+class TagCountSerializer(serializers.ModelSerializer):
+    postCount = serializers.SerializerMethodField()
+    def get_postCount(self, obj):
+        return Post.objects.filter(tags__tag_name=obj['tag_name']).count()
+    class Meta:
+        model = Tag
+        fields = [
                   'tag_name',
                   'postCount',
                   ]
@@ -15,6 +28,7 @@ class TagSerializer(serializers.ModelSerializer):
 
 class SeriesSerializer(serializers.ModelSerializer):
     postNum = serializers.SerializerMethodField()
+    author = serializers.StringRelatedField(read_only=True)
     #update_at, thumbnail
     def get_postNum(self, obj):
         return Post.objects.filter(series=obj.id).count()
@@ -29,7 +43,7 @@ class SeriesSerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
-    author = serializers.PrimaryKeyRelatedField(read_only=True)
+    author = serializers.StringRelatedField(read_only=True)
     tags = TagSerializer(many=True, required=False, read_only=True)
     series = serializers.PrimaryKeyRelatedField(read_only=True)
 
@@ -56,7 +70,7 @@ class PostSerializer(serializers.ModelSerializer):
                             ]
 
 class PostListSerializer(serializers.ModelSerializer):
-    author = serializers.PrimaryKeyRelatedField(read_only=True)
+    author = serializers.StringRelatedField(read_only=True)
     likes = serializers.PrimaryKeyRelatedField(read_only=True)
     comments = serializers.SerializerMethodField()
 
@@ -71,7 +85,6 @@ class PostListSerializer(serializers.ModelSerializer):
             'thumbnail',
             'preview',
             'author',
-            'url',
             'created_at',
             'updated_at',
             'likes',
@@ -79,7 +92,7 @@ class PostListSerializer(serializers.ModelSerializer):
         ]
 
 class CommentSerializer(serializers.ModelSerializer):
-    author = serializers.PrimaryKeyRelatedField(read_only=True)
+    author = serializers.StringRelatedField(read_only=True)
 
     class Meta:
         fields = [
@@ -98,7 +111,7 @@ class CommentSerializer(serializers.ModelSerializer):
         model = Comment
 
 class PostDetailSerializer(serializers.ModelSerializer):
-    author = serializers.PrimaryKeyRelatedField(read_only=True)
+    author = serializers.StringRelatedField(read_only=True)
     likes = serializers.PrimaryKeyRelatedField(read_only=True)
     tags = TagSerializer(many=True, required=False, read_only=True)
     comments = CommentSerializer(many=True, read_only=True, source='comment_set')
