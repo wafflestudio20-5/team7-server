@@ -46,10 +46,6 @@ class UserListUpdateView(UserDetailsView):
     serializer_class = UserSerializer
 
     def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
-        serializer.is_valid(raise_exception=True)
         new_username = request.data.get("username", None)
         if new_username == request.user.username:
             request.data._mutable = True
@@ -58,16 +54,18 @@ class UserListUpdateView(UserDetailsView):
         return super().update(request, *args, **kwargs)
 
 
-
 class UsernameView(generics.ListAPIView):
     permission_classes = [permissions.AllowAny]
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
     def get(self, request, *args, **kwargs):
-        queryset = self.get_queryset().get(username=kwargs['username'])
-        serializer = self.serializer_class(queryset)
-        return Response(serializer.data)
+        try:
+            queryset = self.get_queryset().get(username=kwargs['username'])
+            serializer = self.serializer_class(queryset)
+            return Response(serializer.data)
+        except:
+            return Response(data={f"message": f"There is no user {kwargs['username']}"}, status=status.HTTP_404_NOT_FOUND)
 
 
 def google_login(request):
