@@ -20,7 +20,7 @@ from rest_framework_simplejwt.views import TokenRefreshView, TokenVerifyView
 urlpatterns = [
     path("login/", LoginView.as_view(), name='rest_login'),
     path("logout/", LogoutView.as_view(), name='rest_logout'),
-    path("user/", UserDetailsView.as_view(), name="user_detail"),
+    path("user/", views.UserListUpdateView.as_view(), name="user_detail"),
     path("user/@<str:username>", views.UsernameView.as_view(), name="username_view"),
     path("signup/", RegisterView.as_view(), name="account_signup"),
     path("login/", LoginView.as_view(), name="account_login"),

@@ -11,6 +11,7 @@ from allauth.socialaccount.providers.google import views as google_view
 from allauth.socialaccount.providers.kakao import views as kakao_view
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from dj_rest_auth.registration.views import SocialConnectView, SocialLoginView
+from dj_rest_auth.views import UserDetailsView
 from django.conf import settings
 from django.http import JsonResponse
 from django.shortcuts import redirect
@@ -39,6 +40,17 @@ GITHUB_CALLBACK_URI = BASE_URL + "accounts/github/login/callback/"
 FACEBOOK_CALLBACK_URI = BASE_URL + "accounts/facebook/login/callback/"
 
 state = getattr(settings, "STATE")
+
+
+class UserListUpdateView(UserDetailsView):
+    serializer_class = UserSerializer
+    def update(self, request, *args, **kwargs):
+        if request.data['username'] == request.user.username:
+            request.data._mutable = True
+            request.data.pop('username')
+        kwargs['partial'] = True
+        return super().update(request, *args, **kwargs)
+
 
 
 class UsernameView(generics.ListAPIView):
