@@ -151,12 +151,6 @@ class PostRetrieveUpdateView(generics.RetrieveUpdateAPIView):
         except:
             return Response(data={f"message": f"There is no post id {pid}"}, status=status.HTTP_404_NOT_FOUND)
         author = request.user
-        posturl = request.data.get("url", None)
-        if posturl is not None and posturl != post.url:
-            while Post.objects.filter(url=posturl).exists():
-                postid = Post.objects.filter(url=posturl).count()
-                posturl += "-" + str(postid)
-            post.url = posturl
         create_tag = request.data.get("create_tag", None)
         if create_tag is not None:
             ptags = post.tags.all()
@@ -172,6 +166,17 @@ class PostRetrieveUpdateView(generics.RetrieveUpdateAPIView):
         series = request.data.get("get_or_create_series", None)
         if series is not None and series != "" and post.series.series_name != series:
             post.series = Series.objects.get_or_create(series_name=series, author=author)[0]
+        posturl = request.data.get("url", None)
+        if posturl is not None and posturl:
+            pass
+        else:
+            posturl = request.data.get("title", "")
+        if posturl != post.url:
+            while Post.objects.filter(url=posturl).exists():
+                postid = Post.objects.filter(url=posturl).count()
+                posturl += "-" + str(postid)
+        request.data._mutable = True
+        request.data['url'] = posturl
         post.save()
         return super().update(request, *args, **kwargs)
 
