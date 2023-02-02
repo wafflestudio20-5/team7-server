@@ -1,5 +1,17 @@
 from rest_framework import serializers
 from .models import *
+from django.db.models import Q
+
+# is_private filter
+class FilterPrivateListSerializer(serializers.ListSerializer):
+    def to_representation(self, data):
+        if self.context['request'].user.is_authenticated:
+            data = data.filter(Q(author=self.context['request'].user) |
+                                       Q(is_private=False)
+                                       )
+        else:
+            data = data.filter(is_private=False)
+        return super(FilterPrivateListSerializer, self).to_representation(data)
 
 class TagSerializer(serializers.ModelSerializer):
     postCount = serializers.SerializerMethodField()
@@ -26,10 +38,13 @@ class TagCountSerializer(serializers.ModelSerializer):
                   ]
 
 class SeriesCreateSerializer(serializers.ModelSerializer):
+    author = serializers.StringRelatedField(read_only=True)
+
     class Meta:
         model = Series
         fields = [
             'id',
+            'author',
             'series_name',
             'url',
             'update',
@@ -38,7 +53,7 @@ class SeriesCreateSerializer(serializers.ModelSerializer):
 class SeriesSerializer(serializers.ModelSerializer):
     postNum = serializers.SerializerMethodField()
     author = serializers.StringRelatedField(read_only=True)
-    #update_at, photo,
+
     def get_postNum(self, obj):
         return Post.objects.filter(series=obj.id).count()
     class Meta:
@@ -46,6 +61,8 @@ class SeriesSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'series_name',
+            'url',
+            'update',
             'author',
             'postNum',
         ]
@@ -96,6 +113,7 @@ class PostListSerializer(serializers.ModelSerializer):
             'comments',
             'url',
         ]
+        list_serializer_class = FilterPrivateListSerializer
 
 class CommentSerializer(serializers.ModelSerializer):
     author = serializers.StringRelatedField(read_only=True)
@@ -150,12 +168,23 @@ class PostDetailSerializer(serializers.ModelSerializer):
         ]
 
 
-class SeriesPostSerializer(serializers.ModelSerializer):
-    series_id = serializers.IntegerField()
-    post = PostListSerializer(read_only=True)
+
+class SeriesDetailSerializer(serializers.ModelSerializer):
+    postList = PostListSerializer(many=True, read_only=True, source='post_set')
+    # 비공개 post 처리 필요
+    postNum = serializers.SerializerMethodField()
+    author = serializers.StringRelatedField(read_only=True)
+
+    def get_postNum(self, obj):
+        return Post.objects.filter(series=obj.id).count()
+
     class Meta:
-        model = Post
+        model = Series
         fields = [
-            'series_id',
-            'post',
+            'id',
+            'series_name',
+            'update',
+            'author',
+            'postNum',
+            'postList',
         ]
