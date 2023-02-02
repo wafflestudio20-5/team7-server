@@ -1,3 +1,4 @@
+from django.http import QueryDict
 from rest_framework import generics, status, permissions
 from rest_framework.response import Response
 from .serializers import *
@@ -160,6 +161,58 @@ class PostRetrieveUpdateView(generics.RetrieveUpdateAPIView):
     serializer_class = PostSerializer
     lookup_field = 'pid'
 
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        pid = kwargs['pid']
+        try:
+            post = Post.objects.get(pid=pid)
+        except:
+            return Response(data={f"message": f"There is no post id {pid}"}, status=status.HTTP_404_NOT_FOUND)
+        author = request.user
+        posturl = request.data.get("url", None)
+        if posturl:
+            pass
+        else:
+            posturl = post.url
+        if posturl != post.url and Post.objects.filter(url=posturl).exists():
+            return Response(data={f"message": f"URL {posturl} already exists"}, status=status.HTTP_400_BAD_REQUEST)
+        if isinstance(request.data, QueryDict):
+            request.data._mutable = True
+            request.data['url'] = posturl
+            request.data._mutable = False
+        else:
+            request.data['url'] = posturl
+        create_tag = request.data.get("create_tag", None)
+        if create_tag:
+            ptags = post.tags.all()
+            for ptag in ptags:
+                post.tags.remove(ptag)
+            create_tag.replace("\n", ",")
+            tag_regex = re.findall('([0-9a-zA-Z가-힣]*),', create_tag)
+            tags_list = [Tag.objects.get_or_create(
+                tag_name=t, author=author)
+                for t in tag_regex]
+            for tag, bool in tags_list:
+                post.tags.add(tag.pk)
+        series = request.data.get("get_or_create_series", None)
+        if series and post.series.series_name != series:
+            post.series = Series.objects.get_or_create(series_name=series, author=author)[0]
+        post.save()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        if getattr(instance, '_prefetched_objects_cache', None):
+            # If 'prefetch_related' has been applied to a queryset, we need to
+            # forcibly invalidate the prefetch cache on the instance.
+            instance._prefetched_objects_cache = {}
+
+        return Response(serializer.data)
+
+
 class CommentListCreateView(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     queryset = Comment.objects.all()
@@ -292,14 +345,40 @@ class SearchListView(generics.GenericAPIView): # ajax
             return Post.objects.filter(is_private=False)
     def get(self, request):
         word = request.GET.get('q', None)
+        username = request.GET.get('username', None)
         if word:
             post = Post.objects.filter(Q(content__icontains=word) |
                                     Q(title__icontains=word)
                                    ).order_by('-likes')
+            if username:
+                post = post.filter(Q(author=username))
+                                   
             serializer = PostListSerializer(post, many=True, context={'request': request})
             return self.get_paginated_response(self.paginate_queryset(serializer.data))
         else:
             return Response()
 
+class SearchByAuthorView(generics.GenericAPIView): # ajax
+    permission_classes = [permissions.AllowAny]
+    serializer_class = PostListSerializer
+    pagination_class = PostListPagination
+    queryset = Post.objects.all()
+#     def get_queryset(self):
+#         if self.request.user.is_authenticated:
+#             return Post.objects.filter(Q(author=self.request.user) |
+#                                        Q(is_private=False)
+#                                        )
+#         else:
+#             return Post.objects.filter(is_private=False)
+    def get(self, request, *args, **kwargs):
+        word = request.GET.get('q', None)
+        if word:
+            post = Post.objects.filter((Q(content__icontains=word) & Q(author=self.kwargs['username'])) |
+                                    (Q(title__icontains=word) & Q(author=self.kwargs['username']))
+                                   ).order_by('-likes')
+            serializer = PostListSerializer(post, many=True, context={'request': request})
+            return self.get_paginated_response(self.paginate_queryset(serializer.data))
+        else:
+            return Response()
 
 # Create your views here.

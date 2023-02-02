@@ -26,20 +26,20 @@ chmod +x ./velog/templates/account/
 chmod +x ./velog/templates/account
 chmod +x ./velog/templates/socialaccount/
 chmod +x ./velog/templates/socialaccount
-chmod +x ./velog/templates/loaders/
-chmod +x ./velog/templates/loaders
-chmod +x ./velog/templates/account/messages/
-chmod +x ./velog/templates/account/messages/logged_in.txt
+# chmod +x ./velog/templates/loaders/
+# chmod +x ./velog/templates/loaders
+# chmod +x ./velog/templates/account/messages/
+# chmod +x ./velog/templates/account/messages/logged_in.txt
 
 chmod 777 ./velog/templates/
 chmod 777 ./velog/templates/account/
 chmod 777 ./velog/templates/account
 chmod 777 ./velog/templates/socialaccount/
 chmod 777 ./velog/templates/socialaccount
-chmod 777 ./velog/templates/loaders/
-chmod 777 ./velog/templates/loaders
-chmod 777 ./velog/templates/account/messages/
-chmod 777 ./velog/templates/account/messages/logged_in.txt
+# chmod 777 ./velog/templates/loaders/
+# chmod 777 ./velog/templates/loaders
+# chmod 777 ./velog/templates/account/messages/
+# chmod 777 ./velog/templates/account/messages/logged_in.txt
 
 echo "installing python..."
 sudo apt update
@@ -77,13 +77,13 @@ echo "installing coresheaders..."
 sudo python3 -m pip install django-cors-headers
 
 echo "collect static..."
-python3 manage.py collectstatic
+yes | python3 manage.py collectstatic
 
-echo "make migrations..."
-yes | python3 manage.py makemigrations
+# echo "make migrations..."
+# yes | python3 manage.py makemigrations
 
-echo "apply migration..."
-python3 manage.py migrate
+# echo "apply migration..."
+# python3 manage.py migrate
 
 #echo "move location to project..."
 #cd velog

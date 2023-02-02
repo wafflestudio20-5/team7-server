@@ -11,14 +11,16 @@ from allauth.socialaccount.providers.google import views as google_view
 from allauth.socialaccount.providers.kakao import views as kakao_view
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from dj_rest_auth.registration.views import SocialConnectView, SocialLoginView
+from dj_rest_auth.views import UserDetailsView
 from django.conf import settings
-from django.http import JsonResponse
+from django.http import JsonResponse, QueryDict
 from django.shortcuts import redirect
-from rest_framework import status
+from rest_framework import status, generics, permissions
+from rest_framework.response import Response
 from rest_framework.views import APIView 
 from rest_framework.permissions import AllowAny
-
 from .models import User
+from .serializers import UserSerializer
 
 BASE_URL = "https://api.7elog.store/api/v1/"
 
@@ -38,6 +40,36 @@ GITHUB_CALLBACK_URI = BASE_URL + "accounts/github/login/callback/"
 FACEBOOK_CALLBACK_URI = BASE_URL + "accounts/facebook/login/callback/"
 
 state = getattr(settings, "STATE")
+
+
+class UserListUpdateView(UserDetailsView):
+    serializer_class = UserSerializer
+
+    def update(self, request, *args, **kwargs):
+        new_username = request.data.get("username", None)
+        if new_username == request.user.username:
+            if isinstance(request.data, QueryDict):
+                request.data._mutable = True
+                request.data.pop('username')
+                request.data._mutable = False
+            else:
+                request.data.pop('username')
+            kwargs['partial'] = True
+        return super().update(request, *args, **kwargs)
+
+
+class UsernameView(generics.ListAPIView):
+    permission_classes = [permissions.AllowAny]
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+    def get(self, request, *args, **kwargs):
+        try:
+            queryset = self.get_queryset().get(username=kwargs['username'])
+            serializer = self.serializer_class(queryset)
+            return Response(serializer.data)
+        except:
+            return Response(data={f"message": f"There is no user {kwargs['username']}"}, status=status.HTTP_404_NOT_FOUND)
 
 
 def google_login(request):
