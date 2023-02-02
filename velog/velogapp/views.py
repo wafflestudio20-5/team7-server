@@ -197,9 +197,9 @@ class PostRetrieveUpdateView(generics.RetrieveUpdateAPIView):
                 for t in tag_regex]
             for tag, bool in tags_list:
                 post.tags.add(tag.pk)
-        series = request.data.get("get_or_create_series", None)
-        if series and post.series.series_name != series:
-            post.series = Series.objects.get_or_create(series_name=series, author=author)[0]
+        # series = request.data.get("get_or_create_series", None)
+        # if series and post.series.series_name != series:
+        #     post.series = Series.objects.get_or_create(series_name=series, author=author)[0]
         post.save()
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
@@ -261,9 +261,15 @@ class TagListView(generics.GenericAPIView):
     serializer_class = TagCountSerializer
 
     def get(self, request):
-        queryset = Tag.objects.values('tag_name').distinct() # 현재에는 tag_name이 같으나 author가 달라질 수 있기에 중복제거
-        serializer = TagCountSerializer(queryset, many=True) # TagCountSerializer로 적용
-        return Response(serializer.data)
+        num = request.GET.get('num', None)
+        # 현재에는 tag_name이 같으나 author가 달라질 수 있기에 중복제거
+        queryset = Tag.objects.values('tag_name').order_by('tag_name').distinct()
+        # TagCountSerializer로 적용
+        serializer = TagCountSerializer(queryset, many=True)
+        tag_data = serializer.data
+        if num == "yes":
+            tag_data = sorted(tag_data, key=lambda d: d['postCount'], reverse=True)
+        return Response(tag_data)
 
 class TagPostListView(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]

@@ -22,6 +22,7 @@ urlpatterns = [
     path("logout/", LogoutView.as_view(), name='rest_logout'),
     path("user/", views.UserListUpdateView.as_view(), name="user_detail"),
     path("user/@<str:username>", views.UsernameView.as_view(), name="username_view"),
+    path("user/delete/@<str:username>", views.UserDestroyView.as_view(), name="user_delete"),
     path("signup/", RegisterView.as_view(), name="account_signup"),
     path("login/", LoginView.as_view(), name="account_login"),
     path("logout/", LogoutView.as_view(), name="account_logout"),
