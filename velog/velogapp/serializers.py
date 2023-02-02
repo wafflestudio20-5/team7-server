@@ -167,11 +167,18 @@ class PostDetailSerializer(serializers.ModelSerializer):
             'comments',
         ]
 
-
+class SeriesPostSerializer(serializers.ModelSerializer):
+    post = PostListSerializer(source='*', read_only=True)
+    class Meta:
+        model = Post
+        fields = [
+            'series_order',
+            'post',
+        ]
+        list_serializer_class = FilterPrivateListSerializer
 
 class SeriesDetailSerializer(serializers.ModelSerializer):
-    postList = PostListSerializer(many=True, read_only=True, source='post_set')
-    # 비공개 post 처리 필요
+    postList = SeriesPostSerializer(many=True, read_only=True, source='post_set')
     postNum = serializers.SerializerMethodField()
     author = serializers.StringRelatedField(read_only=True)
 
