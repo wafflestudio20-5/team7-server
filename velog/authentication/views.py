@@ -13,7 +13,7 @@ from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from dj_rest_auth.registration.views import SocialConnectView, SocialLoginView
 from dj_rest_auth.views import UserDetailsView
 from django.conf import settings
-from django.http import JsonResponse
+from django.http import JsonResponse, QueryDict
 from django.shortcuts import redirect
 from rest_framework import status, generics, permissions
 from rest_framework.response import Response
@@ -48,9 +48,12 @@ class UserListUpdateView(UserDetailsView):
     def update(self, request, *args, **kwargs):
         new_username = request.data.get("username", None)
         if new_username == request.user.username:
-            request.data._mutable = True
-            request.data.pop('username')
-            request.data._mutable = False
+            if isinstance(request.data, QueryDict):
+                request.data._mutable = True
+                request.data.pop('username')
+                request.data._mutable = False
+            else:
+                request.data.pop('username')
             kwargs['partial'] = True
         return super().update(request, *args, **kwargs)
 

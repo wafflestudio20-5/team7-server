@@ -1,3 +1,4 @@
+from django.http import QueryDict
 from rest_framework import generics, status, permissions
 from rest_framework.response import Response
 from .serializers import *
@@ -151,8 +152,21 @@ class PostRetrieveUpdateView(generics.RetrieveUpdateAPIView):
         except:
             return Response(data={f"message": f"There is no post id {pid}"}, status=status.HTTP_404_NOT_FOUND)
         author = request.user
+        posturl = request.data.get("url", None)
+        if posturl:
+            pass
+        else:
+            posturl = post.url
+        if posturl != post.url and Post.objects.filter(url=posturl).exists():
+            return Response(data={f"message": f"URL {posturl} already exists"}, status=status.HTTP_400_BAD_REQUEST)
+        if isinstance(request.data, QueryDict):
+            request.data._mutable = True
+            request.data['url'] = posturl
+            request.data._mutable = False
+        else:
+            request.data['url'] = posturl
         create_tag = request.data.get("create_tag", None)
-        if create_tag is not None:
+        if create_tag:
             ptags = post.tags.all()
             for ptag in ptags:
                 post.tags.remove(ptag)
@@ -164,20 +178,8 @@ class PostRetrieveUpdateView(generics.RetrieveUpdateAPIView):
             for tag, bool in tags_list:
                 post.tags.add(tag.pk)
         series = request.data.get("get_or_create_series", None)
-        if series is not None and series != "" and post.series.series_name != series:
+        if series and post.series.series_name != series:
             post.series = Series.objects.get_or_create(series_name=series, author=author)[0]
-        posturl = request.data.get("url", None)
-        if posturl is not None and posturl:
-            pass
-        else:
-            posturl = request.data.get("title", "")
-        if posturl != post.url:
-            while Post.objects.filter(url=posturl).exists():
-                postid = Post.objects.filter(url=posturl).count()
-                posturl += "-" + str(postid)
-        request.data._mutable = True
-        request.data['url'] = posturl
-        request.data._mutable = False
         post.save()
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
