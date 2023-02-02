@@ -88,8 +88,10 @@ class PostSerializer(serializers.ModelSerializer):
             'create_tag',
             'tags',
             'url',
+            'series_order',
         ]
-        write_only_field = ['create_tag',]
+        write_only_fields = ['create_tag',]
+        read_only_fields = ['series_order',]
 
 class PostListSerializer(serializers.ModelSerializer):
     author = serializers.StringRelatedField(read_only=True)
