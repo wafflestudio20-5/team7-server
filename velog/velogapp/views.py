@@ -331,5 +331,27 @@ class SearchListView(generics.GenericAPIView): # ajax
         else:
             return Response()
 
+class SearchByAuthorView(generics.GenericAPIView): # ajax
+    permission_classes = [permissions.AllowAny]
+    serializer_class = PostListSerializer
+    pagination_class = PostListPagination
+    queryset = Post.objects.all()
+#     def get_queryset(self):
+#         if self.request.user.is_authenticated:
+#             return Post.objects.filter(Q(author=self.request.user) |
+#                                        Q(is_private=False)
+#                                        )
+#         else:
+#             return Post.objects.filter(is_private=False)
+    def get(self, request, *args, **kwargs):
+        word = request.GET.get('q', None)
+        if word:
+            post = Post.objects.filter((Q(content__icontains=word) & Q(author.username=self.kwargs['username'])) |
+                                    (Q(title__icontains=word) & Q(author.username=self.kwargs['username']))
+                                   ).order_by('-likes')
+            serializer = PostListSerializer(post, many=True, context={'request': request})
+            return self.get_paginated_response(self.paginate_queryset(serializer.data))
+        else:
+            return Response()
 
 # Create your views here.
