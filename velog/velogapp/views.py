@@ -346,8 +346,8 @@ class SearchByAuthorView(generics.GenericAPIView): # ajax
     def get(self, request, *args, **kwargs):
         word = request.GET.get('q', None)
         if word:
-            post = Post.objects.filter((Q(content__icontains=word) & Q(author.username=self.kwargs['username'])) |
-                                    (Q(title__icontains=word) & Q(author.username=self.kwargs['username']))
+            post = Post.objects.filter((Q(content__icontains=word) & Q(author=self.kwargs['username'])) |
+                                    (Q(title__icontains=word) & Q(author=self.kwargs['username']))
                                    ).order_by('-likes')
             serializer = PostListSerializer(post, many=True, context={'request': request})
             return self.get_paginated_response(self.paginate_queryset(serializer.data))
