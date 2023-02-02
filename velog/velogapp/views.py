@@ -172,8 +172,8 @@ class PostRetrieveUpdateView(generics.RetrieveUpdateAPIView):
         else:
             posturl = request.data.get("title", "")
         if posturl != post.url:
-            while Post.objects.filter(url=posturl, author=author).exists():
-                postid = Post.objects.filter(url=posturl, author=author).count()
+            while Post.objects.filter(url=posturl).exists():
+                postid = Post.objects.filter(url=posturl).count()
                 posturl += "-" + str(postid)
         request.data._mutable = True
         request.data['url'] = posturl
