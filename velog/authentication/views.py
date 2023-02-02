@@ -50,6 +50,7 @@ class UserListUpdateView(UserDetailsView):
         if new_username == request.user.username:
             request.data._mutable = True
             request.data.pop('username')
+            request.data._mutable = False
             kwargs['partial'] = True
         return super().update(request, *args, **kwargs)
 
