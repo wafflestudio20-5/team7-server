@@ -19,8 +19,10 @@ from rest_framework import status, generics, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView 
 from rest_framework.permissions import AllowAny
+from velogapp.models import Post, Tag, Series, Comment
 from .models import User
 from .serializers import UserSerializer
+from .permissions import IsCreator
 
 BASE_URL = "https://api.7elog.store/api/v1/"
 
@@ -70,6 +72,26 @@ class UsernameView(generics.ListAPIView):
             return Response(serializer.data)
         except:
             return Response(data={f"message": f"There is no user {kwargs['username']}"}, status=status.HTTP_404_NOT_FOUND)
+
+
+class UserDestroyView(generics.DestroyAPIView):
+    permission_classes = [IsCreator | permissions.IsAdminUser]
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    lookup_field = 'username'
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        for post in Post.objects.filter(author=instance):
+            post.delete()
+        for comment in Comment.objects.filter(author=instance):
+            comment.delete()
+        for tag in Tag.objects.filter(author=instance):
+            tag.delete()
+        for series in Series.objects.filter(author=instance):
+            series.delete()
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 def google_login(request):
@@ -441,44 +463,3 @@ class ConfirmEmailView(APIView):
         qs = EmailConfirmation.objects.all_valid()
         qs = qs.select_related("email_address__user")
         return qs
-
-
-# class GoogleLogin(SocialLoginView):
-#     adapter_class = GoogleOAuth2Adapter
-#     client_class = OAuth2Client
-#     callback_url = 'http://localhost:8000/auth/google/callback'
-#
-#
-# class GoogleConnect(SocialConnectView):
-#     adapter_class = GoogleOAuth2Adapter
-#     client_class = OAuth2Client
-#
-#
-# class KakaoLogin(SocialLoginView):
-#     adapter_class = KakaoOAuth2Adapter
-#     client_class = OAuth2Client
-#
-#
-# class KakaoConnect(SocialConnectView):
-#     adapter_class = KakaoOAuth2Adapter
-#     client_class = OAuth2Client
-#
-#
-# class FacebookLogin(SocialLoginView):
-#     adapter_class = FacebookOAuth2Adapter
-#     client_class = OAuth2Client
-#
-#
-# class FacebookConnect(SocialConnectView):
-#     adapter_class = FacebookOAuth2Adapter
-#     client_class = OAuth2Client
-#
-#
-# class GithubLogin(SocialLoginView):
-#     adapter_class = GitHubOAuth2Adapter
-#     client_class = OAuth2Client
-#
-#
-# class GithubConnect(SocialConnectView):
-#     adapter_class = GitHubOAuth2Adapter
-#     client_class = OAuth2Client

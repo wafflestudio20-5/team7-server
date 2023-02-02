@@ -12,7 +12,6 @@ from .models import User
 class UserSerializer(UserDetailsSerializer):
     class Meta:
         model = User
-        model = User
         fields = [
             "username",
             "email",
