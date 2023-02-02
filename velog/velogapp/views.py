@@ -93,7 +93,7 @@ class PostListView(generics.ListAPIView):
         elif request.path == '/api/v1/velog/lists/read/':
             if request.user.is_authenticated:
                 queryset = self.get_queryset().filter(view_user=request.user)[::-1]
-        serializer = PostListSerializer(queryset, many=True)
+        serializer = PostListSerializer(queryset, many=True, context={'request': request})
         return self.get_paginated_response(self.paginate_queryset(serializer.data))
 
 class UserPostListView(generics.GenericAPIView):
@@ -321,17 +321,20 @@ class SeriesListView(generics.GenericAPIView):
 
 class SeriesPostListView(generics.GenericAPIView): # PUT, DELETE 추가 필요(permission classes = [IsCreatorOrReadOnly]
     permission_classes = [permissions.AllowAny]
-    serializer_class = PostListSerializer
-    def get_queryset(self):
-        if self.request.user.is_authenticated:
-            return Post.objects.filter(Q(author=self.request.user) |
-                                       Q(is_private=False)
-                                       )
-        else:
-            return Post.objects.filter(is_private=False)
-    def get(self, request, username, series_name):
-        post = Post.objects.filter(author__username=username, series__series_name=series_name).order_by('-created_at')
-        serializer = PostListSerializer(post, many=True, context={'request': request})
+    queryset = Series.objects.all()
+    serializer_class = SeriesDetailSerializer
+
+    # def get_queryset(self):
+    #     if self.request.user.is_authenticated:
+    #         return Post.objects.filter(Q(author=self.request.user) |
+    #                                    Q(is_private=False)
+    #                                    )
+    #     else:
+    #         return Post.objects.filter(is_private=False)
+
+    def get(self, request, username, url):
+        series = Series.objects.get(author__username=username, url=url)
+        serializer = SeriesDetailSerializer(series, context={'request': request})
         return Response(serializer.data)
 
 
