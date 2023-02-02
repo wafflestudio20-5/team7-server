@@ -73,7 +73,7 @@ def get_secret(setting):
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["*", "https://api.7elog.store", "43.201.111.105", "https://7elog.store"]
+ALLOWED_HOSTS = ["*", "https://api.7elog.store", "43.201.111.105", "https://7elog.store", "https://d822df5kj1qhh.cloudfront.net"]
 
 
 # Application definition
