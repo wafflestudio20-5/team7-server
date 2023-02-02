@@ -36,7 +36,8 @@ class PostCreateView(generics.GenericAPIView):
             for tag, bool in tags_list:
                 post.tags.add(tag.pk)
             post.save()
-            # get series
+            # series_number 설정 필요: series 속해있으면 그 안에서 몇번째인지
+
             serializer = PostSerializer(
                 post,
                 context={"request": request},
@@ -153,7 +154,7 @@ class PostRetrieveDestroyView(generics.RetrieveDestroyAPIView):
         post = self.get_queryset().get(author__username=username, url=url)
         self.perform_destroy(post)
         return Response(status=status.HTTP_204_NO_CONTENT)
-    # 해당 post의 comment도 불러오도록 해야 함
+
 
 class PostRetrieveUpdateView(generics.RetrieveUpdateAPIView):
     permission_classes = [IsCreator]
@@ -313,8 +314,8 @@ class SeriesListView(generics.GenericAPIView):
         serializer = SeriesSerializer(series, many=True, context={'request': request})
         return Response(serializer.data)
 
-class SeriesPostListView(generics.GenericAPIView): # PUT, DELETE 추가 필요(permission classes = [IsCreatorOrReadOnly]
-    permission_classes = [permissions.AllowAny]
+class SeriesPostListView(generics.RetrieveUpdateDestroyAPIView): # PUT, DELETE 추가 필요(permission classes = [IsCreatorOrReadOnly]
+    permission_classes = [IsCreatorOrReadOnly]
     queryset = Series.objects.all()
     serializer_class = SeriesDetailSerializer
 
@@ -330,6 +331,25 @@ class SeriesPostListView(generics.GenericAPIView): # PUT, DELETE 추가 필요(p
         series = Series.objects.get(author__username=username, url=url)
         serializer = SeriesDetailSerializer(series, context={'request': request})
         return Response(serializer.data)
+
+    def update(self, request, username, url): # series_number도 바꿀 수 있게(nested serializer update 찾아보기)
+        instance = Series.objects.get(author__username=username, url=url)
+        serializer = self.get_serializer(instance, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        if getattr(instance, '_prefetched_objects_cache', None):
+            # If 'prefetch_related' has been applied to a queryset, we need to
+            # forcibly invalidate the prefetch cache on the instance.
+            instance._prefetched_objects_cache = {}
+
+        return Response(serializer.data)
+
+    def delete(self, request, username, url):
+        series = self.get_queryset().get(author__username=username, url=url)
+        self.perform_destroy(series)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 
 class SearchListView(generics.GenericAPIView): # ajax

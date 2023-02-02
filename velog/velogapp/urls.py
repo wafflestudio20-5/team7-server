@@ -11,7 +11,7 @@ urlpatterns = [
     path('@<str:username>/', UserPostListView.as_view()), # 특정 user가 작성한 포스트 보기 // name->userid(username) 수정필요
     path('write/', PostCreateView.as_view()), #새 글 작성
     path('@<str:username>/series/', SeriesListView.as_view()), # 특정 user가 작성한 시리즈 목록 // name->userid(username) 수정필요
-    path('@<str:username>/series/<str:url>', SeriesPostListView.as_view()), # 특정 user가 작성한 시리즈에 속해있는 포스트 // name->userid(username) 수정필요
+    path('@<str:username>/series/<str:url>', SeriesPostListView.as_view()), # 특정 user가 작성한 시리즈에 속해있는 포스트 조회,수정,삭제 // name->userid(username) 수정필요
     path('@<str:username>/tags/', UserTagListView.as_view()),  # 특정 user가 작성한 테그 목록 // name->userid(username) 수정필요
     path('@<str:username>/tags/<str:tag_name>', UserTagPostListView.as_view()), # 특정 user가 작성한 테그에 속해있는 포스트
     path('@<str:username>/<str:url>/', PostRetrieveDestroyView.as_view()), #특정 포스트 get,delete// name->userid(username) 수정필요
