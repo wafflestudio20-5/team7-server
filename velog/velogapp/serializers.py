@@ -134,12 +134,43 @@ class CommentSerializer(serializers.ModelSerializer):
                             ]
         model = Comment
 
+
+class SeriesPostSerializer(serializers.ModelSerializer):
+    post = PostListSerializer(source='*', read_only=True)
+    class Meta:
+        model = Post
+        fields = [
+            'series_order',
+            'post',
+        ]
+        list_serializer_class = FilterPrivateListSerializer
+
+class SeriesDetailSerializer(serializers.ModelSerializer):
+    postList = SeriesPostSerializer(many=True, read_only=True, source='post_set')
+    postNum = serializers.SerializerMethodField()
+    author = serializers.StringRelatedField(read_only=True)
+
+    def get_postNum(self, obj):
+        return Post.objects.filter(series=obj.id).count()
+
+    class Meta:
+        model = Series
+        fields = [
+            'id',
+            'series_name',
+            'update',
+            'author',
+            'postNum',
+            'postList',
+        ]
+
 class PostDetailSerializer(serializers.ModelSerializer):
     author = serializers.StringRelatedField(read_only=True)
     likes = serializers.PrimaryKeyRelatedField(read_only=True)
     tags = TagSerializer(many=True, required=False, read_only=True)
     comments = CommentSerializer(many=True, read_only=True, source='comment_set')
     is_active = serializers.SerializerMethodField(default=False)
+    series = SeriesDetailSerializer(required=False, read_only=True)
 
     def get_is_active(self, obj):
         try:
@@ -165,26 +196,4 @@ class PostDetailSerializer(serializers.ModelSerializer):
             'likes',
             'is_active',
             'comments',
-        ]
-
-
-
-class SeriesDetailSerializer(serializers.ModelSerializer):
-    postList = PostListSerializer(many=True, read_only=True, source='post_set')
-    # 비공개 post 처리 필요
-    postNum = serializers.SerializerMethodField()
-    author = serializers.StringRelatedField(read_only=True)
-
-    def get_postNum(self, obj):
-        return Post.objects.filter(series=obj.id).count()
-
-    class Meta:
-        model = Series
-        fields = [
-            'id',
-            'series_name',
-            'update',
-            'author',
-            'postNum',
-            'postList',
         ]
