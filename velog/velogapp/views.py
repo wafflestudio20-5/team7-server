@@ -322,10 +322,14 @@ class SearchListView(generics.GenericAPIView): # ajax
             return Post.objects.filter(is_private=False)
     def get(self, request):
         word = request.GET.get('q', None)
+        username = request.GET.get('username', None)
         if word:
             post = Post.objects.filter(Q(content__icontains=word) |
                                     Q(title__icontains=word)
                                    ).order_by('-likes')
+            if username:
+                post = post.filter(Q(author=username)
+                                   
             serializer = PostListSerializer(post, many=True, context={'request': request})
             return self.get_paginated_response(self.paginate_queryset(serializer.data))
         else:
