@@ -134,38 +134,6 @@ class CommentSerializer(serializers.ModelSerializer):
                             ]
         model = Comment
 
-class PostDetailSerializer(serializers.ModelSerializer):
-    author = serializers.StringRelatedField(read_only=True)
-    likes = serializers.PrimaryKeyRelatedField(read_only=True)
-    tags = TagSerializer(many=True, required=False, read_only=True)
-    comments = CommentSerializer(many=True, read_only=True, source='comment_set')
-    is_active = serializers.SerializerMethodField(default=False)
-
-    def get_is_active(self, obj):
-        try:
-            if self.context['request'].user in obj.like_user.all():
-                return True
-            else:
-                return False
-        except:
-            return False
-
-    class Meta:
-        model = Post
-        fields = [
-            'pid',
-            'series',
-            'title',
-            'tags',
-            'author',
-            'url',
-            'created_at',
-            'updated_at',
-            'content',
-            'likes',
-            'is_active',
-            'comments',
-        ]
 
 class SeriesPostSerializer(serializers.ModelSerializer):
     post = PostListSerializer(source='*', read_only=True)
@@ -194,4 +162,38 @@ class SeriesDetailSerializer(serializers.ModelSerializer):
             'author',
             'postNum',
             'postList',
+        ]
+
+class PostDetailSerializer(serializers.ModelSerializer):
+    author = serializers.StringRelatedField(read_only=True)
+    likes = serializers.PrimaryKeyRelatedField(read_only=True)
+    tags = TagSerializer(many=True, required=False, read_only=True)
+    comments = CommentSerializer(many=True, read_only=True, source='comment_set')
+    is_active = serializers.SerializerMethodField(default=False)
+    series = SeriesDetailSerializer(required=False, read_only=True)
+
+    def get_is_active(self, obj):
+        try:
+            if self.context['request'].user in obj.like_user.all():
+                return True
+            else:
+                return False
+        except:
+            return False
+
+    class Meta:
+        model = Post
+        fields = [
+            'pid',
+            'series',
+            'title',
+            'tags',
+            'author',
+            'url',
+            'created_at',
+            'updated_at',
+            'content',
+            'likes',
+            'is_active',
+            'comments',
         ]
