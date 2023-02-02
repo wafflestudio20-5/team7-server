@@ -89,6 +89,7 @@ class PostListSerializer(serializers.ModelSerializer):
             'updated_at',
             'likes',
             'comments',
+            'url',
         ]
 
 class CommentSerializer(serializers.ModelSerializer):

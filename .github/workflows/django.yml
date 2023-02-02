@@ -94,3 +94,4 @@ jobs:
         --deployment-group-name ${{ env.CODE_DEPLOY_DEPLOYMENT_GROUP_NAME }} \
         --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=team7elogdjango.zip
     
+    
