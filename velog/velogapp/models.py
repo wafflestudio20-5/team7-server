@@ -6,7 +6,9 @@ from authentication.models import User
 class Series(models.Model):
     series_name = models.CharField(max_length=100)
     author = models.ForeignKey(User, on_delete=models.PROTECT)
-    url = models.CharField(max_length=100, null=True)
+    url = models.CharField(max_length=100, null=True, unique=True)
+    update = models.DateTimeField(auto_now=True)
+
 
 class Post(models.Model):
     pid = models.AutoField(primary_key=True)
@@ -27,6 +29,11 @@ class Post(models.Model):
     create_tag = models.CharField(max_length=200, null=True)
     get_or_create_series = models.CharField(max_length=100, null=True)
     url = models.CharField(max_length=100, null=True)
+
+class SeriesPost(models.Model):
+    series = models.ForeignKey(Series, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    series_order = models.IntegerField()
 
 class Tag(models.Model):
     tag_name = models.CharField(max_length=200)
