@@ -389,10 +389,10 @@ CORS_ALLOW_HEADERS = (
 
 # CSRF
 CSRF_TRUSTED_ORIGINS = [ 
+    'https://7elog.store',
     'http://api.7elog.store',
     'https://api.7elog.store',
     'https://*.7elog.store',
-    'https://7elog.store',
     'http://7elog.store',
     'https://d822df5kj1qhh.cloudfront.net',
 ]
