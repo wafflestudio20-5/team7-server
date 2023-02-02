@@ -73,7 +73,7 @@ def get_secret(setting):
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["*", "https://api.7elog.store", "43.201.111.105", "https://7elog.store"]
+ALLOWED_HOSTS = ["*", "https://api.7elog.store", "43.201.111.105", "https://7elog.store", "https://d822df5kj1qhh.cloudfront.net"]
 
 
 # Application definition
@@ -389,16 +389,19 @@ CORS_ALLOW_HEADERS = (
 
 # CSRF
 CSRF_TRUSTED_ORIGINS = [ 
+    'https://7elog.store',
     'http://api.7elog.store',
     'https://api.7elog.store',
     'https://*.7elog.store',
-    'https://7elog.store',
     'http://7elog.store',
     'https://d822df5kj1qhh.cloudfront.net',
 ]
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = False
+SESSION_COOKIE_SECURE = False
+
+CSRF_COOKIE_NAME = 'XSRF-TOKEN'
+CSRF_HEADER_NAME = 'X-XSRF-TOKEN'
 
 # Logging
 LOGGING = {
