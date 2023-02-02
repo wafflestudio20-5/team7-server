@@ -25,11 +25,20 @@ class TagCountSerializer(serializers.ModelSerializer):
                   'postCount',
                   ]
 
+class SeriesCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Series
+        fields = [
+            'id',
+            'series_name',
+            'url',
+            'update',
+        ]
 
 class SeriesSerializer(serializers.ModelSerializer):
     postNum = serializers.SerializerMethodField()
     author = serializers.StringRelatedField(read_only=True)
-    #update_at, thumbnail
+    #update_at, photo,
     def get_postNum(self, obj):
         return Post.objects.filter(series=obj.id).count()
     class Meta:
@@ -45,14 +54,12 @@ class SeriesSerializer(serializers.ModelSerializer):
 class PostSerializer(serializers.ModelSerializer):
     author = serializers.StringRelatedField(read_only=True)
     tags = TagSerializer(many=True, required=False, read_only=True)
-    series = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
         model = Post
         fields = [
             'pid',
             'series',
-            'get_or_create_series',
             'title',
             'author',
             'created_at',
@@ -65,9 +72,7 @@ class PostSerializer(serializers.ModelSerializer):
             'tags',
             'url',
         ]
-        write_only_field = ['create_tag',
-                            'get_or_create_series'
-                            ]
+        write_only_field = ['create_tag',]
 
 class PostListSerializer(serializers.ModelSerializer):
     author = serializers.StringRelatedField(read_only=True)
@@ -144,3 +149,13 @@ class PostDetailSerializer(serializers.ModelSerializer):
             'comments',
         ]
 
+
+class SeriesPostSerializer(serializers.ModelSerializer):
+    series_id = serializers.IntegerField()
+    post = PostListSerializer(read_only=True)
+    class Meta:
+        model = Post
+        fields = [
+            'series_id',
+            'post',
+        ]

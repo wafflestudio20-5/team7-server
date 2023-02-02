@@ -36,13 +36,7 @@ class PostCreateView(generics.GenericAPIView):
             for tag, bool in tags_list:
                 post.tags.add(tag.pk)
             post.save()
-            # create or get series
-            series = request.data.get("get_or_create_series") # post 작성 시 series 설정은  create_series로만 저장 가능
-            if series != "":
-                post.series = Series.objects.get_or_create(series_name=series, author=author)[0]
-                post.save()
-            else:
-                pass
+            # get series
             serializer = PostSerializer(
                 post,
                 context={"request": request},
@@ -50,6 +44,32 @@ class PostCreateView(generics.GenericAPIView):
             return Response(data=serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class SeriesCreateView(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    queryset = Series.objects.all()
+    serializer_class = SeriesCreateSerializer
+    def get(self, request):
+        queryset = self.get_queryset().filter(author=request.user)
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data)
+
+    # create series
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            # series url custom
+            seriesurl = request.data.get("url")
+            if seriesurl:
+                pass
+            else:
+                seriesurl = request.data.get("series_name")
+            serializer.save(author=request.user, url=seriesurl)
+            return Response(data=serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 
 class PostListView(generics.ListAPIView):
     permission_classes = [permissions.AllowAny]

@@ -7,6 +7,7 @@ urlpatterns = [
     path('lists/liked/', PostListView.as_view()), # 좋아요 한 포스트
     path('lists/read/', PostListView.as_view()), #최근 읽은 포스트
     path('search/', SearchListView.as_view()), # 포스트 검색 //ajax 적용?
+    path('create_series/', SeriesCreateView.as_view()), # series 생성
     path('@<str:username>/', UserPostListView.as_view()), # 특정 user가 작성한 포스트 보기 // name->userid(username) 수정필요
     path('write/', PostCreateView.as_view()), #새 글 작성
     path('@<str:username>/series/', SeriesListView.as_view()), # 특정 user가 작성한 시리즈 목록 // name->userid(username) 수정필요
