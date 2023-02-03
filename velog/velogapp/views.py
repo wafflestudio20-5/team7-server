@@ -152,6 +152,8 @@ class PostRetrieveDestroyView(generics.RetrieveDestroyAPIView):
                 post.view_user.add(request.user)
             else:
                 post.view_user.add(request.user)
+        post.hits = post.view_user.count()
+        post.save
         serializer = PostDetailSerializer(post, context={'request': request})
         return Response(serializer.data)
     # post 요청 시 좋아요 추가/제거
