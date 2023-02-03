@@ -31,6 +31,22 @@ class Post(models.Model):
     url = models.CharField(max_length=100, null=True)
     series_order = models.IntegerField(null=True)
 
+    
+def image_upload_path(instance, filename):
+    return f'{instance.post.id}/{filename}'
+
+
+class PostImage(models.Model):
+    id = models.AutoField(primary_key=True)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='image')
+    image = models.ImageField(upload_to=image_upload_path)
+
+    def __int__(self):
+        return self.id
+
+    class Meta:
+        db_table = 'velogapp_postimage'
+    
 
 class Tag(models.Model):
     tag_name = models.CharField(max_length=200)
