@@ -171,7 +171,7 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",
+#     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -390,28 +390,28 @@ CORS_ALLOW_HEADERS = (
 )
 
 # CSRF
-CSRF_TRUSTED_ORIGINS = [ 
-    'https://*',
-    'https://7elog.store',
-    'http://api.7elog.store',
-    'https://api.7elog.store',
-    'https://*.7elog.store',
-    'http://7elog.store',
-    'https://d822df5kj1qhh.cloudfront.net',
-]
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
+# CSRF_TRUSTED_ORIGINS = [ 
+#     'https://*',
+#     'https://7elog.store',
+#     'http://api.7elog.store',
+#     'https://api.7elog.store',
+#     'https://*.7elog.store',
+#     'http://7elog.store',
+#     'https://d822df5kj1qhh.cloudfront.net',
+# ]
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# CSRF_COOKIE_SECURE = True
+# SESSION_COOKIE_SECURE = True
 
-CSRF_COOKIE_NAME = 'csrftoken'
-CSRF_HEADER_NAME = 'X-CSRFToken'
+# CSRF_COOKIE_NAME = 'csrftoken'
+# CSRF_HEADER_NAME = 'X-CSRFToken'
 
-ACCESS_CONTROL_ALLOW_ORIGIN = '*'
-ACCESS_CONTROL_ALLOW_CREDENTIALS = True
-ACCESS_CONTROL_ALLOW_METHODS = '*'
-ACCESS_CONTROL_ALLOW_HEADERS = '*'
+# ACCESS_CONTROL_ALLOW_ORIGIN = '*'
+# ACCESS_CONTROL_ALLOW_CREDENTIALS = True
+# ACCESS_CONTROL_ALLOW_METHODS = '*'
+# ACCESS_CONTROL_ALLOW_HEADERS = '*'
 
-CSRF_COOKIE_SAMESITE = 'Strict'  
+# CSRF_COOKIE_SAMESITE = 'Strict'  
 
 # Logging
 LOGGING = {
