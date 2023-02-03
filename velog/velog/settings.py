@@ -140,7 +140,7 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
 #         'rest_framework.authentication.BasicAuthentication',
 #         'rest_framework.authentication.TokenAuthentication',
-        "rest_framework.authentication.SessionAuthentication",
+#        "rest_framework.authentication.SessionAuthentication",
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.CursorPagination",
@@ -149,8 +149,8 @@ REST_FRAMEWORK = {
 
 SIMPLE_JWT = {
     "AUTH_HEADER_TYPES": ("Bearer",),
-    "ACCESS_TOKEN_LIFETIME": timedelta(hours=1),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=365),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=365),
     "ROTATE_REFRESH_TOKENS": False,
     "BLACKLIST_AFTER_ROTATION": True,
 }
@@ -403,8 +403,8 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
 
-# CSRF_COOKIE_NAME = 'csrftoken'
-# CSRF_HEADER_NAME = 'X-CSRFToken'
+CSRF_COOKIE_NAME = 'csrftoken'
+CSRF_HEADER_NAME = 'X-CSRFToken'
 
 # ACCESS_CONTROL_ALLOW_ORIGIN = '*'
 # ACCESS_CONTROL_ALLOW_CREDENTIALS = True
