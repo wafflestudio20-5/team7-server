@@ -19,7 +19,8 @@ web: [https://7elog.store](https://7elog.store/)
 
 
 ## :card_file_box: model diagram
-ERD 만들어 첨부
+<img src="https://user-images.githubusercontent.com/110763772/216666595-22780410-827a-488d-8769-e18869608cbb.png" width="600" height="600"/>
+
 
 ## :sparkles: Features
 구현 완료한 기능
