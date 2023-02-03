@@ -6,6 +6,7 @@ from .permissions import IsCreatorOrReadOnly, IsCreator
 from .paginations import PostListPagination
 from django.db.models import Q
 import re
+import datetime
 
 class PostCreateView(generics.GenericAPIView):
     permissions_classes = [permissions.IsAuthenticated]
@@ -89,8 +90,23 @@ class PostListView(generics.ListAPIView):
         else:
             return Post.objects.filter(is_private=False)
     def get(self, request):
+        look = request.GET.get('filter', None)
         if request.path == '/api/v1/velog/':
-             queryset = self.get_queryset().order_by('-likes')
+            if look:
+                today = datetime.date.today()
+                if look == 'd':
+                    queryset = self.get_queryset().filter(created_at__day=today.day).order_by('-likes')
+                elif look == 'w':
+                    queryset = self.get_queryset().filter(created_at__day__lt=today.day + 1,
+                                                          created_at__day__gt=today.day - 7).order_by('-likes')
+                elif look == 'm':
+                    queryset = self.get_queryset().filter(created_at__month=today.month).order_by('-likes')
+                elif look == 'y':
+                    queryset = self.get_queryset().filter(created_at__year=today.year).order_by('-likes')
+                else:
+                    queryset = self.get_queryset().order_by('-likes')
+            else:
+                queryset = self.get_queryset().order_by('-likes')
         elif request.path == '/api/v1/velog/recent/':
             queryset = self.get_queryset().order_by('-created_at')
         elif request.path == '/api/v1/velog/lists/liked/':
