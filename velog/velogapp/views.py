@@ -7,6 +7,7 @@ from .paginations import PostListPagination
 from django.db.models import Q
 import re
 import datetime
+from .models import PostImage
 
 class PostCreateView(generics.GenericAPIView):
     permissions_classes = [permissions.IsAuthenticated]
@@ -56,6 +57,49 @@ class ImageCreateView(generics.CreateAPIView):
     permission_classes = [IsCreatorOrReadOnly]
     serializer_class = PostImageSerializer
     queryset = PostImage.objects.all()
+
+    def create(self, request, *args, **kwargs):
+        pid = kwargs.get('pid', None)
+        try:
+            post = Post.objects.get(pid=pid)
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save(post=post)
+            headers = self.get_success_headers(serializer.data)
+            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        except:
+            return Response({"detail": "No Matching Post"}, status=status.HTTP_404_NOT_FOUND)
+
+
+class ImageListView(generics.ListAPIView):
+    permission_classes = [IsCreatorOrReadOnly]
+    serializer_class = PostImageSerializer
+    queryset = PostImage.objects.all()
+
+    def list(self, request, *args, **kwargs):
+        pid = kwargs.get('pid', None)
+        try:
+            post = Post.objects.get(pid=pid)
+        except:
+            return Response({"detail": "No Matching Post"}, status=status.HTTP_404_NOT_FOUND)
+        queryset = PostImage.objects.filter(post=post)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+
+class ImageDeleteView(generics.DestroyAPIView):
+    permission_classes = [IsCreatorOrReadOnly]
+    serializer_class = PostImageSerializer
+    queryset = PostImage.objects.all()
+
+    def destroy(self, request, *args, **kwargs):
+        pid = kwargs.get('pid', None)
+        try:
+            instance = PostImage.objects.filter(post__pid=pid)
+            self.perform_destroy(instance)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except:
+            return Response({"detail": "No Matching Image"}, status=status.HTTP_400_BAD_REQUEST)
     
         
 class SeriesCreateView(generics.GenericAPIView):

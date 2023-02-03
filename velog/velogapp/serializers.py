@@ -80,7 +80,7 @@ class PostImageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PostImage
-        fields = ['post', 'image']
+        fields = ['image']
 
 class PostSerializer(serializers.ModelSerializer):
     author = serializers.StringRelatedField(read_only=True)
