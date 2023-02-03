@@ -24,7 +24,12 @@ web: [https://7elog.store](https://7elog.store/)
 
 ## :sparkles: Features
 구현 완료한 기능
-
+- dj_rest_auth와 jwt token을 활용한 Signup, Login, Logout, SocialLogin(Google)
+- User Edit, User Search, User Delete
+- Post 작성 및 수정, Comment 작성 및 수정
+- Post에 대한 추가적인 정보인 Tag, Series 구현
+- Post 생성 날짜에 따른 필터링 기능, Tag 필터링 기능, Series 필터링 기능
+- Post Content에 쓰이는 Image들을 PostId 및 ImageUrl을 토대로 PostImage 클래스의 인스턴스로 저장(아직 연동 X)
 
 ### Pre-commit Guide
 가상환경 생성 후, 터미널에서 다음을 실행하면 pre-commit 설정 가능합니다.
