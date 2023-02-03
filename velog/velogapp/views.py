@@ -52,6 +52,12 @@ class PostCreateView(generics.GenericAPIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class ImageCreateView(generics.GenericAPIView):
+    permission_classes = [IsCreatorOrReadOnly]
+    serializer_class = PostImageSerializer
+    queryset = PostImage.objects.all()
+    
+        
 class SeriesCreateView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     queryset = Series.objects.all()
