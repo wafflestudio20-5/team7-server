@@ -107,14 +107,14 @@ class PostSerializer(serializers.ModelSerializer):
         write_only_fields = ['create_tag',]
         read_only_fields = ['series_order',]
         
-    def create(self, validated_data):
-        instance = Post.objects.create(**validated_data)
-        image_set = self.context['request'].FILES
+    #def create(self, validated_data):
+    #    instance = Post.objects.create(**validated_data)
+    #    image_set = self.context['request'].FILES
         
-        for image_data in image_set.getlist('image'):
-            PostImage.objects.create(post=instance, image=image_data)
+    #    for image_data in image_set.getlist('image'):
+    #        PostImage.objects.create(post=instance, image=image_data)
 
-        return instance
+    #    return instance
     
 
 class PostListSerializer(serializers.ModelSerializer):
