@@ -197,17 +197,27 @@ class PostDetailSerializer(serializers.ModelSerializer):
     is_active = serializers.SerializerMethodField(default=False)
     series = SeriesDetailSerializer(required=False, read_only=True)
     prev_post = serializers.SerializerMethodField()
-    next_post = serializers.SerializerMethodField()
+    next_post = serializers.SerializerMethodField() #둘다 is_private 글도 보여줌
     def get_prev_post(self, obj):
         if obj.series:
             try:
-                prev_post = Post.objects.get(series=obj.series, series_order=obj.series_order-1)
-                return PostListSerializer(prev_post).data
+                if self.context['request'].user == obj.author:
+                    prev_post = Post.objects.get(series=obj.series, series_order=obj.series_order-1)
+                    return PostListSerializer(prev_post).data
+                else:
+                    postset = Post.objects.filter(series=obj.series).exclude(is_private=True).order_by('series_order')
+                    obj_index = postset.filter(series_order__lt=obj.series_order).count()
+                    prev_post = postset[obj_index - 1]
+                    return PostListSerializer(prev_post).data
             except:
                 pass
         else:
             try:
-                postset = Post.objects.filter(series=None, author=obj.author).order_by('created_at')
+                if self.context['request'].user == obj.author:
+                    postset = Post.objects.filter(series=None, author=obj.author).order_by('created_at')
+                else:
+                    postset = Post.objects.filter(series=None, author=obj.author).exclude(is_private=True).order_by(
+                        'created_at')
                 obj_index = postset.filter(created_at__lt=obj.created_at).count()
                 prev_post = postset[obj_index - 1]
                 return PostListSerializer(prev_post).data
@@ -219,13 +229,23 @@ class PostDetailSerializer(serializers.ModelSerializer):
     def get_next_post(self, obj):
         if obj.series:
             try:
-                prev_post = Post.objects.get(series=obj.series, series_order=obj.series_order + 1)
-                return PostListSerializer(prev_post).data
+                if self.context['request'].user == obj.author:
+                    next_post = Post.objects.get(series=obj.series, series_order=obj.series_order + 1)
+                    return PostListSerializer(next_post).data
+                else:
+                    postset = Post.objects.filter(series=obj.series).exclude(is_private=True).order_by('series_order')
+                    obj_index = postset.filter(series_order__lt=obj.series_order).count()
+                    next_post = postset[obj_index + 1]
+                    return PostListSerializer(next_post).data
             except:
                 return None
         else:
             try:
-                postset = Post.objects.filter(series=None, author=obj.author).order_by('created_at')
+                if self.context['request'].user == obj.author:
+                    postset = Post.objects.filter(series=None, author=obj.author).order_by('created_at')
+                else:
+                    postset = Post.objects.filter(series=None, author=obj.author).exclude(is_private=True).order_by(
+                        'created_at')
                 obj_index = postset.filter(created_at__lt=obj.created_at).count()
                 next_post = postset[obj_index + 1]
                 return PostListSerializer(next_post).data
