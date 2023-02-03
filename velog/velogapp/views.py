@@ -140,23 +140,8 @@ class PostListView(generics.ListAPIView):
         else:
             return Post.objects.filter(is_private=False)
     def get(self, request):
-        look = request.GET.get('filter', None)
         if request.path == '/api/v1/velog/':
-            if look:
-                today = datetime.date.today()
-                if look == 'd':
-                    queryset = self.get_queryset().filter(created_at__day=today.day).order_by('-likes')
-                elif look == 'w':
-                    queryset = self.get_queryset().filter(created_at__day__lt=today.day + 1,
-                                                          created_at__day__gt=today.day - 7).order_by('-likes')
-                elif look == 'm':
-                    queryset = self.get_queryset().filter(created_at__month=today.month).order_by('-likes')
-                elif look == 'y':
-                    queryset = self.get_queryset().filter(created_at__year=today.year).order_by('-likes')
-                else:
-                    queryset = self.get_queryset().order_by('-likes')
-            else:
-                queryset = self.get_queryset().order_by('-likes')
+            queryset = self.get_queryset().order_by('-likes')
         elif request.path == '/api/v1/velog/recent/':
             queryset = self.get_queryset().order_by('-created_at')
         elif request.path == '/api/v1/velog/lists/liked/':
@@ -492,6 +477,80 @@ class SearchByAuthorView(generics.GenericAPIView): # ajax
             return self.get_paginated_response(self.paginate_queryset(serializer.data))
         else:
             return Response()
+
+class PostListTodayView(generics.ListAPIView):
+    permission_classes = [permissions.AllowAny]
+    serializer_class = PostListSerializer
+    pagination_class = PostListPagination
+    def get_queryset(self):
+        if self.request.user.is_authenticated:
+            return Post.objects.filter(Q(author=self.request.user) |
+                                       Q(is_private=False)
+                                       )
+        else:
+            return Post.objects.filter(is_private=False)
+
+    def get(self, request):
+        today_min = datetime.datetime.combine(datetime.date.today(), datetime.time.min)
+        today_max = datetime.datetime.combine(datetime.date.today(), datetime.time.max)
+        queryset = self.get_queryset().filter(created_at__range=(today_min, today_max)).order_by('-likes')
+        serializer = PostListSerializer(queryset, many=True)
+        return self.get_paginated_response(self.paginate_queryset(serializer.data))
+
+class PostListWeekView(generics.ListAPIView):
+    permission_classes = [permissions.AllowAny]
+    serializer_class = PostListSerializer
+    pagination_class = PostListPagination
+    def get_queryset(self):
+        if self.request.user.is_authenticated:
+            return Post.objects.filter(Q(author=self.request.user) |
+                                       Q(is_private=False)
+                                       )
+        else:
+            return Post.objects.filter(is_private=False)
+
+    def get(self, request):
+        one_week_ago = datetime.datetime.today() - datetime.timedelta(days=7)
+        queryset = self.get_queryset().filter(created_at__gte=one_week_ago).order_by('-likes')
+        serializer = PostListSerializer(queryset, many=True)
+        return self.get_paginated_response(self.paginate_queryset(serializer.data))
+
+class PostListMonthView(generics.ListAPIView):
+    permission_classes = [permissions.AllowAny]
+    serializer_class = PostListSerializer
+    pagination_class = PostListPagination
+    def get_queryset(self):
+        if self.request.user.is_authenticated:
+            return Post.objects.filter(Q(author=self.request.user) |
+                                       Q(is_private=False)
+                                       )
+        else:
+            return Post.objects.filter(is_private=False)
+
+    def get(self, request):
+        today = datetime.datetime.today()
+        queryset = self.get_queryset().filter(created_at__month=today.month, created_at__year=today.year).order_by('-likes')
+        serializer = PostListSerializer(queryset, many=True)
+        return self.get_paginated_response(self.paginate_queryset(serializer.data))
+
+class PostListYearView(generics.ListAPIView):
+    permission_classes = [permissions.AllowAny]
+    serializer_class = PostListSerializer
+    pagination_class = PostListPagination
+    def get_queryset(self):
+        if self.request.user.is_authenticated:
+            return Post.objects.filter(Q(author=self.request.user) |
+                                       Q(is_private=False)
+                                       )
+        else:
+            return Post.objects.filter(is_private=False)
+
+    def get(self, request):
+        today = datetime.datetime.today()
+        queryset = self.get_queryset().filter(created_at__year=today.year).order_by(
+            '-likes')
+        serializer = PostListSerializer(queryset, many=True)
+        return self.get_paginated_response(self.paginate_queryset(serializer.data))
 
 # class SeriesPostView(generics.GenericAPIView):
 #     permission_classes = [IsCreatorOrReadOnly]
