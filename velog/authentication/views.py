@@ -13,7 +13,7 @@ from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from dj_rest_auth.registration.views import SocialConnectView, SocialLoginView
 from dj_rest_auth.views import UserDetailsView
 from django.conf import settings
-from django.http import JsonResponse, QueryDict
+from django.http import JsonResponse, QueryDict, FileResponse
 from django.shortcuts import redirect
 from rest_framework import status, generics, permissions
 from rest_framework.response import Response
@@ -43,6 +43,15 @@ FACEBOOK_CALLBACK_URI = BASE_URL + "accounts/facebook/login/callback/"
 
 state = getattr(settings, "STATE")
 
+def MediaProfileView(request, filename:str):
+    try:
+        base_url = 'media/authentication/pictures/'
+        img = open(base_url + filename, 'rb')
+        print(filename)
+        response = FileResponse(img)
+        return response
+    except:
+        return JsonResponse(data={"error": "no url"}, status=status.HTTP_400_BAD_REQUEST)
 
 class UserListUpdateView(UserDetailsView):
     serializer_class = UserSerializer
