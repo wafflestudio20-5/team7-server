@@ -34,13 +34,14 @@ class PostCreateView(generics.GenericAPIView):
                 post = serializer.save(author=author, url=posturl)
             # create or get tag
             create_tag = request.data.get("create_tag")
-            create_tag.replace("\n", ",")
-            tag_regex = re.findall('([0-9a-zA-Z가-힣]*),', create_tag)
-            tags_list = [Tag.objects.get_or_create(
-                            tag_name=t, author=author)
-                         for t in tag_regex]
-            for tag, bool in tags_list:
-                post.tags.add(tag.pk)
+            if create_tag:
+                create_tag.replace("\n", ",")
+                tag_regex = re.findall('([0-9a-zA-Z가-힣]*),', create_tag)
+                tags_list = [Tag.objects.get_or_create(
+                             tag_name=t, author=author)
+                             for t in tag_regex]
+                for tag, bool in tags_list:
+                    post.tags.add(tag.pk)
             post.save()
             serializer = PostSerializer(
                 post,
