@@ -75,6 +75,12 @@ class SeriesSerializer(serializers.ModelSerializer):
             'postNum',
         ]
 
+class PostImageSerializer(serializers.ModelSerializer):
+    image = serializers.ImageField(use_url=True)
+
+    class Meta:
+        model = PostImage
+        fields = ['image']
 
 class PostSerializer(serializers.ModelSerializer):
     author = serializers.StringRelatedField(read_only=True)
