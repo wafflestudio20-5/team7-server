@@ -26,6 +26,7 @@ from django.views.generic import TemplateView
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
+from authentication.views import MediaProfileView
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -62,5 +63,5 @@ urlpatterns = [
     path("api/v1/accounts/", include("allauth.urls"), name="socialaccount_signup"),
     path("api/v1/", TemplateView.as_view(template_name="home.html"), name="home"),
     path("api/v1/velog/", include("velogapp.urls")),
-    
+    path("media/authentication/pictures/<str:filename>", MediaProfileView),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
