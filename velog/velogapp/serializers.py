@@ -181,6 +181,14 @@ class SeriesDetailSerializer(serializers.ModelSerializer):
             'postList',
         ]
 
+        def update(self, instance, validated_data):
+            if 'postList' in validated_data:
+                nested_serializer = self.fields['postList']
+                nested_instance = instance.postList
+                nested_data = validated_data.pop('postList')
+                nested_serializer.update(nested_instance, nested_data)
+            return super(SeriesDetailSerializer, self).update(instance, validated_data)
+
 class PostDetailSerializer(serializers.ModelSerializer):
     author = serializers.StringRelatedField(read_only=True)
     likes = serializers.PrimaryKeyRelatedField(read_only=True)

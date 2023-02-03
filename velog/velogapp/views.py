@@ -412,13 +412,13 @@ class SearchByAuthorView(generics.GenericAPIView): # ajax
         else:
             return Response()
 
-class SeriesPostView(generics.GenericAPIView):
-    permission_classes = [permissions.AllowAny]
-    serializer_class = SeriesPostSerializer
-    queryset = Post.objects.all()
-    def get(self, request, pid):
-        post = self.get_queryset().get(pid=pid)
-        serializer = SeriesPostSerializer(post, context={'request': request})
-        return Response(serializer.data)
+# class SeriesPostView(generics.GenericAPIView):
+#     permission_classes = [IsCreatorOrReadOnly]
+#     serializer_class = SeriesPostSerializer
+#     queryset = Post.objects.all()
+#     def get(self, request, username, url, series_order):
+#         post = self.get_queryset().get(author__username=username, series__url=url, series_order=series_order)
+#         serializer = SeriesPostSerializer(post, context={'request': request})
+#         return Response(serializer.data)
 
 # Create your views here.
