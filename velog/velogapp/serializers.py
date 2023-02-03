@@ -123,7 +123,7 @@ class PostListSerializer(serializers.ModelSerializer):
             'comments',
             'url',
         ]
-        list_serializer_class = FilterPrivateListSerializer
+        #list_serializer_class = FilterPrivateListSerializer
 
 class CommentSerializer(serializers.ModelSerializer):
     author = serializers.StringRelatedField(read_only=True)
