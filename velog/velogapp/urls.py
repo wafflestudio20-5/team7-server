@@ -24,6 +24,7 @@ urlpatterns = [
     path('<int:pid>/comment/<int:cid>', CommentUpdateDeleteView.as_view()),
     path('tags/', TagListView.as_view()), # tag 목록
     path('tags/<str:tag_name>', TagPostListView.as_view()), # 특정 tag가 포함된 포스트
+    path('image_upload/', ImageCreateView.as_view()),
     # path('@<str:username>/series/<str:url>/<int:series_order>', SeriesPostView.as_view()),
 ]
 
