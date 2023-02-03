@@ -47,7 +47,7 @@ class PostImage(models.Model):
     class Meta:
         db_table = 'velogapp_postimage'
     
-
+    
 class Tag(models.Model):
     tag_name = models.CharField(max_length=200)
     author = models.ForeignKey(User, on_delete=models.PROTECT)
