@@ -359,7 +359,7 @@ class SeriesPostListView(generics.RetrieveUpdateDestroyAPIView): # PUT, DELETE �
         serializer = SeriesDetailSerializer(series, context={'request': request})
         return Response(serializer.data)
 
-    def update(self, request, username, url): # series_number도 바꿀 수 있게(nested serializer update 찾아보기)
+    def update(self, request, username, url, *args, **kwrargs): # series_number도 바꿀 수 있게(nested serializer update 찾아보기)
         instance = Series.objects.get(author__username=username, url=url)
         serializer = self.get_serializer(instance, data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -372,7 +372,7 @@ class SeriesPostListView(generics.RetrieveUpdateDestroyAPIView): # PUT, DELETE �
 
         return Response(serializer.data)
 
-    def delete(self, request, username, url):
+    def delete(self, request, username, url, *args, **kwrargs):
         series = self.get_queryset().get(author__username=username, url=url)
         self.perform_destroy(series)
         return Response(status=status.HTTP_204_NO_CONTENT)
