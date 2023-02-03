@@ -7,6 +7,10 @@ from .views import *
 
 urlpatterns = [
     path('', PostListView.as_view()), #메인페이지
+    path('today/', PostListTodayView.as_view()),
+    path('week/', PostListWeekView.as_view()),
+    path('month/', PostListMonthView.as_view()),
+    path('year/', PostListYearView.as_view()),
     path('recent/', PostListView.as_view()), #최신순으로 정렬
     path('lists/liked/', PostListView.as_view()), # 좋아요 한 포스트
     path('lists/read/', PostListView.as_view()), #최근 읽은 포스트
