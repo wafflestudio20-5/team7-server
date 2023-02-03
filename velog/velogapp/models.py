@@ -39,7 +39,7 @@ def image_upload_path(instance, filename):
 class PostImage(models.Model):
     id = models.AutoField(primary_key=True)
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='image')
-    image = models.ImageField(upload_to=image_upload_path)
+    image = models.ImageField(null=False)
 
     def __int__(self):
         return self.id
