@@ -26,7 +26,7 @@ class PostCreateView(generics.GenericAPIView):
                 posturl = request.data.get("title")
             while Post.objects.filter(url=posturl).exists():
                 postid = Post.objects.filter(url=posturl).count()
-                posturl += "-"+str(postid)
+                posturl += "-"+str(postid) 
             # series_order 설정 필요: series 속해있으면 그 안에서 몇번째인지 (해당 series 내 게시물 수 +1)
             if series:
                 series_order = Post.objects.filter(series=series).count() + 1
