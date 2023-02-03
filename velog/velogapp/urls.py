@@ -27,4 +27,4 @@ urlpatterns = [
     # path('@<str:username>/series/<str:url>/<int:series_order>', SeriesPostView.as_view()),
 ]
 
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
