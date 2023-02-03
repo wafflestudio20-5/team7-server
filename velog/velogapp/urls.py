@@ -1,4 +1,8 @@
 from django.urls import path
+from django.views.static imoprt serve
+from django.conf import settings
+from django.conf.urls.static import static
+
 from .views import *
 
 urlpatterns = [
@@ -22,3 +26,5 @@ urlpatterns = [
     path('tags/<str:tag_name>', TagPostListView.as_view()), # 특정 tag가 포함된 포스트
     # path('@<str:username>/series/<str:url>/<int:series_order>', SeriesPostView.as_view()),
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
