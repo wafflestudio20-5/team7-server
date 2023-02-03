@@ -306,9 +306,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 #     },
 # }
 
-LOGIN_REDIRECT_URL = "/api/v1/"
-LOGOUT_REDIRECT_URL = "/api/v1/accounts/login/"
-ACCOUNT_LOGOUT_REDIRECT_URL = "/api/v1/accounts/login/"
+LOGIN_REDIRECT_URL = "https://7elog.store/login"
+LOGOUT_REDIRECT_URL = "https://7elog.store/login"
+ACCOUNT_LOGOUT_REDIRECT_URL = "https://7elog.store/login"
 # LOGOUT_REDIRECT_URL = "/api/v1/accounts/logout/"
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
