@@ -33,7 +33,7 @@ class Post(models.Model):
 
     
 def image_upload_path(instance, filename):
-    return f'{instance.post.pid}/{filename}'
+    return f'{filename}'
 
 
 class PostImage(models.Model):
