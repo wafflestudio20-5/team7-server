@@ -197,6 +197,7 @@ class PostRetrieveUpdateView(generics.RetrieveUpdateAPIView):
             return Response(data={f"message": f"There is no post id {pid}"}, status=status.HTTP_404_NOT_FOUND)
         author = request.user
         posturl = request.data.get("url", None)
+        series = request.data.get("series", None)
         if posturl:
             pass
         else:
@@ -227,6 +228,16 @@ class PostRetrieveUpdateView(generics.RetrieveUpdateAPIView):
         post.save()
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
+        serializer.save()
+        # series_order 재정의
+        if series == post.series:
+            series_order = post.series_order
+        else:
+            if series:
+                series_order = Post.objects.filter(series=series).count()
+            else:
+                series_order = None
+        serializer.save(series_order=series_order)
         self.perform_update(serializer)
 
         if getattr(instance, '_prefetched_objects_cache', None):
