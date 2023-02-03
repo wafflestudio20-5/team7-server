@@ -15,8 +15,10 @@ class PostCreateView(generics.GenericAPIView):
         data = request.data
         serializer = self.serializer_class(data=data)
         if serializer.is_valid():
-            # url custom
             posturl = request.data.get("url")
+            series = request.data.get("series")
+            author = request.user
+            # url custom
             if posturl:
                 pass
             else:
@@ -24,8 +26,12 @@ class PostCreateView(generics.GenericAPIView):
             while Post.objects.filter(url=posturl).exists():
                 postid = Post.objects.filter(url=posturl).count()
                 posturl += "-"+str(postid)
-            author = request.user
-            post = serializer.save(author=author, url=posturl)
+            # series_order 설정 필요: series 속해있으면 그 안에서 몇번째인지 (해당 series 내 게시물 수 +1)
+            if series:
+                series_order = Post.objects.filter(series=series).count() + 1
+                post = serializer.save(author=author, url=posturl, series_order=series_order)
+            else:
+                post = serializer.save(author=author, url=posturl)
             # create or get tag
             create_tag = request.data.get("create_tag")
             create_tag.replace("\n", ",")
@@ -36,8 +42,6 @@ class PostCreateView(generics.GenericAPIView):
             for tag, bool in tags_list:
                 post.tags.add(tag.pk)
             post.save()
-            # series_number 설정 필요: series 속해있으면 그 안에서 몇번째인지
-
             serializer = PostSerializer(
                 post,
                 context={"request": request},

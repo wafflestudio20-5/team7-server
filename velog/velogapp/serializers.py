@@ -53,6 +53,13 @@ class SeriesCreateSerializer(serializers.ModelSerializer):
 class SeriesSerializer(serializers.ModelSerializer):
     postNum = serializers.SerializerMethodField()
     author = serializers.StringRelatedField(read_only=True)
+    photo = serializers.SerializerMethodField()
+
+    def get_photo(self, obj):
+        try:
+            return Post.objects.get(series=obj.id, series_order=1).thumbnail.url
+        except:
+            return None
 
     def get_postNum(self, obj):
         return Post.objects.filter(series=obj.id).count()
@@ -62,6 +69,7 @@ class SeriesSerializer(serializers.ModelSerializer):
             'id',
             'series_name',
             'url',
+            'photo',
             'update',
             'author',
             'postNum',
@@ -88,8 +96,10 @@ class PostSerializer(serializers.ModelSerializer):
             'create_tag',
             'tags',
             'url',
+            'series_order',
         ]
-        write_only_field = ['create_tag',]
+        write_only_fields = ['create_tag',]
+        read_only_fields = ['series_order',]
 
 class PostListSerializer(serializers.ModelSerializer):
     author = serializers.StringRelatedField(read_only=True)
@@ -149,15 +159,22 @@ class SeriesDetailSerializer(serializers.ModelSerializer):
     postList = SeriesPostSerializer(many=True, read_only=True, source='post_set')
     postNum = serializers.SerializerMethodField()
     author = serializers.StringRelatedField(read_only=True)
+    photo = serializers.SerializerMethodField()
 
     def get_postNum(self, obj):
         return Post.objects.filter(series=obj.id).count()
+    def get_photo(self, obj):
+        try:
+            return Post.objects.get(series=obj.id, series_order=1).thumbnail.url
+        except:
+            return None
 
     class Meta:
         model = Series
         fields = [
             'id',
             'series_name',
+            'photo',
             'update',
             'author',
             'postNum',
@@ -171,6 +188,42 @@ class PostDetailSerializer(serializers.ModelSerializer):
     comments = CommentSerializer(many=True, read_only=True, source='comment_set')
     is_active = serializers.SerializerMethodField(default=False)
     series = SeriesDetailSerializer(required=False, read_only=True)
+    prev_post = serializers.SerializerMethodField()
+    next_post = serializers.SerializerMethodField()
+    def get_prev_post(self, obj):
+        if obj.series:
+            try:
+                prev_post = Post.objects.get(series=obj.series, series_order=obj.series_order-1)
+                return PostListSerializer(prev_post).data
+            except:
+                pass
+        else:
+            try:
+                postset = Post.objects.filter(series=None, author=obj.author).order_by('created_at')
+                obj_index = postset.filter(created_at__lt=obj.created_at).count()
+                prev_post = postset[obj_index - 1]
+                return PostListSerializer(prev_post).data
+            except IndexError:
+                pass
+
+
+
+    def get_next_post(self, obj):
+        if obj.series:
+            try:
+                prev_post = Post.objects.get(series=obj.series, series_order=obj.series_order + 1)
+                return PostListSerializer(prev_post).data
+            except:
+                return None
+        else:
+            try:
+                postset = Post.objects.filter(series=None, author=obj.author).order_by('created_at')
+                obj_index = postset.filter(created_at__lt=obj.created_at).count()
+                next_post = postset[obj_index + 1]
+                return PostListSerializer(next_post).data
+            except IndexError:
+                pass
+
 
     def get_is_active(self, obj):
         try:
@@ -190,10 +243,15 @@ class PostDetailSerializer(serializers.ModelSerializer):
             'tags',
             'author',
             'url',
+            'preview',
+            'thumbnail',
             'created_at',
             'updated_at',
             'content',
             'likes',
             'is_active',
             'comments',
+            'is_private',
+            'prev_post',
+            'next_post',
         ]
