@@ -209,7 +209,10 @@ class PostDetailSerializer(serializers.ModelSerializer):
             try:
                 postset = Post.objects.filter(series=None, author=obj.author).order_by('created_at')
                 obj_index = postset.filter(created_at__lt=obj.created_at).count()
-                prev_post = postset[obj_index - 1]
+                if obj_index > 0
+                    prev_post = postset[obj_index - 1]
+                else:
+                    prev_post = None
                 return PostListSerializer(prev_post).data
             except IndexError:
                 pass
