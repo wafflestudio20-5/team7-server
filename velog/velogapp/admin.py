@@ -3,6 +3,7 @@ from .models import *
 
 admin.site.register(Post)
 admin.site.register(Tag)
-admin.register(Comment)
+admin.site.register(Comment)
+admin.site.register(Series)
 
 # Register your models here.

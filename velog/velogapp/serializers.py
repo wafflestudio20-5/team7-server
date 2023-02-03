@@ -53,6 +53,13 @@ class SeriesCreateSerializer(serializers.ModelSerializer):
 class SeriesSerializer(serializers.ModelSerializer):
     postNum = serializers.SerializerMethodField()
     author = serializers.StringRelatedField(read_only=True)
+    photo = serializers.SerializerMethodField()
+
+    def get_photo(self, obj):
+        try:
+            return Post.objects.get(series=obj.id, series_order=1).thumbnail.url
+        except:
+            return None
 
     def get_postNum(self, obj):
         return Post.objects.filter(series=obj.id).count()
@@ -62,6 +69,7 @@ class SeriesSerializer(serializers.ModelSerializer):
             'id',
             'series_name',
             'url',
+            'photo',
             'update',
             'author',
             'postNum',
@@ -151,15 +159,22 @@ class SeriesDetailSerializer(serializers.ModelSerializer):
     postList = SeriesPostSerializer(many=True, read_only=True, source='post_set')
     postNum = serializers.SerializerMethodField()
     author = serializers.StringRelatedField(read_only=True)
+    photo = serializers.SerializerMethodField()
 
     def get_postNum(self, obj):
         return Post.objects.filter(series=obj.id).count()
+    def get_photo(self, obj):
+        try:
+            return Post.objects.get(series=obj.id, series_order=1).thumbnail.url
+        except:
+            return None
 
     class Meta:
         model = Series
         fields = [
             'id',
             'series_name',
+            'photo',
             'update',
             'author',
             'postNum',
