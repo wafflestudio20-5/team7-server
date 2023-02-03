@@ -376,6 +376,8 @@ class SeriesPostListView(generics.RetrieveUpdateDestroyAPIView): # PUT, DELETE ì
 
     def delete(self, request, username, url, *args, **kwrargs):
         series = self.get_queryset().get(author__username=username, url=url)
+        post_list = Post.objects.filter(series=series)
+        post_list.update(series=None)
         self.perform_destroy(series)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
