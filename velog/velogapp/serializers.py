@@ -85,7 +85,7 @@ class PostImageSerializer(serializers.ModelSerializer):
 class PostSerializer(serializers.ModelSerializer):
     author = serializers.StringRelatedField(read_only=True)
     tags = TagSerializer(many=True, required=False, read_only=True)
-    thumbnail = serializers.ImageField(required=False, use_url=True)
+    thumbnail = serializers.ImageField(required=False, use_url=True, default = 'default.png')
 
     class Meta:
         model = Post
