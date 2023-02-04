@@ -16,6 +16,13 @@ class PostCreateView(generics.GenericAPIView):
     serializer_class = PostSerializer
     def post(self, request, *args, **kwargs):
         data = request.data
+        if data.get("thumbnail") == None:
+            if isinstance(request.data, QueryDict):
+            request.data._mutable = True
+            request.data.pop('thumbnail')
+            request.data._mutable = False
+        else:
+            request.data.pop('thumnbnail')
         serializer = self.serializer_class(data=data)
         if serializer.is_valid():
             posturl = request.data.get("url")
