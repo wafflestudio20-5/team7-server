@@ -10,8 +10,7 @@ from .models import User
 
 
 class UserSerializer(UserDetailsSerializer):
-    profile_image = serializers.ImageField(use_url=True)
-    
+    profile_image = serializers.ImageField(required=False, use_url=True, default='default.png')
     class Meta:
         model = User
         fields = [
