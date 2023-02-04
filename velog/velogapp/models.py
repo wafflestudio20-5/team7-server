@@ -8,7 +8,6 @@ class Series(models.Model):
     author = models.ForeignKey(User, on_delete=models.PROTECT)
     url = models.CharField(max_length=100, null=True, unique=True)
     update = models.DateTimeField(auto_now=True)
-    photo = models.ImageField()
 
 
 class Post(models.Model):
