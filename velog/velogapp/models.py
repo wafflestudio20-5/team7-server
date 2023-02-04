@@ -13,7 +13,7 @@ class Series(models.Model):
 class Post(models.Model):
     pid = models.AutoField(primary_key=True)
     series = models.ForeignKey(Series, on_delete=models.PROTECT, null=True)
-    thumbnail = models.ImageField(null=True, default='media/default.png')
+    thumbnail = models.ImageField(null=True, default='default.png')
     title = models.TextField()
     preview = models.CharField(max_length=150, null=True)
     content = models.TextField()
