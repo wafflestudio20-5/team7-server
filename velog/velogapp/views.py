@@ -529,7 +529,7 @@ class PostListMonthView(generics.ListAPIView):
 
     def get(self, request):
         today = datetime.datetime.today()
-        queryset = self.get_queryset().filter(created_at__month=today.month, created_at__year=today.year).order_by('-likes')
+        queryset = self.get_queryset().filter(created_at__month=today.month).filter(created_at__year=today.year).order_by('-likes')
         serializer = PostListSerializer(queryset, many=True)
         return self.get_paginated_response(self.paginate_queryset(serializer.data))
 
