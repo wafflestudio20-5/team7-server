@@ -33,8 +33,8 @@ web : [https://7elog.store](https://7elog.store/)
 
 
 ## API
-API docs : [https://api.7elog.store/api/v1/docs/](https://api.7elog.store/api/v1/docs/) 
-User API : [https://www.notion.so/ahyeon98/User-Api-002777e5240e4d82afe1f573730ad1c9](https://www.notion.so/ahyeon98/User-Api-002777e5240e4d82afe1f573730ad1c9)
+- API docs : [https://api.7elog.store/api/v1/docs/](https://api.7elog.store/api/v1/docs/) 
+- User API : [https://www.notion.so/ahyeon98/User-Api-002777e5240e4d82afe1f573730ad1c9](https://www.notion.so/ahyeon98/User-Api-002777e5240e4d82afe1f573730ad1c9)
 
 
 ### Pre-commit Guide
