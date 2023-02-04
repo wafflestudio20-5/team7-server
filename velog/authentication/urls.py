@@ -78,3 +78,5 @@ urlpatterns = [
         name="account_confirm_email",
     ),
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
