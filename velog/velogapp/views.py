@@ -22,7 +22,7 @@ class PostCreateView(generics.GenericAPIView):
                 request.data.pop('thumbnail')
                 request.data._mutable = False
             else:
-                request.data.pop('thumnbnail')
+                request.data.pop('thumbnail')
         serializer = self.serializer_class(data=data)
         if serializer.is_valid():
             posturl = request.data.get("url")
