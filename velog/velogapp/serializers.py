@@ -53,7 +53,7 @@ class SeriesCreateSerializer(serializers.ModelSerializer):
 class SeriesSerializer(serializers.ModelSerializer):
     postNum = serializers.SerializerMethodField()
     author = serializers.StringRelatedField(read_only=True)
-    photo = serializers.SerializerMethodField(use_url=True)
+    photo = serializers.ImageField(use_url=True)
 
     def get_photo(self, obj):
         try:
@@ -176,7 +176,7 @@ class SeriesDetailSerializer(serializers.ModelSerializer):
     postList = SeriesPostSerializer(many=True, read_only=True, source='post_set')
     postNum = serializers.SerializerMethodField()
     author = serializers.StringRelatedField(read_only=True)
-    photo = serializers.SerializerMethodField(use_url=True)
+    photo = serializers.ImageField(use_url=True)
 
     def get_postNum(self, obj):
         return Post.objects.filter(series=obj.id).count()
