@@ -48,10 +48,7 @@
 
 
 ## :sparkles: Features
-### authentication
-구현 완료한 기능, 자랑하고싶은 내용/어려웠던 내용
-### velogapp
-구현 완료한 기능
+### 구현 완료
 - dj_rest_auth와 jwt token을 활용한 Signup, Login, Logout, SocialLogin(Google)
 - User Edit, User Search, User Delete
 - Post 작성 및 수정, Comment 작성 및 수정
