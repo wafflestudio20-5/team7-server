@@ -66,6 +66,17 @@ class UserListUpdateView(UserDetailsView):
             else:
                 request.data.pop('username')
             kwargs['partial'] = True
+        profile = request.data.get("profile_image", None)
+        if profile:
+            pass
+        else:
+            profile = request.user.profile_image
+        if isinstance(request.data, QueryDict):
+            request.data._mutable = True
+            request.data['profile_image'] = profile
+            request.data._mutable = False
+        else:
+            request.data['profile_image'] = profile
         return super().update(request, *args, **kwargs)
 
 
