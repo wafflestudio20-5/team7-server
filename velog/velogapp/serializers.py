@@ -53,13 +53,13 @@ class SeriesCreateSerializer(serializers.ModelSerializer):
 class SeriesSerializer(serializers.ModelSerializer):
     postNum = serializers.SerializerMethodField()
     author = serializers.StringRelatedField(read_only=True)
-    photo = serializers.ImageField(use_url=True)
+    photo = serializers.SerializerMethodField()
 
-#     def get_photo(self, obj):
-#         try:
-#             return Post.objects.get(series=obj.id, series_order=1).thumbnail.url
-#         except:
-#             return None
+    def get_photo(self, obj):
+        try:
+            return Post.objects.get(series=obj.id, series_order=1).thumbnail.url
+        except:
+            return None
 
     def get_postNum(self, obj):
         return Post.objects.filter(series=obj.id).count()
