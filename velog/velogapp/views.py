@@ -7,6 +7,7 @@ from .paginations import PostListPagination
 from django.db.models import Q
 import re
 import datetime
+import calendar
 from .models import PostImage
 
 class PostCreateView(generics.GenericAPIView):
@@ -529,7 +530,13 @@ class PostListMonthView(generics.ListAPIView):
 
     def get(self, request):
         today = datetime.datetime.today()
-        queryset = self.get_queryset().filter(created_at__month=today.month).filter(created_at__year=today.year).order_by('-likes')
+        month = calendar.monthrange(today.year, today.month)
+        max_day = month[1]
+        month_min = datetime.datetime.combine(datetime.date(year=today.year, month=today.month, day=1),
+                                              datetime.time.min)
+        month_max = datetime.datetime.combine(datetime.date(year=today.year, month=today.month, day=max_day),
+                                              datetime.time.max)
+        queryset = self.get_queryset().filter(created_at__range=(month_min, month_max)).order_by('-likes')
         serializer = PostListSerializer(queryset, many=True)
         return self.get_paginated_response(self.paginate_queryset(serializer.data))
 
