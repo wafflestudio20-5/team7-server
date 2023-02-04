@@ -22,7 +22,7 @@ class User(AbstractUser):
     facebook = models.CharField(max_length=100, blank=True)
     homepage = models.CharField(max_length=100, blank=True)
     about = models.TextField(blank=True)
-    profile_image = models.ImageField(upload_to="authentication/pictures", blank=True, null=True)
+    profile_image = models.ImageField(upload_to="authentication/pictures", blank=True, null=True, default='default.png')
     introduction = models.CharField(max_length=100, blank=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
