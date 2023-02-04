@@ -57,8 +57,12 @@
 - Post 작성 및 수정, Comment 작성 및 수정
 - Post에 대한 추가적인 정보인 Tag, Series 구현
 - Post 생성 날짜에 따른 필터링 기능, Tag 필터링 기능, Series 필터링 기능
-- Post Content에 쓰이는 Image들을 PostId 및 ImageUrl을 토대로 PostImage 클래스의 인스턴스로 저장(아직 연동 X)
+- Post Content에 쓰이는 Image들을 PostId 및 ImageUrl을 토대로 PostImage 클래스의 인스턴스로 저장
 
+
+## API
+- API docs : [https://api.7elog.store/api/v1/docs/](https://api.7elog.store/api/v1/docs/) 
+- User API : [https://ahyeon98.notion.site/User-Api-002777e5240e4d82afe1f573730ad1c9](https://ahyeon98.notion.site/User-Api-002777e5240e4d82afe1f573730ad1c9)
 
 -------------
 ### Pre-commit Guide
