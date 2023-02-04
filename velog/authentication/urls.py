@@ -5,6 +5,10 @@ from dj_rest_auth.registration.views import (
     ResendEmailVerificationView,
     VerifyEmailView,
 )
+from django.views.static import serve
+from django.conf import settings
+from django.conf.urls.static import static
+
 from dj_rest_auth.views import (
     LoginView,
     LogoutView,
