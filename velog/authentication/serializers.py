@@ -48,7 +48,7 @@ class CustomRegisterSerializer(RegisterSerializer):
     # username = None
     username = serializers.CharField(max_length=100)
     name = serializers.CharField(max_length=100)
-    profile_image = serializers.ImageField(default="")
+    profile_image = serializers.ImageField(use_url=True, default="")
     introduction = serializers.CharField(max_length=100)
 
     def update(self, instance, validated_data):
