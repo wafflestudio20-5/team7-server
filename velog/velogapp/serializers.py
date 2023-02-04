@@ -122,7 +122,7 @@ class PostListSerializer(serializers.ModelSerializer):
     author = serializers.StringRelatedField(read_only=True)
     likes = serializers.PrimaryKeyRelatedField(read_only=True)
     comments = serializers.SerializerMethodField()
-    #thumbnail = serializers.ImageField(use_url=True)
+    thumbnail = serializers.ImageField(required=False, use_url=True)
     
     def get_comments(self, obj):
         return Comment.objects.filter(post__pid=obj.pid).count()
