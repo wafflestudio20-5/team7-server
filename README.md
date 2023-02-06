@@ -26,9 +26,10 @@
 |[김아연](https://github.com/kay1918)|Comment API|
 
 ## :hammer_and_wrench: 기술 스택
-- framework: Django
+- framework: Django, DRF
 - db: MySQL
 - language: python
+- CI/CD: github actions, AWS Codedeploy, AWS EC2
 
 ## :clipboard: commit convention
 - 프로젝트 생성 ⇒ :tada: Feat: ~~
